@@ -1,26 +1,13 @@
 package by.epamtc.protsko.rentcar.dao.reader;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class RegexPropertyReader implements PropertyReader {
-	private static final String REGEX_PROPERTY_FILE = "./property/validator_regex.properties";
+    private static final String REGEX_PROPERTY_FILE = "property/validator_regex";
+    private ResourceBundle bundle = ResourceBundle.getBundle(REGEX_PROPERTY_FILE);
 
-	@Override
-	public Properties readProperty() throws IOException {
-		Properties property = new Properties();
-		FileInputStream fis = null;
-
-		try {
-			fis = new FileInputStream(REGEX_PROPERTY_FILE);
-			property.load(fis);
-
-		} finally {
-			if (fis != null) {
-				fis.close();
-			}
-		}
-		return property;
-	}
+    @Override
+    public String getPropertyValue(String key) {
+        return bundle.getString(key);
+    }
 }

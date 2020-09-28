@@ -5,6 +5,6 @@ import java.util.Properties;
 
 public interface PropertyReader {
 	
-	Properties readProperty() throws IOException;
+	String getPropertyValue(String key) throws IOException;
 
 }

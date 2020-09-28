@@ -18,13 +18,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User authentication(String login, String password) throws ServiceException {
-		User user = null;
+		User user;
 
 		try {
-			if ((login != null) && (password != null)) {
+			if ((!login.isEmpty()) && (!password.isEmpty())) {
 				user = userDAO.authentication(login, password);
 			} else {
-				throw new ServiceException("Логин и/или пароль не введены.");
+				throw new ServiceException("Incorrect login or password");
 			}
 		} catch (DAOException e) {
 			throw new ServiceException(e);

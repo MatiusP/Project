@@ -1,7 +1,7 @@
 package by.epamtc.protsko.rentcar.bean;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class User implements Serializable {
 	private static final long serialVersionUID = -8685454795552992812L;
@@ -11,7 +11,7 @@ public class User implements Serializable {
 	private String name;
 	private String passportIdNumber;
 	private String driverLicense;
-	private Date dateOfBirth;
+	private LocalDate dateOfBirth;
 	private String eMail;
 	private String phone;
 	private int role; /////////////// разобраться с типом (необходимо Role)
@@ -59,11 +59,11 @@ public class User implements Serializable {
 		this.driverLicense = driverLicense;
 	}
 
-	public Date getDateOfBirth() {
+	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 

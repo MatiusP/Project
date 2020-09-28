@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="RentCar-web-app:war">
+    <output-path>$PROJECT_DIR$/out/artifacts/RentCar_web_app_war</output-path>
+    <root id="archive" name="RentCar-web-app_war.war">
+      <element id="artifact" artifact-name="RentCar-web-app:war exploded" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="lib">
+          <element id="file-copy" path="C:/000_Other/Java/Tomcat_9/lib/servlet-api.jar" />
+          <element id="file-copy" path="C:/000_Other/Java/Tomcat_9/webapps/examples/WEB-INF/lib/taglibs-standard-impl-1.2.5.jar" />
+          <element id="file-copy" path="C:/000_Other/Java/Tomcat_9/webapps/examples/WEB-INF/lib/taglibs-standard-spec-1.2.5.jar" />
+        </element>
+      </element>
+      <element id="directory" name="src">
+        <element id="dir-copy" path="$PROJECT_DIR$/src" />
+      </element>
+    </root>
+  </artifact>
+</component>
