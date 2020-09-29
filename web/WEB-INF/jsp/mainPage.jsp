@@ -5,44 +5,43 @@
 <!DOCTYPE html>
 <html>
 
+<fmt:setLocale value="${sessionScope.local}"/>
+<fmt:setBundle basename="property/localisation" var="loc"/>
+
+<fmt:message bundle="${loc}" key="local.button.be" var="be_button"/>
+<fmt:message bundle="${loc}" key="local.button.ru" var="ru_button"/>
+<fmt:message bundle="${loc}" key="local.button.en" var="en_button"/>
+<fmt:message bundle="${loc}" key="local.message.signIn" var="sign_in"/>
+<fmt:message bundle="${loc}" key="local.message.mainPage" var="message"/>
+
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
     <title>Insert title here</title>
-
-    <fmt:setLocale value="${sessionScope.locale}"/>
-    <fmt:setBundle basename="property.locale" var="loc"/>
-
-    <fmt:message bundle="${loc}" key="local.button.be" var="be_button"/>
-    <fmt:message bundle="${loc}" key="local.button.ru" var="ru_button"/>
-    <fmt:message bundle="${loc}" key="local.button.en" var="en_button"/>
-    <fmt:message bundle="${loc}" key="local.mes.mainMes.mainPage" var="message"/>
-
 </head>
 
 <body>
 <form action="userController" method="post">
     <input type="hidden" name="command" value="change_locale"/>
-    <input type="hidden" name="local" value="be_BY"/>
-    <input type="submit" value="${be_button}"/>
+    <input type="hidden" name="local" value="be">
+    <input type="submit" value="${be_button}">
 </form>
 
 <form action="userController" method="post">
     <input type="hidden" name="command" value="change_locale"/>
-    <input type="hidden" name="local" value="ru_RU"/>
-    <input type="submit" value="${ru_button}"/>
+    <input type="hidden" name="local" value="ru">
+    <input type="submit" value="${ru_button}">
 </form>
 
 <form action="userController" method="post">
     <input type="hidden" name="command" value="change_locale"/>
-    <input type="hidden" name="local" value="en_EN"/>
-    <input type="submit" value="${en_button}"/>
+    <input type="hidden" name="local" value="en">
+    <input type="submit" value="${en_button}">
 </form>
 
-<c:out value="${message}"/>
-<c:out value="Привет!"/>
+<h2><c:out value="${message}"/></h2>
 
 
-<a href="userController?command=authentication">Sign in</a>
+<a href="userController?command=authentication">${sign_in}</a>
 
 </body>
 </html>
