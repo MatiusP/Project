@@ -3,7 +3,6 @@ package by.epamtc.protsko.rentcar.controller.command;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,11 +17,10 @@ import by.epamtc.protsko.rentcar.service.exception.ServiceException;
 public class SaveNewUserCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
-    private User user;
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ControllerException {
+            throws IOException, ControllerException {
 
         UserDTO userDTO;
         boolean isRegistrationSuccessfully;
@@ -60,7 +58,7 @@ public class SaveNewUserCommand implements Command {
     }
 
     private User getUserRegistrationData(UserDTO userDTO) {
-        user = new User();
+        User user = new User();
 
         user.setId(userDTO.getId());
         user.setSurname(userDTO.getSurname());

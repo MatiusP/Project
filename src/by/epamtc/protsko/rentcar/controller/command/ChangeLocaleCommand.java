@@ -10,7 +10,8 @@ import java.io.IOException;
 public class ChangeLocaleCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
-        request.getSession(true).setAttribute("local", request.getParameter("local"));
+        request.getSession(true).setAttribute("locale", request.getParameter("local"));
         request.getRequestDispatcher("userController?command=go_to_main_page").forward(request, response);
+
     }
 }
