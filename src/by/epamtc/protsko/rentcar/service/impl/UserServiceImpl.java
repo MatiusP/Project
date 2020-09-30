@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 			if (userServiceValidator.isRegistrationDataFilled(userDTO)) {
 				return userDAO.registration(userDTO);
 			} else {
-				throw new ServiceException("Заполнены не все поля регистрационной формы");
+				throw new ServiceException("Not all fields of the registration form are filled");
 			}
 		} catch (DAOException e) {
 			throw new ServiceException(e);

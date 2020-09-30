@@ -8,7 +8,9 @@ import java.io.IOException;
 public class ShowUserRegDataCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/jsp/showUserRegDataPage.jsp").forward(request, response);
 
+
+
+        request.getRequestDispatcher("WEB-INF/jsp/showUserRegDataPage.jsp").forward(request, response);
     }
 }

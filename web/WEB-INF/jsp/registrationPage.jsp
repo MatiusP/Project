@@ -1,36 +1,96 @@
-<%@ page language="java" contentType="text/html; charset=UTF8"
-         pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
+
+<fmt:setLocale value="${sessionScope.local}"/>
+<fmt:setBundle basename="property/localisation" var="loc"/>
+
+<fmt:message bundle="${loc}" key="local.message.regPage" var="mainMessage"/>
+<fmt:message bundle="${loc}" key="local.message.regPage.enterLogin" var="enter_login"/>
+<fmt:message bundle="${loc}" key="local.message.regPage.enterPassword" var="enter_pass"/>
+<fmt:message bundle="${loc}" key="local.message.regPage.repeatPassword" var="repeat_pass"/>
+<fmt:message bundle="${loc}" key="local.message.regPage.enterSurname" var="enter_surname"/>
+<fmt:message bundle="${loc}" key="local.message.regPage.enterName" var="enter_name"/>
+<fmt:message bundle="${loc}" key="local.message.regPage.enterPassport" var="enter_passport_ID"/>
+<fmt:message bundle="${loc}" key="local.message.regPage.enterDriverLicense" var="enter_driver_license"/>
+<fmt:message bundle="${loc}" key="local.message.regPage.enterDateOfBirth" var="enter_date_birth"/>
+<fmt:message bundle="${loc}" key="local.message.regPage.enterEMail" var="enter_email"/>
+<fmt:message bundle="${loc}" key="local.message.regPage.enterPhone" var="enter_phone"/>
+<fmt:message bundle="${loc}" key="local.message.login" var="login"/>
+<fmt:message bundle="${loc}" key="local.message.password" var="password"/>
+<fmt:message bundle="${loc}" key="local.message.repeat.password" var="repeat_password"/>
+<fmt:message bundle="${loc}" key="local.message.surname" var="surname"/>
+<fmt:message bundle="${loc}" key="local.message.name" var="name"/>
+<fmt:message bundle="${loc}" key="local.message.passport" var="passport"/>
+<fmt:message bundle="${loc}" key="local.message.driver_license" var="driver_license"/>
+<fmt:message bundle="${loc}" key="local.message.date_birth" var="date_birth"/>
+<fmt:message bundle="${loc}" key="local.button.regPage" var="button"/>
+
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
+    <title>Registration form</title>
 </head>
 <body>
 
-<h2>Please, enter registration data</h2>
+<h2>${mainMessage}</h2>
 
 <form action="userController" method="post">
     <input type="hidden" name="command" value="save_new_user">
-    Введите логин <input type="text" name="login" placeholder="login"/><br/>
-    Введите пароль <input type="text" name="password" placeholder="password"/><br/>
-    Повторите пароль <input type="text" name="password_repeat" placeholder="repeat password"/><br/>
-    Введите фамилию <input type="text" name="surname" placeholder="surname"/><br/>
-    Введите имя <input type="text" name="name" placeholder="name"/><br/> Введите
-    идентификационный номер паспорта <input type="text"
-                                            name="passport_Id_Number" placeholder="passport ID number"/><br/> Введите
-    номер
-    водительского удостоверения <input type="text" name="driver_license"
-                                       placeholder="driver license number"/><br/> Введите год рождения <input
-        type="text"
-        name="date_of_birth" placeholder="yyyy-mm-dd"/><br/>
-    Введите e-mail <input
-        type="text" name="e_mail" placeholder="e-mail"/><br/> Введите номер телефона
-    <input type="text" name="phone" placeholder="+xxx xx xxx xx xx"/><br/> <br/> <input
-        type="submit" value="Зарегистрироваться"><br/>
+    <table style="with: 50%">
+        <tr>
+            <td>${enter_login}</td>
+            <td><input type="text" name="login" placeholder="${login}"/></td>
+        </tr>
+        <tr>
+            <td>${enter_pass}</td>
+            <td><input type="text" name="password" placeholder="${password}"/></td>
+        </tr>
+        <tr>
+            <td>${repeat_pass}</td>
+            <td><input type="text" name="password_repeat" placeholder="${repeat_password}"/>
+
+                <c:if test="${not empty sessionScope.get('registrationError')}">
+                    <c:out value="${sessionScope.get('registrationError')}"/>
+
+
+                </c:if>
+               </td>
+
+        </tr>
+        <tr>
+            <td>${enter_surname}</td>
+            <td><input type="text" name="surname" placeholder="${surname}"/></td>
+        </tr>
+        <tr>
+            <td>${enter_name}</td>
+            <td><input type="text" name="name" placeholder="${name}"/></td>
+        </tr>
+        <tr>
+            <td>${enter_passport_ID}</td>
+            <td><input type="text" name="passport_Id_Number" placeholder="${passport}"/></td>
+        </tr>
+        <tr>
+            <td>${enter_driver_license}</td>
+            <td><input type="text" name="driver_license" placeholder="${driver_license}"/></td>
+        </tr>
+        <tr>
+            <td>${enter_date_birth}</td>
+            <td><input type="text" name="date_of_birth" placeholder="${date_birth}"/></td>
+        </tr>
+        <tr>
+            <td>${enter_email}</td>
+            <td><input type="text" name="e_mail" placeholder="e-mail"/></td>
+        </tr>
+        <tr>
+            <td>${enter_phone}</td>
+            <td><input type="text" name="phone" placeholder="+xxx xx xxx xx xx"/></td>
+        </tr>
+    </table>
+    <input type="submit" value="${button}"><br/>
 </form>
-<br/>
-
-
 </body>
+
 </html>

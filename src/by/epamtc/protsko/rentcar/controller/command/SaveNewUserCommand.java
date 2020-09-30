@@ -3,6 +3,7 @@ package by.epamtc.protsko.rentcar.controller.command;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,10 +21,12 @@ public class SaveNewUserCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ControllerException {
+            throws IOException, ControllerException, ServletException {
 
-        UserDTO userDTO;
-        boolean isRegistrationSuccessfully;
+        UserDTO userDTO = null;
+        boolean isRegistrationSuccessfully = false;
+        HttpSession session = request.getSession();
+        String registrationErrorMessage;
 
         try {
             if (request.getParameter("password").equals(request.getParameter("password_repeat"))) {
@@ -41,19 +44,19 @@ public class SaveNewUserCommand implements Command {
 
                 isRegistrationSuccessfully = userService.registration(userDTO);
             } else {
-                throw new ControllerException("Пароли не совпадают!");
+                registrationErrorMessage = "Passwords do not match!";
+                session.setAttribute("registrationError", registrationErrorMessage);
             }
         } catch (ServiceException e) {
-            throw new ControllerException("НЕ РАБОТАЕТ from SaveNewUserCommand", e);
+            registrationErrorMessage = e.getMessage();
+            session.setAttribute("registrationError", registrationErrorMessage);
         }
 
         if (isRegistrationSuccessfully) {
-            HttpSession session = request.getSession();
-
             session.setAttribute("userRegData", getUserRegistrationData(userDTO));
             response.sendRedirect("userController?command=show_user_reg_data");
         } else {
-            throw new ControllerException("Invalid data");
+            response.sendRedirect("userController?command=registration");
         }
     }
 
