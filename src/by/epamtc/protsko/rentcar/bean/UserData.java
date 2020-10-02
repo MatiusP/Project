@@ -3,7 +3,7 @@ package by.epamtc.protsko.rentcar.bean;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class UserDTO implements Serializable {
+public class UserData implements Serializable {
 	private static final long serialVersionUID = -7140832636495909933L;
 
 	private int id;
@@ -18,11 +18,11 @@ public class UserDTO implements Serializable {
 	private String phone;
 	private int role; /////////////// разобраться с типом (необходимо Role)
 
-	public UserDTO() {
+	public UserData() {
 	}
 
-	public UserDTO(int id, String login, String password, String surname, String name, String passportIdNumber,
-			String driverLicense, LocalDate dateOfBirth, String eMail, String phone, int role) {
+	public UserData(int id, String login, String password, String surname, String name, String passportIdNumber,
+                    String driverLicense, LocalDate dateOfBirth, String eMail, String phone, int role) {
 		super();
 		this.id = id;
 		this.login = login;
@@ -151,7 +151,7 @@ public class UserDTO implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UserDTO other = (UserDTO) obj;
+		UserData other = (UserData) obj;
 		if (dateOfBirth == null) {
 			if (other.dateOfBirth != null)
 				return false;

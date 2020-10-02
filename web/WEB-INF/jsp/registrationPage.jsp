@@ -28,6 +28,8 @@
 <fmt:message bundle="${loc}" key="local.message.driver_license" var="driver_license"/>
 <fmt:message bundle="${loc}" key="local.message.date_birth" var="date_birth"/>
 <fmt:message bundle="${loc}" key="local.button.regPage" var="button"/>
+<fmt:message bundle="${loc}" key="local.passwordsError.message" var="passwords_error"/>
+<fmt:message bundle="${loc}" key="local.fillRegDataError.message" var="fill_reg_data_error"/>
 
 <head>
     <meta charset="UTF-8">
@@ -39,30 +41,36 @@
 
 <form action="userController" method="post">
     <input type="hidden" name="command" value="save_new_user">
+
+    <c:if test="${not empty requestScope.get('fillRegDataError')}">
+        <c:out value="${fill_reg_data_error}"/><br/>
+    </c:if><br/>
+
+    <c:if test="${not empty requestScope.get('validationError')}">
+        <c:out value="${validationError}"/><br/>
+    </c:if><br/>
+
     <table style="with: 50%">
         <tr>
             <td>${enter_login}</td>
-            <td><input type="text" name="login" placeholder="${login}"/></td>
+            <td><input type="text" name="login" placeholder="${login}" required/></td>
         </tr>
         <tr>
             <td>${enter_pass}</td>
-            <td><input type="text" name="password" placeholder="${password}"/></td>
+            <td><input type="text" name="password" placeholder="${password}" required/></td>
         </tr>
         <tr>
             <td>${repeat_pass}</td>
-            <td><input type="text" name="password_repeat" placeholder="${repeat_password}"/>
-
-                <c:if test="${not empty sessionScope.get('registrationError')}">
-                    <c:out value="${sessionScope.get('registrationError')}"/>
-
-
+            <td><input type="text" name="password_repeat" placeholder="${repeat_password}" required/>
+                <c:if test="${not empty requestScope.get('passwordsError')}">
+                    <c:out value="${passwords_error}"/>
                 </c:if>
-               </td>
+            </td>
 
         </tr>
         <tr>
             <td>${enter_surname}</td>
-            <td><input type="text" name="surname" placeholder="${surname}"/></td>
+            <td><input type="text" name="surname" placeholder="${surname}" required/></td>
         </tr>
         <tr>
             <td>${enter_name}</td>
@@ -70,23 +78,23 @@
         </tr>
         <tr>
             <td>${enter_passport_ID}</td>
-            <td><input type="text" name="passport_Id_Number" placeholder="${passport}"/></td>
+            <td><input type="text" name="passport_Id_Number" placeholder="${passport}" required/></td>
         </tr>
         <tr>
             <td>${enter_driver_license}</td>
-            <td><input type="text" name="driver_license" placeholder="${driver_license}"/></td>
+            <td><input type="text" name="driver_license" placeholder="${driver_license}" required/></td>
         </tr>
         <tr>
             <td>${enter_date_birth}</td>
-            <td><input type="text" name="date_of_birth" placeholder="${date_birth}"/></td>
+            <td><input type="text" name="date_of_birth" placeholder="${date_birth}" required/></td>
         </tr>
         <tr>
             <td>${enter_email}</td>
-            <td><input type="text" name="e_mail" placeholder="e-mail"/></td>
+            <td><input type="text" name="e_mail" placeholder="e-mail" required/></td>
         </tr>
         <tr>
             <td>${enter_phone}</td>
-            <td><input type="text" name="phone" placeholder="+xxx xx xxx xx xx"/></td>
+            <td><input type="text" name="phone" placeholder="+xxx xx xxx xx xx" required/></td>
         </tr>
     </table>
     <input type="submit" value="${button}"><br/>

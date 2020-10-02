@@ -1,8 +1,6 @@
 package by.epamtc.protsko.rentcar.dao.util;
 
-import java.io.IOException;
-
-import by.epamtc.protsko.rentcar.bean.UserDTO;
+import by.epamtc.protsko.rentcar.bean.UserData;
 import by.epamtc.protsko.rentcar.dao.exception.DAOException;
 import by.epamtc.protsko.rentcar.dao.validator.CommandProvider;
 import by.epamtc.protsko.rentcar.dao.validator.UserCredentialType;
@@ -11,7 +9,6 @@ public class UserUtil {
     private final CommandProvider validatorCommandProvider = new CommandProvider();
 
     public boolean isAuthenticationDataValid(String login, String password) throws DAOException {
-
         boolean isLoginValid = validatorCommandProvider.getValidator(UserCredentialType.LOGIN).execute(login);
         boolean isPassportValid = validatorCommandProvider.getValidator(UserCredentialType.PASSWORD)
                 .execute(password);
@@ -23,16 +20,16 @@ public class UserUtil {
         }
     }
 
-    public boolean isRegistrationDataValid(UserDTO userDTO) throws DAOException {
-        String userLogin = userDTO.getLogin();
-        String userPassword = userDTO.getPassword();
-        String userSurname = userDTO.getSurname();
-        String userName = userDTO.getName();
-        String userPassportID = userDTO.getPassportIdNumber();
-        String userDriverLicense = userDTO.getDriverLicense();
-        String userDateOfBirth = String.valueOf(userDTO.getDateOfBirth());
-        String userEMail = userDTO.geteMail();
-        String userPhone = userDTO.getPhone();
+    public boolean isRegistrationDataValid(UserData userData) throws DAOException {
+        String userLogin = userData.getLogin();
+        String userPassword = userData.getPassword();
+        String userSurname = userData.getSurname();
+        String userName = userData.getName();
+        String userPassportID = userData.getPassportIdNumber();
+        String userDriverLicense = userData.getDriverLicense();
+        String userDateOfBirth = String.valueOf(userData.getDateOfBirth());
+        String userEMail = userData.geteMail();
+        String userPhone = userData.getPhone();
 
 
         boolean isLoginValid = validatorCommandProvider.getValidator(UserCredentialType.LOGIN).execute(userLogin);
@@ -50,11 +47,25 @@ public class UserUtil {
         boolean isEMailValid = validatorCommandProvider.getValidator(UserCredentialType.E_MAIL).execute(userEMail);
         boolean isPhoneValid = validatorCommandProvider.getValidator(UserCredentialType.PHONE).execute(userPhone);
 
-        if (isLoginValid && isPasswordValid && isSurnameValid && isNameValid && isPassportIDValid
-                && isDriverLicenseValid && isDateOfBirthValid && isEMailValid && isPhoneValid) {
-            return true;
-        } else {
-            throw new DAOException("Invalid registration data");
+        if (!isLoginValid) {
+            throw new DAOException("Login invalid");
+        } else if (!isPasswordValid) {
+            throw new DAOException("Password invalid");
+        } else if (!isSurnameValid) {
+            throw new DAOException("Surname invalid");
+        } else if (!isNameValid) {
+            throw new DAOException("Name invalid");
+        } else if (!isPassportIDValid) {
+            throw new DAOException("PassportID invalid");
+        } else if (!isDriverLicenseValid) {
+            throw new DAOException("DriverLicense invalid");
+        } else if (!isDateOfBirthValid) {
+            throw new DAOException("Date of birth invalid");
+        } else if (!isEMailValid) {
+            throw new DAOException("E-mail invalid");
+        } else if (!isPhoneValid) {
+            throw new DAOException("Phone invalid");
         }
+        return true;
     }
 }

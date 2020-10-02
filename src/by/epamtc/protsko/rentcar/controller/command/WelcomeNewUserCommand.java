@@ -10,12 +10,9 @@ import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 
 public class WelcomeNewUserCommand implements Command {
 
-	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, ControllerException {
-		
-		System.out.println("Redirect");
-		
-		request.getRequestDispatcher("WEB-INF/jsp/userRegistrationParameter.jsp").forward(request, response);
-	}
+    @Override
+    public void execute(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, ControllerException {
+        request.getRequestDispatcher("WEB-INF/jsp/userRegistrationParameter.jsp").forward(request, response);
+    }
 }

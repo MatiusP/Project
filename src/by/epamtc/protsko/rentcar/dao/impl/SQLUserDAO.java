@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.List;
 
 import by.epamtc.protsko.rentcar.bean.User;
-import by.epamtc.protsko.rentcar.bean.UserDTO;
+import by.epamtc.protsko.rentcar.bean.UserData;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPoolException;
@@ -37,28 +37,35 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean registration(UserDTO userDTO) throws DAOException {
+    public boolean registration(UserData userData) throws DAOException {
+        String userLogin = userData.getLogin();
+        String userPassword = userData.getPassword();
 
-        if (userUtil.isRegistrationDataValid(userDTO)) {
+        if (getUserFromDatabase(userLogin, userPassword) != null) {
+            throw new DAOException("Sorry, but the login you entered exists. Try a different login.");
+        }
+
+        if (userUtil.isRegistrationDataValid(userData)) {
             try {
                 connection = connectionPool.takeConnection();
                 preparedStatement = connection.prepareStatement(INSERT_USER_TO_DATABASE);
 
-                preparedStatement.setString(1, userDTO.getLogin());
-                preparedStatement.setString(2, userDTO.getPassword());
-                preparedStatement.setString(3, userDTO.getSurname());
-                preparedStatement.setString(4, userDTO.getName());
-                preparedStatement.setString(5, userDTO.getPassportIdNumber());
-                preparedStatement.setString(6, userDTO.getDriverLicense());
-                preparedStatement.setDate(7, Date.valueOf(userDTO.getDateOfBirth()));
-                preparedStatement.setString(8, userDTO.geteMail());
-                preparedStatement.setString(9, userDTO.getPhone().replaceAll(" ", ""));
+                preparedStatement.setString(1, userData.getLogin());
+                preparedStatement.setString(2, userData.getPassword());
+                preparedStatement.setString(3, userData.getSurname());
+                preparedStatement.setString(4, userData.getName());
+                preparedStatement.setString(5, userData.getPassportIdNumber());
+                preparedStatement.setString(6, userData.getDriverLicense());
+                preparedStatement.setDate(7, Date.valueOf(userData.getDateOfBirth()));
+                preparedStatement.setString(8, userData.geteMail());
+                preparedStatement.setString(9, userData.getPhone().replaceAll(" ", ""));
 
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
+                //log
                 throw new DAOException("Save new user error", e);
             } catch (ConnectionPoolException e) {
-                throw new DAOException(e);
+                throw new DAOException("Connection pool exception", e);
             } finally {
                 closeConnection(connection, preparedStatement, resultSet);
             }
@@ -68,7 +75,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean editUserData(UserDTO userDTO) throws DAOException {
+    public boolean editUserData(UserData userData) throws DAOException {
         // TODO Auto-generated method stub
         return false;
     }
@@ -89,7 +96,6 @@ public class SQLUserDAO implements UserDAO {
         User user = null;
 
         try {
-            user = new User();
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(IS_USER_EXIST);
 
@@ -99,6 +105,7 @@ public class SQLUserDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
+                user = new User();
                 user.setId(resultSet.getInt(1));
                 user.setSurname(resultSet.getString(4));
                 user.setName(resultSet.getString(5));
@@ -112,6 +119,7 @@ public class SQLUserDAO implements UserDAO {
         } catch (SQLException e) {
             throw new DAOException(e);
         } catch (ConnectionPoolException e) {
+            //logger
             throw new DAOException(e);
         } finally {
             closeConnection(connection, preparedStatement, resultSet);
@@ -141,15 +149,4 @@ public class SQLUserDAO implements UserDAO {
             throw new DAOException("Error return connection");
         }
     }
-//    public static void main(String[] args) throws DAOException {
-//        SQLUserDAO sqlUserDAO = new SQLUserDAO();
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//
-//        sqlUserDAO.registration(new UserDTO(1, "Matvey16", "Pmat1234%", "Процко",
-//                "Матвей", "3281281R004PB7", "RY12365987", LocalDate.parse("28-12-1981", dtf),
-//                "matveyPr@gmail.com", "+375297505482", 1));
-//        User user =
-//                sqlUserDAO.authentication("Matvey", "Pmat1234%");
-//        System.out.println(user);
-//    }
 }

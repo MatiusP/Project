@@ -1,0 +1,49 @@
+logo {
+    font-size: 60px;
+    color: red;
+    font-family: "Algerian";
+    font-variant: small-caps;
+    line-height: 1.2;
+    text-align: left;
+    position: sticky;
+    left: 22.493px;
+    top: 5.374px;
+}
+
+logo_text {
+    font-size: 25px;
+    font-variant: small-caps;
+    color: darkblue;
+    line-height: 1.2;
+    text-align: right;
+    position: absolute;
+    left: 21.493px;
+    top: 56.374px;
+}
+
+slogan_text {
+    font-size: 30px;
+    font-family: "MV Boli";
+    font-variant: small-caps;
+    color: darkblue;
+    line-height: 1.2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+header {
+    background-color: aliceblue;
+}
+
+links {
+    height: 28px;
+    background-color: azure;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+img {
+    width: 100%;
+}

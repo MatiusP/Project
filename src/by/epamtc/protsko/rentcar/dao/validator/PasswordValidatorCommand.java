@@ -3,12 +3,13 @@ package by.epamtc.protsko.rentcar.dao.validator;
 import java.util.regex.Pattern;
 
 public class PasswordValidatorCommand implements CommandValidator {
-    private static final String VALIDATOR_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{5,45}$";
+    private ValidatorManager validatorManager = ValidatorManager.getInstance();
     private Pattern pattern;
 
     @Override
     public boolean execute(String userPassword) {
-        pattern = Pattern.compile(VALIDATOR_REGEX);
+        String validatorRegex = validatorManager.getValidatorRegex(ValidatorParameter.PASSWORD);
+        pattern = Pattern.compile(validatorRegex);
 
         return pattern.matcher(userPassword).matches();
     }

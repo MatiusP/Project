@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import by.epamtc.protsko.rentcar.bean.User;
-import by.epamtc.protsko.rentcar.bean.UserDTO;
+import by.epamtc.protsko.rentcar.bean.UserData;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
@@ -23,55 +23,59 @@ public class SaveNewUserCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ControllerException, ServletException {
 
-        UserDTO userDTO = null;
+        UserData userData = null;
         boolean isRegistrationSuccessfully = false;
         HttpSession session = request.getSession();
-        String registrationErrorMessage;
+        String registrationError;
 
         try {
             if (request.getParameter("password").equals(request.getParameter("password_repeat"))) {
-                userDTO = new UserDTO();
+                userData = new UserData();
 
-                userDTO.setLogin(request.getParameter("login"));
-                userDTO.setPassword(request.getParameter("password"));
-                userDTO.setSurname(request.getParameter("surname"));
-                userDTO.setName(request.getParameter("name"));
-                userDTO.setPassportIdNumber(request.getParameter("passport_Id_Number"));
-                userDTO.setDriverLicense(request.getParameter("driver_license"));
-                userDTO.setDateOfBirth(LocalDate.parse(request.getParameter("date_of_birth")));
-                userDTO.seteMail(request.getParameter("e_mail"));
-                userDTO.setPhone(request.getParameter("phone"));
+                userData.setLogin(request.getParameter("login"));
+                userData.setPassword(request.getParameter("password"));
+                userData.setSurname(request.getParameter("surname"));
+                userData.setName(request.getParameter("name"));
+                userData.setPassportIdNumber(request.getParameter("passport_Id_Number"));
+                userData.setDriverLicense(request.getParameter("driver_license"));
+                userData.setDateOfBirth(LocalDate.parse(request.getParameter("date_of_birth")));
+                userData.seteMail(request.getParameter("e_mail"));
+                userData.setPhone(request.getParameter("phone"));
 
-                isRegistrationSuccessfully = userService.registration(userDTO);
+                isRegistrationSuccessfully = userService.registration(userData);
             } else {
-                registrationErrorMessage = "Passwords do not match!";
-                session.setAttribute("registrationError", registrationErrorMessage);
+                registrationError = "Passwords do not match!";
+                request.setAttribute("passwordsError", registrationError);
+                request.getRequestDispatcher("userController?command=registration").forward(request, response);
             }
         } catch (ServiceException e) {
-            registrationErrorMessage = e.getMessage();
-            session.setAttribute("registrationError", registrationErrorMessage);
+            registrationError = e.getMessage();
+            if (registrationError.contains("filling error")) {
+                request.setAttribute("fillRegDataError", registrationError);
+            } else {
+                request.setAttribute("validationError", registrationError);
+            }
+            request.getRequestDispatcher("userController?command=registration").forward(request, response);
         }
 
         if (isRegistrationSuccessfully) {
-            session.setAttribute("userRegData", getUserRegistrationData(userDTO));
+            session.setAttribute("userRegData", getUserRegistrationData(userData));
             response.sendRedirect("userController?command=show_user_reg_data");
-        } else {
-            response.sendRedirect("userController?command=registration");
         }
     }
 
-    private User getUserRegistrationData(UserDTO userDTO) {
+    private User getUserRegistrationData(UserData userData) {
         User user = new User();
 
-        user.setId(userDTO.getId());
-        user.setSurname(userDTO.getSurname());
-        user.setName(userDTO.getName());
-        user.setPassportIdNumber(userDTO.getPassportIdNumber());
-        user.setDriverLicense(userDTO.getDriverLicense());
-        user.setDateOfBirth(userDTO.getDateOfBirth());
-        user.seteMail(userDTO.geteMail());
-        user.setPhone(userDTO.getPhone());
-        user.setRole(userDTO.getRole());
+        user.setId(userData.getId());
+        user.setSurname(userData.getSurname());
+        user.setName(userData.getName());
+        user.setPassportIdNumber(userData.getPassportIdNumber());
+        user.setDriverLicense(userData.getDriverLicense());
+        user.setDateOfBirth(userData.getDateOfBirth());
+        user.seteMail(userData.geteMail());
+        user.setPhone(userData.getPhone());
+        user.setRole(userData.getRole());
 
         return user;
     }
