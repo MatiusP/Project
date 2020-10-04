@@ -23,13 +23,14 @@
 <body>
 
 <jsp:useBean id="userRegData" class="by.epamtc.protsko.rentcar.bean.User" scope="session"/>
+<jsp:include page="PageHeader.jsp"/>
 
 <p>
 <h2>${main_message}</h2></p><br/>
 <h3>${page_message}</h3><br/>
 
-<form action="userController" method="post">
-    <input type="hidden" name="command" value="save_new_user">
+<form action="mainController" method="post">
+    <input type="hidden" name="command" value="show_user_reg_data">
     <table style="with: 50%" border="1">
         <tr>
             <td>${reg_surname_mess}</td>
@@ -62,8 +63,7 @@
     </table>
 </form>
 
-<form action="userController" method="post">
-    <input type="hidden" name="command" value="go_to_main_page"/>
+<form action="mainController?command=go_to_main_page" method="post">
     <input type="submit" value="Main page"/>
 </form>
 

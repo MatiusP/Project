@@ -11,9 +11,6 @@ public class ChangeLocaleCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
         request.getSession(true).setAttribute("local", request.getParameter("local"));
-
-        //request.getRequestDispatcher("WEB-INF/jsp/mainPage.jsp").forward(request, response);
-        //request.getRequestDispatcher(requestURI).forward(request, response);
         response.sendRedirect((String) request.getSession().getAttribute("previousRequestURL"));
     }
 }

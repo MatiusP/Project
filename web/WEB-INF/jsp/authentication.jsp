@@ -12,29 +12,39 @@
 <fmt:message bundle="${loc}" key="local.message.signIn" var="sign_in"/>
 <fmt:message bundle="${loc}" key="local.reg.message.authPage.message1" var="message_1_AuthPage"/>
 <fmt:message bundle="${loc}" key="local.reg.message.authPage.message2" var="message_2_AuthPage"/>
-
+<fmt:message bundle="${loc}" key="local.authError.message" var="auth_error"/>
 
 <head>
     <title>Authentication page</title>
 </head>
+
 <body>
 <h2>${message}</h2>
 
 <c:if test="${not empty sessionScope.get('authError')}">
-    <c:out value="${sessionScope.get('authError')}"/>
+    <c:out value="${auth_error}"/>
 </c:if>
 
-
-<form action="userController" method="get">
+<form action="mainController" method="get">
     <input type="hidden" name="command" value="check_user_auth_data"/>
     ${login} <br/>
     <input type="text" name="login" placeholder="${login}"/><br/>
     ${password} <br/>
-    <input type="password" name="password" placeholder="${password}"/><br/>
+    <input type="password" name="password" placeholder="${password}"/><br/><br/>
     <input type="submit" value="${sign_in}"/><br/>
 </form>
 
-${message_1_AuthPage} <a href="userController?command=registration">${message_2_AuthPage}</a>
+<form>
+    <select name="menu" size="1">
+        <option value="first">First</option>
+        <option value="second">Second</option>
+        <option value="third">Third</option>
+        <option value="four">Four</option>
+        <option value="five">Five</option>
+    </select>
+</form>
+
+${message_1_AuthPage} <a href="mainController?command=registration">${message_2_AuthPage}</a>
 
 </body>
 </html>

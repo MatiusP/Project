@@ -26,6 +26,9 @@ public class SQLUserDAO implements UserDAO {
     private static final String INSERT_USER_TO_DATABASE = "INSERT INTO users (login, password, surname,"
             + " name, passport_id_number, driver_license, date_of_birth, e_mail, phone) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+
+
+
     @Override
     public User authentication(String login, String password) throws DAOException {
         User user = null;
@@ -76,6 +79,12 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public boolean editUserData(UserData userData) throws DAOException {
+
+
+
+
+
+
         // TODO Auto-generated method stub
         return false;
     }

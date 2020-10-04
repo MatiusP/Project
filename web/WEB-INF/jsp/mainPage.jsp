@@ -19,19 +19,19 @@
 </head>
 
 <body>
-<form action="userController" method="post">
+<form action="mainController" method="post">
     <input type="hidden" name="command" value="change_locale"/>
     <input type="hidden" name="local" value="be">
     <input type="submit" value="${be_button}">
 </form>
 
-<form action="userController" method="post">
+<form action="mainController" method="post">
     <input type="hidden" name="command" value="change_locale"/>
     <input type="hidden" name="local" value="ru">
     <input type="submit" value="${ru_button}">
 </form>
 
-<form action="userController" method="post">
+<form action="mainController" method="post">
     <input type="hidden" name="command" value="change_locale"/>
     <input type="hidden" name="local" value="en">
     <input type="submit" value="${en_button}">
@@ -40,7 +40,7 @@
 <h2><c:out value="${message}"/></h2>
 
 
-<a href="userController?command=authentication">${sign_in}</a>
+<a href="mainController?command=authentication">${sign_in}</a>
 
 </body>
 </html>

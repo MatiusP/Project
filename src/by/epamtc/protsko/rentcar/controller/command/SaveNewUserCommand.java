@@ -46,7 +46,7 @@ public class SaveNewUserCommand implements Command {
             } else {
                 registrationError = "Passwords do not match!";
                 request.setAttribute("passwordsError", registrationError);
-                request.getRequestDispatcher("userController?command=registration").forward(request, response);
+                request.getRequestDispatcher("mainController?command=registration").forward(request, response);
             }
         } catch (ServiceException e) {
             registrationError = e.getMessage();
@@ -55,12 +55,16 @@ public class SaveNewUserCommand implements Command {
             } else {
                 request.setAttribute("validationError", registrationError);
             }
-            request.getRequestDispatcher("userController?command=registration").forward(request, response);
+            request.getRequestDispatcher("mainController?command=registration").forward(request, response);
         }
 
         if (isRegistrationSuccessfully) {
-            session.setAttribute("userRegData", getUserRegistrationData(userData));
-            response.sendRedirect("userController?command=show_user_reg_data");
+            User user = getUserRegistrationData(userData);
+
+            session.setAttribute("userRegData", user);
+            session.setAttribute("currentUserLogin", user.getSurname());
+            session.setAttribute("currentUserRole", user.getRole());
+            response.sendRedirect("mainController?command=show_user_reg_data");
         }
     }
 
@@ -75,7 +79,7 @@ public class SaveNewUserCommand implements Command {
         user.setDateOfBirth(userData.getDateOfBirth());
         user.seteMail(userData.geteMail());
         user.setPhone(userData.getPhone());
-        user.setRole(userData.getRole());
+        user.setRole(1);//////////////////////////////////// убрать
 
         return user;
     }

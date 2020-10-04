@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<!DOCTYPE html>
 <html>
 
 <fmt:setLocale value="${sessionScope.local}"/>
@@ -35,11 +34,14 @@
     <meta charset="UTF-8">
     <title>Registration form</title>
 </head>
+
+<jsp:include page="PageHeader.jsp"/>
+
 <body>
 
 <h2>${mainMessage}</h2>
 
-<form action="userController" method="post">
+<form action="mainController" method="post">
     <input type="hidden" name="command" value="save_new_user">
 
     <c:if test="${not empty requestScope.get('fillRegDataError')}">
@@ -74,7 +76,7 @@
         </tr>
         <tr>
             <td>${enter_name}</td>
-            <td><input type="text" name="name" placeholder="${name}"/></td>
+            <td><input type="text" name="name" placeholder="${name}" required/></td>
         </tr>
         <tr>
             <td>${enter_passport_ID}</td>

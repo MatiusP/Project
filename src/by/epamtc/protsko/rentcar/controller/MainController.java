@@ -10,14 +10,14 @@ import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.command.CommandProvider;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 
-public class UserController extends HttpServlet {
+public class MainController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private final CommandProvider provider = new CommandProvider();
 
     private static final String COMMAND_NAME = "command";
 
-    public UserController() {
+    public MainController() {
         super();
     }
 

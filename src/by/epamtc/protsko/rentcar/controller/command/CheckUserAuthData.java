@@ -32,14 +32,13 @@ public class CheckUserAuthData implements Command {
         if (user == null) {
             String authError = "Incorrect login or password";
             session.setAttribute("authError", authError);
-
-            response.sendRedirect("userController?command=authentication");
+            response.sendRedirect("mainController?command=authentication");
         } else {
             session.removeAttribute("authError");
             session.setAttribute("currentUserLogin", userLogin);
             session.setAttribute("currentUserRole", user.getRole());
 
-            response.sendRedirect("userController?command=go_to_main_page");
+            response.sendRedirect("mainController?command=go_to_main_page");
         }
     }
 }

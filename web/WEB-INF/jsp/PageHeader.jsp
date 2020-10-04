@@ -21,7 +21,10 @@
     <fmt:message bundle="${loc}" key="local.contacts.href" var="our_contacts_button"/>
     <fmt:message bundle="${loc}" key="local.signOut.href" var="sign_out"/>
 
-    <link rel="stylesheet" href="css/style_headerPage.css">
+    <fmt:message bundle="${loc}" key="local.showUserRegData.button" var="show_user_button"/>
+    <fmt:message bundle="${loc}" key="local.editUserData.button" var="edit_user_button"/>
+
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style_headerPage.css"/>
 </head>
 <body>
 
@@ -31,41 +34,45 @@
     <slogan_text>${slogan_text}</slogan_text>
 </header>
 
-
 <links>
     <a href="mainPage">${home_button}</a>
+
     <a href="carsPage">${our_cars_button}</a>
+
     <a href="rentalConditionsPage">${our_conditions_button}</a>
+
     <a href="contactPage">${our_contacts_button}</a>
-    <a href="userController?command=change_locale&&local=ru">Key RUS</a>
-    <a href="userController?command=change_locale&&local=be">Key BE</a>
-    <a href="userController?command=change_locale&&local=en">Key EN</a>
-    <a href="userController?command=authentication">${sign_in}</a>
+
+    <a href="mainController?command=change_locale&&local=ru">Key RUS</a>
+
+    <a href="mainController?command=change_locale&&local=be">Key BE</a>
+
+    <a href="mainController?command=change_locale&&local=en">Key EN</a>
+
+    <c:choose>
+        <c:when test="${not empty sessionScope.get('currentUserLogin')}">
+            <a href="">${currentUserLogin}</a>
+        </c:when>
+        <c:otherwise>
+            <a href="mainController?command=authentication">${sign_in}</a>
+        </c:otherwise>
+    </c:choose>
+
+    <c:if test="${sessionScope.get('currentUserRole') == 1}">
+        <a href="mainController?command=show_user_reg_data">${show_user_button}</a>
+        <a href="mainController?command=show_user_reg_data">${edit_user_button}</a>
+
+    </c:if>
+    <c:if test="${sessionScope.get('currentUserRole') == 2}">
+        <a href="mainController?command=show_user_reg_data">${show_user_button}</a>
+        <a href="mainController?command=show_user_reg_data">${edit_user_button}</a>
+        <a href="">Drop user</a>
+        <a href="">Show users</a>
+    </c:if>
+
+
     <a href="contactPage">${sign_out}</a><br/>
 </links>
-
-<img src="images/startPage.jpeg" alt="photo"/>
-
-
-<form action="userController" method="post">
-    <input type="hidden" name="command" value="change_locale"/>
-    <input type="hidden" name="local" value="be">
-    <input type="submit" value="${be_button}">
-</form>
-
-<form action="userController" method="post">
-    <input type="hidden" name="command" value="change_locale"/>
-    <input type="hidden" name="local" value="ru">
-    <input type="submit" value="${ru_button}">
-</form>
-
-<form action="userController" method="post">
-    <input type="hidden" name="command" value="change_locale"/>
-    <input type="hidden" name="local" value="en">
-    <input type="submit" value="${en_button}">
-</form>
-
-<h2><c:out value="${message}"/></h2>
 
 </body>
 </html>
