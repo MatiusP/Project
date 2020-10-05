@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToAuthPageCommand implements Command {
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
         String currentRequestURL = RequestURL.getRequestURL(request);

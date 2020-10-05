@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command;
 
-import by.epamtc.protsko.rentcar.bean.UserRegistrationDTO;
+import by.epamtc.protsko.rentcar.bean.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
@@ -22,7 +22,7 @@ public class CheckUserAuthData implements Command {
         String userLogin = request.getParameter("login");
         String userPassword = request.getParameter("password");
 
-        UserRegistrationDTO user = null;
+        RegistrationUserDTO user = null;
         try {
             user = userService.authentication(userLogin, userPassword);
         } catch (ServiceException e) {

@@ -61,12 +61,12 @@
 
     <c:if test="${sessionScope.get('currentUserRole') == 1}">
         <a href="mainController?command=show_user_reg_data">${show_user_button}</a>
-        <a href="mainController?command=show_user_reg_data">${edit_user_button}</a>
+        <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
 
     </c:if>
     <c:if test="${sessionScope.get('currentUserRole') == 2}">
         <a href="mainController?command=show_user_reg_data">${show_user_button}</a>
-        <a href="mainController?command=show_user_reg_data">${edit_user_button}</a>
+        <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
         <a href="">Drop user</a>
         <a href="">Show users</a>
     </c:if>

@@ -2,8 +2,9 @@ package by.epamtc.protsko.rentcar.service.impl;
 
 import java.util.List;
 
-import by.epamtc.protsko.rentcar.bean.UserRegistrationDTO;
-import by.epamtc.protsko.rentcar.bean.UserData;
+import by.epamtc.protsko.rentcar.bean.EditUserDTO;
+import by.epamtc.protsko.rentcar.bean.RegistrationUserDTO;
+import by.epamtc.protsko.rentcar.bean.User;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.exception.DAOException;
@@ -19,8 +20,8 @@ public class UserServiceImpl implements UserService {
     private static final String REG_FORM_FILLING_ERROR = "Registration form filling error";
 
     @Override
-    public UserRegistrationDTO authentication(String login, String password) throws ServiceException {
-        UserRegistrationDTO user;
+    public RegistrationUserDTO authentication(String login, String password) throws ServiceException {
+        RegistrationUserDTO user;
 
         try {
             if ((!login.isEmpty()) && (!password.isEmpty())) {
@@ -35,10 +36,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean registration(UserData userData) throws ServiceException {
+    public boolean registration(User user) throws ServiceException {
         try {
-            if (userServiceValidator.isRegistrationDataFilled(userData)) {
-                return userDAO.registration(userData);
+            if (userServiceValidator.isRegistrationDataFilled(user)) {
+                return userDAO.registration(user);
             } else {
                 throw new ServiceException(REG_FORM_FILLING_ERROR);
             }
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean editUserData(UserData userData) throws ServiceException {
+    public boolean editUserData(EditUserDTO user) throws ServiceException {
         // TODO Auto-generated method stub
         return false;
     }
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserRegistrationDTO> getUser(String criteria) throws ServiceException {
+    public List<RegistrationUserDTO> getUser(String criteria) throws ServiceException {
         // TODO Auto-generated method stub
         return null;
     }

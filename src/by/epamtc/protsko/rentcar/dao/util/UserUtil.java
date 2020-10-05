@@ -1,12 +1,16 @@
 package by.epamtc.protsko.rentcar.dao.util;
 
-import by.epamtc.protsko.rentcar.bean.UserData;
+import by.epamtc.protsko.rentcar.bean.User;
 import by.epamtc.protsko.rentcar.dao.exception.DAOException;
 import by.epamtc.protsko.rentcar.dao.validator.CommandProvider;
 import by.epamtc.protsko.rentcar.dao.validator.UserCredentialType;
 
 public class UserUtil {
     private static final CommandProvider validatorCommandProvider = new CommandProvider();
+
+    private UserUtil() {
+    }
+
 
     public static boolean isAuthenticationDataValid(String login, String password) throws DAOException {
         boolean isLoginValid = validatorCommandProvider.getValidator(UserCredentialType.LOGIN).execute(login);
@@ -20,17 +24,16 @@ public class UserUtil {
         }
     }
 
-    public static boolean isRegistrationDataValid(UserData userData) throws DAOException {
-        String userLogin = userData.getLogin();
-        String userPassword = userData.getPassword();
-        String userSurname = userData.getSurname();
-        String userName = userData.getName();
-        String userPassportID = userData.getPassportIdNumber();
-        String userDriverLicense = userData.getDriverLicense();
-        String userDateOfBirth = String.valueOf(userData.getDateOfBirth());
-        String userEMail = userData.geteMail();
-        String userPhone = userData.getPhone();
-
+    public static boolean isRegistrationDataValid(User user) throws DAOException {
+        String userLogin = user.getLogin();
+        String userPassword = user.getPassword();
+        String userSurname = user.getSurname();
+        String userName = user.getName();
+        String userPassportID = user.getPassportIdNumber();
+        String userDriverLicense = user.getDriverLicense();
+        String userDateOfBirth = String.valueOf(user.getDateOfBirth());
+        String userEMail = user.geteMail();
+        String userPhone = user.getPhone();
 
         boolean isLoginValid = validatorCommandProvider.getValidator(UserCredentialType.LOGIN).execute(userLogin);
         boolean isPasswordValid = validatorCommandProvider.getValidator(UserCredentialType.PASSWORD)

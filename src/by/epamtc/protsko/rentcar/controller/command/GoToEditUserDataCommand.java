@@ -1,20 +1,21 @@
 package by.epamtc.protsko.rentcar.controller.command;
 
 import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
+import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ShowUserRegDataCommand implements Command {
+public class GoToEditUserDataCommand implements Command {
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
         String currentRequestURL = RequestURL.getRequestURL(request);
 
         request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
 
-        request.getRequestDispatcher("WEB-INF/jsp/showUserRegDataPage.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/editUserDataPage.jsp").forward(request, response);
     }
 }
