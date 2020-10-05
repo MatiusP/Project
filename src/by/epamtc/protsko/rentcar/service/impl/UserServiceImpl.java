@@ -2,7 +2,7 @@ package by.epamtc.protsko.rentcar.service.impl;
 
 import java.util.List;
 
-import by.epamtc.protsko.rentcar.bean.User;
+import by.epamtc.protsko.rentcar.bean.UserRegistrationDTO;
 import by.epamtc.protsko.rentcar.bean.UserData;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
@@ -19,8 +19,8 @@ public class UserServiceImpl implements UserService {
     private static final String REG_FORM_FILLING_ERROR = "Registration form filling error";
 
     @Override
-    public User authentication(String login, String password) throws ServiceException {
-        User user;
+    public UserRegistrationDTO authentication(String login, String password) throws ServiceException {
+        UserRegistrationDTO user;
 
         try {
             if ((!login.isEmpty()) && (!password.isEmpty())) {
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUser(String criteria) throws ServiceException {
+    public List<UserRegistrationDTO> getUser(String criteria) throws ServiceException {
         // TODO Auto-generated method stub
         return null;
     }

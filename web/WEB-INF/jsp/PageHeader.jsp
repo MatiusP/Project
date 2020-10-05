@@ -25,6 +25,7 @@
     <fmt:message bundle="${loc}" key="local.editUserData.button" var="edit_user_button"/>
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style_headerPage.css"/>
+
 </head>
 <body>
 

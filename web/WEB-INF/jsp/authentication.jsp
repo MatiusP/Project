@@ -14,6 +14,8 @@
 <fmt:message bundle="${loc}" key="local.reg.message.authPage.message2" var="message_2_AuthPage"/>
 <fmt:message bundle="${loc}" key="local.authError.message" var="auth_error"/>
 
+<jsp:include page="PageHeader.jsp"/>
+
 <head>
     <title>Authentication page</title>
 </head>

@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.bean;
 
-public class Role {
-	
-	
+public enum Role {
+    CLIENT,
+    ADMIN
 }

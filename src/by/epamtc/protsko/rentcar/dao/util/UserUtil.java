@@ -6,9 +6,9 @@ import by.epamtc.protsko.rentcar.dao.validator.CommandProvider;
 import by.epamtc.protsko.rentcar.dao.validator.UserCredentialType;
 
 public class UserUtil {
-    private final CommandProvider validatorCommandProvider = new CommandProvider();
+    private static final CommandProvider validatorCommandProvider = new CommandProvider();
 
-    public boolean isAuthenticationDataValid(String login, String password) throws DAOException {
+    public static boolean isAuthenticationDataValid(String login, String password) throws DAOException {
         boolean isLoginValid = validatorCommandProvider.getValidator(UserCredentialType.LOGIN).execute(login);
         boolean isPassportValid = validatorCommandProvider.getValidator(UserCredentialType.PASSWORD)
                 .execute(password);
@@ -20,7 +20,7 @@ public class UserUtil {
         }
     }
 
-    public boolean isRegistrationDataValid(UserData userData) throws DAOException {
+    public static boolean isRegistrationDataValid(UserData userData) throws DAOException {
         String userLogin = userData.getLogin();
         String userPassword = userData.getPassword();
         String userSurname = userData.getSurname();

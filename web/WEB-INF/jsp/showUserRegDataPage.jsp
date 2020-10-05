@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<jsp:useBean id="userRegData" class="by.epamtc.protsko.rentcar.bean.User" scope="session"/>
+<jsp:useBean id="userRegData" class="by.epamtc.protsko.rentcar.bean.UserRegistrationDTO" scope="session"/>
 <jsp:include page="PageHeader.jsp"/>
 
 <p>

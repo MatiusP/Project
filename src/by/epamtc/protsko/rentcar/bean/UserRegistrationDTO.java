@@ -3,12 +3,10 @@ package by.epamtc.protsko.rentcar.bean;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class UserData implements Serializable {
-    private static final long serialVersionUID = -7140832636495909933L;
+public class UserRegistrationDTO implements Serializable {
+    private static final long serialVersionUID = -8685454795552992812L;
 
     private int id;
-    private String login;
-    private String password;
     private String surname;
     private String name;
     private String passportIdNumber;
@@ -18,23 +16,7 @@ public class UserData implements Serializable {
     private String phone;
     private int role;
 
-    public UserData() {
-    }
-
-    public UserData(int id, String login, String password, String surname, String name, String passportIdNumber,
-                    String driverLicense, LocalDate dateOfBirth, String eMail, String phone, int role) {
-        super();
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.surname = surname;
-        this.name = name;
-        this.passportIdNumber = passportIdNumber;
-        this.driverLicense = driverLicense;
-        this.dateOfBirth = dateOfBirth;
-        this.eMail = eMail;
-        this.phone = phone;
-        this.role = role;
+    public UserRegistrationDTO() {
     }
 
     public int getId() {
@@ -43,22 +25,6 @@ public class UserData implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getSurname() {
@@ -133,10 +99,8 @@ public class UserData implements Serializable {
         result = prime * result + ((driverLicense == null) ? 0 : driverLicense.hashCode());
         result = prime * result + ((eMail == null) ? 0 : eMail.hashCode());
         result = prime * result + id;
-        result = prime * result + ((login == null) ? 0 : login.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((passportIdNumber == null) ? 0 : passportIdNumber.hashCode());
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((phone == null) ? 0 : phone.hashCode());
         result = prime * result + role;
         result = prime * result + ((surname == null) ? 0 : surname.hashCode());
@@ -151,7 +115,7 @@ public class UserData implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        UserData other = (UserData) obj;
+        UserRegistrationDTO other = (UserRegistrationDTO) obj;
         if (dateOfBirth == null) {
             if (other.dateOfBirth != null)
                 return false;
@@ -169,11 +133,6 @@ public class UserData implements Serializable {
             return false;
         if (id != other.id)
             return false;
-        if (login == null) {
-            if (other.login != null)
-                return false;
-        } else if (!login.equals(other.login))
-            return false;
         if (name == null) {
             if (other.name != null)
                 return false;
@@ -183,11 +142,6 @@ public class UserData implements Serializable {
             if (other.passportIdNumber != null)
                 return false;
         } else if (!passportIdNumber.equals(other.passportIdNumber))
-            return false;
-        if (password == null) {
-            if (other.password != null)
-                return false;
-        } else if (!password.equals(other.password))
             return false;
         if (phone == null) {
             if (other.phone != null)
@@ -206,8 +160,8 @@ public class UserData implements Serializable {
 
     @Override
     public String toString() {
-        return "UserDTO [id=" + id + ", login=" + login + ", password=" + password + ", surname=" + surname + ", name="
-                + name + ", passportIdNumber=" + passportIdNumber + ", driverLicense=" + driverLicense
-                + ", dateOfBirth=" + dateOfBirth + ", eMail=" + eMail + ", phone=" + phone + ", role=" + role + "]";
+        return "User [id=" + id + ", surname=" + surname + ", name=" + name + ", passportIdNumber=" + passportIdNumber
+                + ", driverLicense=" + driverLicense + ", dateOfBirth=" + dateOfBirth + ", eMail=" + eMail + ", phone="
+                + phone + ", role=" + role + "]";
     }
 }

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import by.epamtc.protsko.rentcar.bean.User;
+import by.epamtc.protsko.rentcar.bean.UserRegistrationDTO;
 import by.epamtc.protsko.rentcar.bean.UserData;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
@@ -59,7 +59,8 @@ public class SaveNewUserCommand implements Command {
         }
 
         if (isRegistrationSuccessfully) {
-            User user = getUserRegistrationData(userData);
+            UserRegistrationDTO user = getUserRegistrationData(userData);
+            userData = null;
 
             session.setAttribute("userRegData", user);
             session.setAttribute("currentUserLogin", user.getSurname());
@@ -68,19 +69,13 @@ public class SaveNewUserCommand implements Command {
         }
     }
 
-    private User getUserRegistrationData(UserData userData) {
-        User user = new User();
-
-        user.setId(userData.getId());
-        user.setSurname(userData.getSurname());
-        user.setName(userData.getName());
-        user.setPassportIdNumber(userData.getPassportIdNumber());
-        user.setDriverLicense(userData.getDriverLicense());
-        user.setDateOfBirth(userData.getDateOfBirth());
-        user.seteMail(userData.geteMail());
-        user.setPhone(userData.getPhone());
-        user.setRole(1);//////////////////////////////////// убрать
-
+    private UserRegistrationDTO getUserRegistrationData(UserData userData) {
+        UserRegistrationDTO user = null;
+        try {
+            user = userService.authentication(userData.getLogin(), userData.getPassword());
+        } catch (ServiceException e) {
+            //loger;
+        }
         return user;
     }
 }
