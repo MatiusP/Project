@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command;
 
-import by.epamtc.protsko.rentcar.bean.RegistrationUserDTO;
+import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
@@ -37,6 +37,7 @@ public class CheckUserAuthData implements Command {
             session.removeAttribute("authError");
             session.setAttribute("currentUserLogin", userLogin);
             session.setAttribute("currentUserRole", user.getRole());
+            session.setAttribute("currentUserID", user.getId());
             session.setAttribute("userRegData", user);
 
             response.sendRedirect("mainController?command=go_to_main_page");

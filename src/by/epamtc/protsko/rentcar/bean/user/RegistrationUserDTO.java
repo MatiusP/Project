@@ -1,4 +1,4 @@
-package by.epamtc.protsko.rentcar.bean;
+package by.epamtc.protsko.rentcar.bean.user;
 
 import java.io.Serializable;
 import java.time.LocalDate;

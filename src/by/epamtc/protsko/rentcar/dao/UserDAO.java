@@ -2,9 +2,8 @@ package by.epamtc.protsko.rentcar.dao;
 
 import java.util.List;
 
-import by.epamtc.protsko.rentcar.bean.EditUserDTO;
-import by.epamtc.protsko.rentcar.bean.RegistrationUserDTO;
-import by.epamtc.protsko.rentcar.bean.User;
+import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
+import by.epamtc.protsko.rentcar.bean.user.User;
 import by.epamtc.protsko.rentcar.dao.exception.DAOException;
 
 public interface UserDAO {
@@ -13,7 +12,7 @@ public interface UserDAO {
 
     boolean registration(User user) throws DAOException;
 
-    boolean editUserData(EditUserDTO editUserDTO) throws DAOException;
+    boolean editUserData(User user) throws DAOException;
 
     boolean deleteUser(int userId) throws DAOException;
 

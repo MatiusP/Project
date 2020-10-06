@@ -1,15 +1,14 @@
-package by.epamtc.protsko.rentcar.bean;
+package by.epamtc.protsko.rentcar.bean.user;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class EditUserDTO implements Serializable {
-    private static final long serialVersionUID = 6346261302539455026L;
+public class FullUserDTO implements Serializable {
+    private static final long serialVersionUID = 936143019147785056L;
 
     private int id;
     private String login;
-    private String currentPassword;
-    private String newPassword;
+    private String password;
     private String surname;
     private String name;
     private String passportIdNumber;
@@ -19,7 +18,11 @@ public class EditUserDTO implements Serializable {
     private String phone;
     private int role;
 
-    public EditUserDTO() {
+    public FullUserDTO() {
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public int getId() {
@@ -38,20 +41,12 @@ public class EditUserDTO implements Serializable {
         this.login = login;
     }
 
-    public String getCurrentPassword() {
-        return currentPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setCurrentPassword(String currentPassword) {
-        this.currentPassword = currentPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getSurname() {
@@ -121,16 +116,14 @@ public class EditUserDTO implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EditUserDTO)) return false;
+        if (!(o instanceof FullUserDTO)) return false;
 
-        EditUserDTO that = (EditUserDTO) o;
+        FullUserDTO that = (FullUserDTO) o;
 
         if (id != that.id) return false;
         if (role != that.role) return false;
         if (login != null ? !login.equals(that.login) : that.login != null) return false;
-        if (currentPassword != null ? !currentPassword.equals(that.currentPassword) : that.currentPassword != null)
-            return false;
-        if (newPassword != null ? !newPassword.equals(that.newPassword) : that.newPassword != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (surname != null ? !surname.equals(that.surname) : that.surname != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (passportIdNumber != null ? !passportIdNumber.equals(that.passportIdNumber) : that.passportIdNumber != null)
@@ -146,8 +139,7 @@ public class EditUserDTO implements Serializable {
     public int hashCode() {
         int result = id;
         result = 31 * result + (login != null ? login.hashCode() : 0);
-        result = 31 * result + (currentPassword != null ? currentPassword.hashCode() : 0);
-        result = 31 * result + (newPassword != null ? newPassword.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (passportIdNumber != null ? passportIdNumber.hashCode() : 0);
@@ -161,11 +153,10 @@ public class EditUserDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "EditUserDTO{" +
+        return "FullUserDTO{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
-                ", currentPassword='" + currentPassword + '\'' +
-                ", newPassword='" + newPassword + '\'' +
+                ", password='" + password + '\'' +
                 ", surname='" + surname + '\'' +
                 ", name='" + name + '\'' +
                 ", passportIdNumber='" + passportIdNumber + '\'' +

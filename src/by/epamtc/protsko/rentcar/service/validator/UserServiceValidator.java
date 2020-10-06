@@ -1,19 +1,19 @@
 package by.epamtc.protsko.rentcar.service.validator;
 
-import by.epamtc.protsko.rentcar.bean.User;
+import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
 
 public class UserServiceValidator {
 
-    public boolean isRegistrationDataFilled(User user) {
-        String userLogin = user.getLogin();
-        String userPassword = user.getPassword();
-        String userSurname = user.getSurname();
-        String userName = user.getName();
-        String userPassportID = user.getPassportIdNumber();
-        String userDriverLicense = user.getDriverLicense();
-        String userDateOfBirth = String.valueOf(user.getDateOfBirth());
-        String userEMail = user.geteMail();
-        String userPhone = user.getPhone();
+    public boolean isRegistrationDataFilled(FullUserDTO userData) {
+        String userLogin = userData.getLogin();
+        String userPassword = userData.getPassword();
+        String userSurname = userData.getSurname();
+        String userName = userData.getName();
+        String userPassportID = userData.getPassportIdNumber();
+        String userDriverLicense = userData.getDriverLicense();
+        String userDateOfBirth = String.valueOf(userData.getDateOfBirth());
+        String userEMail = userData.geteMail();
+        String userPhone = userData.getPhone();
 
         boolean isLoginFilled = ((userLogin != null) && (!userLogin.isEmpty()));
         boolean isPasswordFilled = ((userPassword != null) && (!userPassword.isEmpty()));
@@ -31,5 +31,4 @@ public class UserServiceValidator {
         }
         return false;
     }
-
 }

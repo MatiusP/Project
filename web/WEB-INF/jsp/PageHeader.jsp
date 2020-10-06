@@ -72,7 +72,9 @@
     </c:if>
 
 
-    <a href="contactPage">${sign_out}</a><br/>
+    <a href="mainController?command=sign_out">${sign_out} </a>
+
+    <br/>
 </links>
 
 </body>

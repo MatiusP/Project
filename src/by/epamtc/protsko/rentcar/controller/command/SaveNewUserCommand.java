@@ -8,9 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import by.epamtc.protsko.rentcar.bean.RegistrationUserDTO;
-import by.epamtc.protsko.rentcar.bean.User;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
+import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
+import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.ServiceException;
@@ -21,28 +20,28 @@ public class SaveNewUserCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ControllerException, ServletException {
+            throws IOException, ServletException {
 
-        User user = null;
+        FullUserDTO fullUserDTO = null;
         boolean isRegistrationSuccessfully = false;
-        HttpSession session = request.getSession();
         String registrationError;
+        HttpSession session;
 
         try {
             if (request.getParameter("password").equals(request.getParameter("password_repeat"))) {
-                user = new User();
+                fullUserDTO = new FullUserDTO();
 
-                user.setLogin(request.getParameter("login"));
-                user.setPassword(request.getParameter("password"));
-                user.setSurname(request.getParameter("surname"));
-                user.setName(request.getParameter("name"));
-                user.setPassportIdNumber(request.getParameter("passport_Id_Number"));
-                user.setDriverLicense(request.getParameter("driver_license"));
-                user.setDateOfBirth(LocalDate.parse(request.getParameter("date_of_birth")));
-                user.seteMail(request.getParameter("e_mail"));
-                user.setPhone(request.getParameter("phone"));
+                fullUserDTO.setLogin(request.getParameter("login"));
+                fullUserDTO.setPassword(request.getParameter("password"));
+                fullUserDTO.setSurname(request.getParameter("surname"));
+                fullUserDTO.setName(request.getParameter("name"));
+                fullUserDTO.setPassportIdNumber(request.getParameter("passport_Id_Number"));
+                fullUserDTO.setDriverLicense(request.getParameter("driver_license"));
+                fullUserDTO.setDateOfBirth(LocalDate.parse(request.getParameter("date_of_birth")));
+                fullUserDTO.seteMail(request.getParameter("e_mail"));
+                fullUserDTO.setPhone(request.getParameter("phone"));
 
-                isRegistrationSuccessfully = userService.registration(user);
+                isRegistrationSuccessfully = userService.registration(fullUserDTO);
             } else {
                 registrationError = "Passwords do not match!";
                 request.setAttribute("passwordsError", registrationError);
@@ -59,20 +58,22 @@ public class SaveNewUserCommand implements Command {
         }
 
         if (isRegistrationSuccessfully) {
-            RegistrationUserDTO registrationUserDTO = getUserRegistrationData(user);
+            session = request.getSession();
+            RegistrationUserDTO registrationUserDTO = getUserRegistrationData(fullUserDTO);
 
             session.setAttribute("userRegData", registrationUserDTO);
-            session.setAttribute("currentUserLogin", user.getLogin());
-            session.setAttribute("currentUserRole", user.getRole());
-            user = null;
+            session.setAttribute("currentUserLogin", fullUserDTO.getLogin());
+            session.setAttribute("currentUserRole", registrationUserDTO.getRole());
+            session.setAttribute("currentUserID", registrationUserDTO.getId());
+            fullUserDTO = null;
             response.sendRedirect("mainController?command=show_user_reg_data");
         }
     }
 
-    private RegistrationUserDTO getUserRegistrationData(User userData) {
+    private RegistrationUserDTO getUserRegistrationData(FullUserDTO fullUserDTO) {
         RegistrationUserDTO user = null;
         try {
-            user = userService.authentication(userData.getLogin(), userData.getPassword());
+            user = userService.authentication(fullUserDTO.getLogin(), fullUserDTO.getPassword());
         } catch (ServiceException e) {
             //loger;
         }

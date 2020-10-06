@@ -21,16 +21,18 @@
 
 <body>
 
-<jsp:useBean id="userRegData" class="by.epamtc.protsko.rentcar.bean.RegistrationUserDTO" scope="session"/>
+<jsp:useBean id="userRegData" class="by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO" scope="session"/>
 <jsp:include page="PageHeader.jsp"/>
-
 
 
 <p>
 <h3>${page_message}</h3><br/>
 
 <form action="mainController" method="post">
-    <input type="hidden" name="command" value="show_user_profile_data">
+    <input type="hidden" name="command" value="edit_user_data">
+    <input type="hidden" name="currentUserID" value="${sessionScope.get('currentUserID')}"/>
+    <input type="hidden" name="currentLogin" value="${sessionScope.get('currentUserLogin')}">
+
     <table style="with: 50%" border="1">
         <tr>
             <td>Login</td>
@@ -38,39 +40,39 @@
         </tr>
         <tr>
             <td>Current password</td>
-            <td><input type="password" name="currentPassword" placeholder="enter_current_password"/></td>
+            <td><input type="password" name="currentPassword" placeholder="current_password"/></td>
         </tr>
         <tr>
             <td>New password</td>
-            <td><input type="password" name="newPassword" placeholder="enter_new_password"/></td>
+            <td><input type="password" name="newPassword" placeholder="new_password"/></td>
         </tr>
         <tr>
             <td>${reg_surname_mess}</td>
-            <td><input type="text" name="login" value="${userRegData.surname}" required/></td>
+            <td><input type="text" name="surname" value="${userRegData.surname}" required/></td>
         </tr>
         <tr>
             <td>${reg_name_mess}</td>
-            <td><input type="text" name="login" value="${userRegData.name}" required/></td>
+            <td><input type="text" name="name" value="${userRegData.name}" required/></td>
         </tr>
         <tr>
             <td>${reg_passportID_mess}</td>
-            <td><input type="text" name="login" value="${userRegData.passportIdNumber}" required/></td>
+            <td><input type="text" name="passportID" value="${userRegData.passportIdNumber}" required/></td>
         </tr>
         <tr>
             <td>${reg_driver_license_mess}</td>
-            <td><input type="text" name="login" value="${userRegData.driverLicense}" required/></td>
+            <td><input type="text" name="driverLicense" value="${userRegData.driverLicense}" required/></td>
         </tr>
         <tr>
             <td>${reg_date_birth_mess}</td>
-            <td><input type="text" name="login" value="${userRegData.dateOfBirth}" required/></td>
+            <td><input type="text" name="dateOfBirth" value="${userRegData.dateOfBirth}" required/></td>
         </tr>
         <tr>
             <td>${reg_email_mess}</td>
-            <td><input type="text" name="login" value="${userRegData.eMail}" required/></td>
+            <td><input type="text" name="eMail" value="${userRegData.eMail}" required/></td>
         </tr>
         <tr>
             <td>${reg_phone_mess}</td>
-            <td><input type="text" name="login" value="${userRegData.phone}" required/></td>
+            <td><input type="text" name="phone" value="${userRegData.phone}" required/></td>
         </tr>
         <c:if test="${sessionScope.get('currentUserRole') == 2}">
             <tr>
@@ -79,9 +81,11 @@
             </tr>
         </c:if>
     </table>
-</form>
 
-<form action="mainController?command=edit_user_data" method="post">
+    <c:if test="${requestScope.get('role') == null}">
+        <input type="hidden" name="role" value="${userRegData.role}"/>
+    </c:if>
+
     <input type="submit" value="Edit user data"/>
 </form>
 

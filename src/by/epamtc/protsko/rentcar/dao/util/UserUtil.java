@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.dao.util;
 
-import by.epamtc.protsko.rentcar.bean.User;
+import by.epamtc.protsko.rentcar.bean.user.User;
 import by.epamtc.protsko.rentcar.dao.exception.DAOException;
 import by.epamtc.protsko.rentcar.dao.validator.CommandProvider;
 import by.epamtc.protsko.rentcar.dao.validator.UserCredentialType;
