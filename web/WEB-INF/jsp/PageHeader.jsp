@@ -51,7 +51,7 @@
     <a href="mainController?command=change_locale&&local=en">Key EN</a>
 
     <c:choose>
-        <c:when test="${not empty sessionScope.get('currentUserLogin')}">
+        <c:when test="${not empty sessionScope.currentUserLogin}">
             <a href="">${currentUserLogin}</a>
         </c:when>
         <c:otherwise>
@@ -59,16 +59,16 @@
         </c:otherwise>
     </c:choose>
 
-    <c:if test="${sessionScope.get('currentUserRole') == 1}">
+    <c:if test="${sessionScope.currentUserRole == 1}">
         <a href="mainController?command=show_user_reg_data">${show_user_button}</a>
         <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
 
     </c:if>
-    <c:if test="${sessionScope.get('currentUserRole') == 2}">
+    <c:if test="${sessionScope.currentUserRole == 2}">
         <a href="mainController?command=show_user_reg_data">${show_user_button}</a>
         <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
         <a href="">Drop user</a>
-        <a href="">Show users</a>
+        <a href="mainController?command=get_all_users">Show all users</a>
     </c:if>
 
 

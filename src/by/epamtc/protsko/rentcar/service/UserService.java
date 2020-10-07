@@ -17,6 +17,8 @@ public interface UserService {
 	
 	boolean deleteUser(int userId) throws ServiceException;
 	
-	List<RegistrationUserDTO> getUser(String criteria) throws ServiceException;
+	List<FullUserDTO> getUser(FullUserDTO userDTO) throws ServiceException;
+
+	List<FullUserDTO> getAllUsers() throws ServiceException;
 
 }

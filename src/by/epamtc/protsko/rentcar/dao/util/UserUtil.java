@@ -5,6 +5,8 @@ import by.epamtc.protsko.rentcar.dao.exception.DAOException;
 import by.epamtc.protsko.rentcar.dao.validator.CommandProvider;
 import by.epamtc.protsko.rentcar.dao.validator.UserCredentialType;
 
+import java.time.LocalDate;
+
 public class UserUtil {
     private static final CommandProvider validatorCommandProvider = new CommandProvider();
 
@@ -70,5 +72,53 @@ public class UserUtil {
             throw new DAOException("Phone invalid");
         }
         return true;
+    }
+
+    public static String createSearchUserQuery(User userData) {
+        final int id = userData.getId();
+        final String login = userData.getLogin();
+        final String surname = userData.getSurname();
+        final String name = userData.getName();
+        final String passportIdNumber = userData.getPassportIdNumber();
+        final String driverLicense = userData.getDriverLicense();
+        final LocalDate dateOfBirth = userData.getDateOfBirth();
+        final String eMail = userData.geteMail();
+        final String phone = userData.getPhone();
+        final int role = userData.getRole();
+
+        StringBuffer searchUserCriteria = new StringBuffer();
+
+        if (id != 0) {
+            searchUserCriteria.append("id=" + id).append(" ");
+        }
+        if (!login.isEmpty()) {
+            searchUserCriteria.append("login=" + login).append(" ");
+        }
+        if (!surname.isEmpty()) {
+            searchUserCriteria.append("surname=" + surname).append(" ");
+        }
+        if (!name.isEmpty()) {
+            searchUserCriteria.append("name=" + name).append(" ");
+        }
+        if (!passportIdNumber.isEmpty()) {
+            searchUserCriteria.append("passport_id_number=" + passportIdNumber).append(" ");
+        }
+        if (!driverLicense.isEmpty()) {
+            searchUserCriteria.append("driver_license=" + driverLicense).append(" ");
+        }
+        if (dateOfBirth != null) {
+            searchUserCriteria.append("date_of_birth=" + dateOfBirth).append(" ");
+        }
+        if (!eMail.isEmpty()) {
+            searchUserCriteria.append("e_mail=" + eMail).append(" ");
+        }
+        if (!phone.isEmpty()) {
+            searchUserCriteria.append("phone=" + phone).append(" ");
+        }
+        if (role != 0) {
+            searchUserCriteria.append("role_id=" + role).append(" ");
+        }
+
+        return searchUserCriteria.toString().trim().replaceAll(" ", " AND ");
     }
 }

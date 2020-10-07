@@ -206,7 +206,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "UserDTO [id=" + id + ", login=" + login + ", password=" + password + ", surname=" + surname + ", name="
+        return "User [id=" + id + ", login=" + login + ", password=" + password + ", surname=" + surname + ", name="
                 + name + ", passportIdNumber=" + passportIdNumber + ", driverLicense=" + driverLicense
                 + ", dateOfBirth=" + dateOfBirth + ", eMail=" + eMail + ", phone=" + phone + ", role=" + role + "]";
     }

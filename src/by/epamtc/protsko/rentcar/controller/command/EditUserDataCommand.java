@@ -47,7 +47,6 @@ public class EditUserDataCommand implements Command {
             editUserDataError = e.getMessage();
             request.setAttribute("validationError", editUserDataError);
             response.sendRedirect("mainController?command=edit_user_data");
-            //request.getRequestDispatcher("mainController?command=edit_user_data").forward(request, response);
         }
 
         if (isEditUserDataSuccessfully) {

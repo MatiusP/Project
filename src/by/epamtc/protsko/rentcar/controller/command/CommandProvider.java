@@ -18,6 +18,8 @@ public class CommandProvider {
         commands.put(ParameterName.GO_TO_EDIT_USER_DATA_PAGE, new GoToEditUserDataCommand());
         commands.put(ParameterName.EDIT_USER_DATA, new EditUserDataCommand());
         commands.put(ParameterName.SIGN_OUT, new SignOutCommand());
+        commands.put(ParameterName.GET_ALL_USERS, new GetAllUsersCommand());
+        commands.put(ParameterName.FIND_USER, new FindUserCommand());
     }
 
     public Command getCommand(String commandName) {

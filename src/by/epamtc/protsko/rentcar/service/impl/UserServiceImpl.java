@@ -1,6 +1,8 @@
 package by.epamtc.protsko.rentcar.service.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private static final String LOGIN_OR_PASSWORD_ERROR = "Incorrect login or password";
     private static final String PASSWORD_ERROR = "Incorrect current password";
     private static final String REG_FORM_FILLING_ERROR = "Registration form filling error";
+    private static final String NO_USERS_FOUND = "No users found by the specified criteria";
 
     @Override
     public RegistrationUserDTO authentication(String login, String password) throws ServiceException {
@@ -54,10 +57,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean editUserData(EditUserDTO editUserData) throws ServiceException {
-        String currentUserLogin = editUserData.getCurrentLogin();
-        String currentUserPassword = editUserData.getCurrentPassword();
-        String newUserPassword = editUserData.getNewPassword();
+    public boolean editUserData(EditUserDTO userForEdit) throws ServiceException {
+        String currentUserLogin = userForEdit.getCurrentLogin();
+        String currentUserPassword = userForEdit.getCurrentPassword();
+        String newUserPassword = userForEdit.getNewPassword();
         User user;
 
         try {
@@ -65,12 +68,12 @@ public class UserServiceImpl implements UserService {
                 RegistrationUserDTO authentication = userDAO.authentication(currentUserLogin, currentUserPassword);
 
                 if (authentication != null) {
-                    user = buildUserFromEditData(editUserData);
+                    user = buildUserFromEditData(userForEdit);
                     return userDAO.editUserData(user);
                 }
             } else if ((currentUserPassword.isEmpty()) && (newUserPassword.isEmpty())) {
 
-                user = buildUserFromEditData(editUserData);
+                user = buildUserFromEditData(userForEdit);
                 return userDAO.editUserData(user);
             }
             throw new ServiceException(PASSWORD_ERROR);
@@ -86,10 +89,63 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<RegistrationUserDTO> getUser(String criteria) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
+    public List<FullUserDTO> getUser(FullUserDTO userSearchCriteria) throws ServiceException {
+        List<FullUserDTO> usersFoundList = new ArrayList<>();
+        FullUserDTO foundUser;
+
+        try {
+            final List<User> foundUsers = userDAO.getUser(buildUserFromFullUserDTO(userSearchCriteria));
+
+            for (User user : foundUsers) {
+                foundUser = buildFullUserData(user);
+                usersFoundList.add(foundUser);
+            }
+        } catch (DAOException e) {
+            //logger
+            e.printStackTrace();
+        }
+        if (usersFoundList.isEmpty()) {
+            throw new ServiceException(NO_USERS_FOUND);
+        }
+        return usersFoundList;
     }
+
+    @Override
+    public List<FullUserDTO> getAllUsers() throws ServiceException {
+        List<FullUserDTO> usersList = new ArrayList<>();
+        FullUserDTO fullUserData;
+
+        try {
+            List<User> users = userDAO.getAllUsers();
+
+            for (User user : users) {
+                fullUserData = buildFullUserData(user);
+                usersList.add(fullUserData);
+            }
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return usersList;
+    }
+
+    private FullUserDTO buildFullUserData(User user) {
+        FullUserDTO fullUserData = new FullUserDTO();
+
+        fullUserData.setId(user.getId());
+        fullUserData.setLogin(user.getLogin());
+        fullUserData.setPassword(user.getPassword());
+        fullUserData.setSurname(user.getSurname());
+        fullUserData.setName(user.getName());
+        fullUserData.setPassportIdNumber(user.getPassportIdNumber());
+        fullUserData.setDriverLicense(user.getDriverLicense());
+        fullUserData.setDateOfBirth(user.getDateOfBirth());
+        fullUserData.seteMail(user.geteMail());
+        fullUserData.setPhone(user.getPhone());
+        fullUserData.setRole(user.getRole());
+
+        return fullUserData;
+    }
+
 
     private User buildUserFromRegistrationData(FullUserDTO fullUserDTO) {
         User user = new User();
@@ -124,4 +180,23 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
+
+    private User buildUserFromFullUserDTO(FullUserDTO fullUserDTO) {
+        User user = new User();
+
+        user.setId(fullUserDTO.getId());
+        user.setLogin(fullUserDTO.getLogin());
+        user.setPassword(fullUserDTO.getPassword());
+        user.setSurname(fullUserDTO.getSurname());
+        user.setName(fullUserDTO.getName());
+        user.setPassportIdNumber(fullUserDTO.getPassportIdNumber());
+        user.setDriverLicense(fullUserDTO.getDriverLicense());
+        user.setDateOfBirth(fullUserDTO.getDateOfBirth());
+        user.seteMail(fullUserDTO.geteMail());
+        user.setPhone(fullUserDTO.getPhone());
+        user.setRole(fullUserDTO.getRole());
+
+        return user;
+    }
+
 }

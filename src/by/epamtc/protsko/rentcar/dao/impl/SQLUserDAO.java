@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
@@ -27,7 +28,9 @@ public class SQLUserDAO implements UserDAO {
     private static final String EDIT_USER_DATA_QUERY = "UPDATE users SET login=?, password=?, surname=?, name=?, passport_id_number=?, " +
             "driver_license=?, date_of_birth=?, e_mail=?, phone=?, role_id=? WHERE id=?";
     private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id=?";
-    private static final String GET_USERS_QUERY = "SELECT * FROM USERS";
+    private static final String GET_ALL_USERS_QUERY = "SELECT * FROM users";
+    private static final String GET_USER_QUERY = "SELECT * FROM users WHERE ";
+
 
     @Override
     public RegistrationUserDTO authentication(String login, String password) throws DAOException {
@@ -154,12 +157,103 @@ public class SQLUserDAO implements UserDAO {
         return false;
     }
 
-
-    //Find user method
     @Override
-    public List<User> getUser(String criteria) throws DAOException {
-        // TODO Auto-generated method stub
-        return null;
+    public List<User> getUser(User userData) throws DAOException {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        Statement statement = null;
+        List<User> users = new ArrayList<>();
+        String searchUserCriteriaQuery = GET_USER_QUERY + "(" + UserUtil.createSearchUserQuery(userData) + ")";
+        User user;
+
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.createStatement();
+
+            resultSet = statement.executeQuery(searchUserCriteriaQuery);
+
+            while (resultSet.next()) {
+                int i = 0;
+
+                user = new User();
+
+                user.setId(resultSet.getInt(++i));
+                user.setLogin(resultSet.getString(++i));
+                user.setPassword(resultSet.getString(++i));
+                user.setSurname(resultSet.getString(++i));
+                user.setName(resultSet.getString(++i));
+                user.setPassportIdNumber(resultSet.getString(++i));
+                user.setDriverLicense(resultSet.getString(++i));
+                user.setDateOfBirth(resultSet.getDate(++i).toLocalDate());
+                user.seteMail(resultSet.getString(++i));
+                user.setPhone(resultSet.getString(++i));
+                user.setRole(resultSet.getInt(++i));
+
+                users.add(user);
+            }
+        } catch (ConnectionPoolException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                closeStatement(statement);
+            }
+            if (resultSet != null) {
+                closeResultSet(resultSet);
+            }
+            closeConnection(connection);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> getAllUsers() throws DAOException {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        Statement statement = null;
+        List<User> users = new ArrayList<>();
+        User user;
+
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.createStatement();
+
+            resultSet = statement.executeQuery(GET_ALL_USERS_QUERY);
+
+            while (resultSet.next()) {
+                int i = 0;
+
+                user = new User();
+
+                user.setId(resultSet.getInt(++i));
+                user.setLogin(resultSet.getString(++i));
+                user.setPassword(resultSet.getString(++i));
+                user.setSurname(resultSet.getString(++i));
+                user.setName(resultSet.getString(++i));
+                user.setPassportIdNumber(resultSet.getString(++i));
+                user.setDriverLicense(resultSet.getString(++i));
+                user.setDateOfBirth(resultSet.getDate(++i).toLocalDate());
+                user.seteMail(resultSet.getString(++i));
+                user.setPhone(resultSet.getString(++i));
+                user.setRole(resultSet.getInt(++i));
+
+                users.add(user);
+            }
+        } catch (ConnectionPoolException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                closeStatement(statement);
+            }
+            if (resultSet != null) {
+                closeResultSet(resultSet);
+            }
+            closeConnection(connection);
+        }
+        return users;
     }
 
     private RegistrationUserDTO getRegistrationUserData(String login, String password) throws DAOException {

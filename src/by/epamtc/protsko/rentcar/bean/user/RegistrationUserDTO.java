@@ -160,7 +160,7 @@ public class RegistrationUserDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", surname=" + surname + ", name=" + name + ", passportIdNumber=" + passportIdNumber
+        return "RegistrationUserDTO [id=" + id + ", surname=" + surname + ", name=" + name + ", passportIdNumber=" + passportIdNumber
                 + ", driverLicense=" + driverLicense + ", dateOfBirth=" + dateOfBirth + ", eMail=" + eMail + ", phone="
                 + phone + ", role=" + role + "]";
     }
