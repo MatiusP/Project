@@ -8,9 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class SignOutCommand implements Command {
+    private static final String SIGN_OUT_MAPPING = "WEB-INF/jsp/signOut.jsp";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
 
-        request.getRequestDispatcher("WEB-INF/jsp/signOut.jsp").forward(request, response);
+        request.getRequestDispatcher(SIGN_OUT_MAPPING).forward(request, response);
     }
 }

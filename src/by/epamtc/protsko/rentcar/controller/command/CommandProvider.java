@@ -19,12 +19,12 @@ public class CommandProvider {
         commands.put(ParameterName.EDIT_USER_DATA, new EditUserDataCommand());
         commands.put(ParameterName.SIGN_OUT, new SignOutCommand());
         commands.put(ParameterName.GET_ALL_USERS, new GetAllUsersCommand());
+        commands.put(ParameterName.GO_TO_FIND_USER_PAGE, new GoToFindUserCommand());
         commands.put(ParameterName.FIND_USER, new FindUserCommand());
     }
 
     public Command getCommand(String commandName) {
         Command command = null;
-
         try {
             if (!commandName.isEmpty() || commandName != null) {
                 commandName = commandName.toUpperCase();

@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GoToAuthPageCommand implements Command {
-    private static final String AUTHENTICATION_MAPPING = "WEB-INF/jsp/authentication.jsp";
+public class GoToFindUserCommand implements Command {
+    private static final String FIND_USER_MAPPING = "WEB-INF/jsp/findUser.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -16,6 +16,6 @@ public class GoToAuthPageCommand implements Command {
 
         request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
 
-        request.getRequestDispatcher(AUTHENTICATION_MAPPING).forward(request, response);
+        request.getRequestDispatcher(FIND_USER_MAPPING).forward(request, response);
     }
 }

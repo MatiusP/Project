@@ -21,22 +21,6 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(int id, String login, String password, String surname, String name, String passportIdNumber,
-                String driverLicense, LocalDate dateOfBirth, String eMail, String phone, int role) {
-        super();
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.surname = surname;
-        this.name = name;
-        this.passportIdNumber = passportIdNumber;
-        this.driverLicense = driverLicense;
-        this.dateOfBirth = dateOfBirth;
-        this.eMail = eMail;
-        this.phone = phone;
-        this.role = role;
-    }
-
     public int getId() {
         return id;
     }

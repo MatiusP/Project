@@ -19,7 +19,6 @@ import by.epamtc.protsko.rentcar.dao.util.UserUtil;
 
 public class SQLUserDAO implements UserDAO {
     private static ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private PreparedStatement preparedStatement;
     private static final String IS_USER_EXIST_QUERY = "SELECT * FROM users WHERE (login=? AND password=?)";
     private static final String IS_LOGIN_EXISTS_QUERY = "SELECT * FROM users WHERE login=?";
     private static final String GET_USER_PASSWORD_QUERY = "SELECT password FROM users WHERE id=?";
@@ -51,6 +50,8 @@ public class SQLUserDAO implements UserDAO {
 
         if (UserUtil.isRegistrationDataValid(user)) {
             Connection connection = null;
+            PreparedStatement preparedStatement = null;
+
             try {
                 connection = connectionPool.takeConnection();
                 preparedStatement = connection.prepareStatement(INSERT_USER_TO_DATABASE_QUERY);
@@ -85,6 +86,7 @@ public class SQLUserDAO implements UserDAO {
     public boolean editUserData(User user) throws DAOException {
         String userPassword = user.getPassword();
         Connection connection = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet;
 
         try {
@@ -135,6 +137,7 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public boolean deleteUser(int userId) throws DAOException {
         Connection connection = null;
+        PreparedStatement preparedStatement = null;
 
         try {
             connection = connectionPool.takeConnection();
@@ -259,6 +262,7 @@ public class SQLUserDAO implements UserDAO {
     private RegistrationUserDTO getRegistrationUserData(String login, String password) throws DAOException {
         RegistrationUserDTO user = null;
         Connection connection = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
@@ -300,6 +304,7 @@ public class SQLUserDAO implements UserDAO {
 
     private boolean isLoginExist(String login) throws DAOException {
         Connection connection = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {

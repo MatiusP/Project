@@ -45,7 +45,7 @@
         </tr>
         <tr>
             <td>User date of birth</td>
-            <td><input type="text" name="dateOfBirth" placeholder="date of birth}"/></td>
+            <td><input type="text" name="dateOfBirth" placeholder="date of birth"/></td>
         </tr>
         <tr>
             <td>User e-mail</td>
@@ -57,26 +57,54 @@
         </tr>
         <tr>
             <td>User role</td>
-            <td><input type="text" name="role" placeholder="role"/></td>
+            <td><input type="number" name="role" placeholder="role"/></td>
         </tr>
-    </table>
+    </table><br/><br/>
 
 
     <c:choose>
-        <c:when test="${not empty sessionScope.validationError}">
-            <c:out value="${sessionScope..validationError}"
-            
+        <c:when test="${not empty sessionScope.noUsersMessage}">
+            <h2><c:out value="${sessionScope.noUsersMessage}"/></h2>
         </c:when>
+
+
+
+
         <c:otherwise>
-            <a href="mainController?command=authentication">${sign_in}</a>
+            <c:if test="${not empty requestScope.usersFoundList}">
+            <table style="with: 100%" border="1">
+                <tr>
+                    <td>id</td>
+                    <td>login</td>
+                    <td>surname</td>
+                    <td>name</td>
+                    <td>passportIdNumber</td>
+                    <td>driverLicense</td>
+                    <td>dateOfBirth</td>
+                    <td>eMail</td>
+                    <td>phone</td>
+                    <td>role</td>
+                </tr>
+
+                <c:forEach items="${requestScope.usersFoundList}" var="user">
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.login}</td>
+                        <td>${user.surname}</td>
+                        <td>${user.name}</td>
+                        <td>${user.passportIdNumber}</td>
+                        <td>${user.driverLicense}</td>
+                        <td>${user.dateOfBirth}</td>
+                        <td>${user.eMail}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.role}</td>
+                    </tr>
+                </c:forEach>
+
+            </table>
+            </c:if>
         </c:otherwise>
     </c:choose>
-
-
-
-
-
-
 
     <input type="hidden" name="command" value="find_user"/>
     <input type="submit" value="Find user"/>

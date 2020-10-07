@@ -21,10 +21,6 @@ public class FullUserDTO implements Serializable {
     public FullUserDTO() {
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public int getId() {
         return id;
     }

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToMainPageCommand implements Command {
+    private static final String PAGE_HEADER_MAPPING = "WEB-INF/jsp/PageHeader.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -15,6 +16,6 @@ public class GoToMainPageCommand implements Command {
 
         request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
 
-        request.getRequestDispatcher("WEB-INF/jsp/PageHeader.jsp").forward(request, response);
+        request.getRequestDispatcher(PAGE_HEADER_MAPPING).forward(request, response);
     }
 }

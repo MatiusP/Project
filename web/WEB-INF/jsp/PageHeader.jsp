@@ -69,7 +69,7 @@
         <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
         <a href="">Drop user</a>
         <a href="mainController?command=get_all_users">Show all users</a>
-        <a href="mainController?command=find_user">Find user</a>
+        <a href="mainController?command=go_to_find_user_page">Find user</a>
     </c:if>
 
 

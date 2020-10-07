@@ -2,12 +2,10 @@ package by.epamtc.protsko.rentcar.controller.command;
 
 import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.ServiceException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,12 +15,14 @@ import java.time.LocalDate;
 public class EditUserDataCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
+    private static final String EDIT_USER_DATA_MAPPING = "mainController?command=edit_user_data";
+    private static final String SHOW_USER_REG_DATA_MAPPING = "mainController?command=show_user_reg_data";
+    private static final String VALIDATION_ERROR = "validationError";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         EditUserDTO editUserData = null;
         boolean isEditUserDataSuccessfully = false;
-        HttpSession session = request.getSession(false);
         String editUserDataError;
 
         try {
@@ -37,7 +37,7 @@ public class EditUserDataCommand implements Command {
             editUserData.setName(request.getParameter("name"));
             editUserData.setPassportIdNumber(request.getParameter("passportID"));
             editUserData.setDriverLicense(request.getParameter("driverLicense"));
-            editUserData.setDateOfBirth(request.getParameter("dateOfBirth"));
+            editUserData.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth")));
             editUserData.seteMail(request.getParameter("eMail"));
             editUserData.setPhone(request.getParameter("phone"));
             editUserData.setRole(Integer.parseInt(request.getParameter("role")));
@@ -45,19 +45,20 @@ public class EditUserDataCommand implements Command {
             isEditUserDataSuccessfully = userService.editUserData(editUserData);
         } catch (ServiceException e) {
             editUserDataError = e.getMessage();
-            request.setAttribute("validationError", editUserDataError);
-            response.sendRedirect("mainController?command=edit_user_data");
+            request.setAttribute(VALIDATION_ERROR, editUserDataError);
+            response.sendRedirect(EDIT_USER_DATA_MAPPING);
         }
 
         if (isEditUserDataSuccessfully) {
             RegistrationUserDTO registrationUserDTO = getUserRegistrationData(editUserData);
+            HttpSession session = request.getSession(false);
 
             session.setAttribute("userRegData", registrationUserDTO);
             session.setAttribute("currentUserLogin", editUserData.getNewLogin());
             session.setAttribute("currentUserRole", registrationUserDTO.getRole());
             session.setAttribute("currentUserID", registrationUserDTO.getId());
             editUserData = null;
-            response.sendRedirect("mainController?command=show_user_reg_data");
+            response.sendRedirect(SHOW_USER_REG_DATA_MAPPING);
         }
     }
 
@@ -69,7 +70,7 @@ public class EditUserDataCommand implements Command {
         userRegData.setName(editUserDTO.getName());
         userRegData.setPassportIdNumber(editUserDTO.getPassportIdNumber());
         userRegData.setDriverLicense(editUserDTO.getDriverLicense());
-        userRegData.setDateOfBirth(LocalDate.parse(editUserDTO.getDateOfBirth()));
+        userRegData.setDateOfBirth(editUserDTO.getDateOfBirth());
         userRegData.seteMail(editUserDTO.geteMail());
         userRegData.setPhone(editUserDTO.getPhone());
         userRegData.setRole(editUserDTO.getRole());

@@ -12,10 +12,8 @@ import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 
 public class MainController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    private final CommandProvider provider = new CommandProvider();
-
     private static final String COMMAND_NAME = "command";
+    private final CommandProvider provider = new CommandProvider();
 
     public MainController() {
         super();

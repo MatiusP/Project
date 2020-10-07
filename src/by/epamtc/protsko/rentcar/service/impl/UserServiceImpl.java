@@ -1,8 +1,6 @@
 package by.epamtc.protsko.rentcar.service.impl;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
@@ -19,7 +17,6 @@ import by.epamtc.protsko.rentcar.service.validator.UserServiceValidator;
 public class UserServiceImpl implements UserService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
     private UserDAO userDAO = daoFactory.getUserDAO();
-    private UserServiceValidator userServiceValidator = new UserServiceValidator();
     private static final String LOGIN_OR_PASSWORD_ERROR = "Incorrect login or password";
     private static final String PASSWORD_ERROR = "Incorrect current password";
     private static final String REG_FORM_FILLING_ERROR = "Registration form filling error";
@@ -44,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public boolean registration(FullUserDTO userData) throws ServiceException {
         User user;
         try {
-            if (userServiceValidator.isRegistrationDataFilled(userData)) {
+            if (UserServiceValidator.isRegistrationDataFilled(userData)) {
                 user = buildUserFromRegistrationData(userData);
 
                 return userDAO.registration(user);
@@ -173,7 +170,7 @@ public class UserServiceImpl implements UserService {
         user.setName(editUserData.getName());
         user.setPassportIdNumber(editUserData.getPassportIdNumber());
         user.setDriverLicense(editUserData.getDriverLicense());
-        user.setDateOfBirth(LocalDate.parse(editUserData.getDateOfBirth()));
+        user.setDateOfBirth(editUserData.getDateOfBirth());
         user.seteMail(editUserData.geteMail());
         user.setPhone(editUserData.getPhone());
         user.setRole(editUserData.getRole());
@@ -198,5 +195,4 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
-
 }

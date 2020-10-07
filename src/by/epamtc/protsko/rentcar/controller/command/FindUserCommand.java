@@ -17,37 +17,73 @@ import java.util.List;
 public class FindUserCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
-    private HttpSession session;
+    private static final String FIND_USER_MAPPING = "mainController?command=find_users";
+    private static final String FIND_USER_PAGE_MAPPING = "WEB-INF/jsp/findUser.jsp";
     private static final String NO_USERS_EXC = "No any users in database";
-    private static final String VALIDATION_ERROR = "VALIDATION ERROR FIND USERS";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
-        session = request.getSession(false);
-        FullUserDTO userSearchParameters = new FullUserDTO();
+        final String searchingId = request.getParameter("id");
+        final String searchingLogin = request.getParameter("login");
+        final String searchingSurname = request.getParameter("surname");
+        final String searchingName = request.getParameter("name");
+        final String searchingPassportID = request.getParameter("passportID");
+        final String searchingDriverLicense = request.getParameter("driverLicense");
+        final String searchingDateOfBirth = request.getParameter("dateOfBirth");
+        final String searchingEMail = request.getParameter("eMail");
+        final String searchingPhone = request.getParameter("phone");
+        final String searchingRole = request.getParameter("role");
 
-        userSearchParameters.setId(Integer.parseInt(request.getParameter("id")));
-        userSearchParameters.setLogin(request.getParameter("login"));
-        userSearchParameters.setSurname(request.getParameter("surname"));
-        userSearchParameters.setName(request.getParameter("name"));
-        userSearchParameters.setPassportIdNumber(request.getParameter("passportID"));
-        userSearchParameters.setDriverLicense(request.getParameter("driverLicense"));
-        userSearchParameters.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth")));
-        userSearchParameters.seteMail(request.getParameter("eMail"));
-        userSearchParameters.setPhone(request.getParameter("phone"));
-        userSearchParameters.setRole(Integer.parseInt("role"));
+        List<FullUserDTO> usersFoundList = null;
+        FullUserDTO userSearchParameters = new FullUserDTO();
+        HttpSession session = request.getSession(false);
+
+        if (!searchingId.isEmpty()) {
+            userSearchParameters.setId(Integer.parseInt(searchingId));
+        }
+        if (!searchingLogin.isEmpty()) {
+            userSearchParameters.setLogin(searchingLogin);
+        }
+        if (!searchingSurname.isEmpty()) {
+            userSearchParameters.setSurname(searchingSurname);
+        }
+        if (!searchingName.isEmpty()) {
+            userSearchParameters.setName(searchingName);
+        }
+        if (!searchingPassportID.isEmpty()) {
+            userSearchParameters.setPassportIdNumber(searchingPassportID);
+        }
+        if (!searchingDriverLicense.isEmpty()) {
+            userSearchParameters.setDriverLicense(searchingDriverLicense);
+        }
+        if (!searchingDateOfBirth.isEmpty()) {
+            userSearchParameters.setDateOfBirth(LocalDate.parse(searchingDateOfBirth));
+        }
+        if (!searchingEMail.isEmpty()) {
+            userSearchParameters.seteMail(searchingEMail);
+        }
+        if (!searchingPhone.isEmpty()) {
+            userSearchParameters.setPhone(searchingPhone);
+        }
+        if (!searchingRole.isEmpty()) {
+            userSearchParameters.setRole(Integer.parseInt(searchingRole));
+        }
 
         try {
-            final List<FullUserDTO> usersFoundList = userService.getUser(userSearchParameters);
-            if (usersFoundList.isEmpty()) {
-                session.setAttribute("validationError", VALIDATION_ERROR);
-                response.sendRedirect("mainController?command=find_users");
-            } else {
+            usersFoundList = userService.getUser(userSearchParameters);
+
+            if (!usersFoundList.isEmpty()) {
+                session.removeAttribute("noUsersMessage");
                 request.setAttribute("usersFoundList", usersFoundList);
-                request.getRequestDispatcher("WEB-INF/jsp/findUser.jsp").forward(request, response);        //TODO размещение относительно catch - подумать
+                request.getRequestDispatcher(FIND_USER_PAGE_MAPPING).forward(request, response);
+            } else {
+                session.setAttribute("noUsersMessage", NO_USERS_EXC);
+                response.sendRedirect(FIND_USER_MAPPING);
             }
         } catch (ServiceException e) {
-            e.printStackTrace();
+            session.setAttribute("noUsersMessage", e.getMessage());
+            response.sendRedirect(FIND_USER_MAPPING);
         }
+
     }
 }

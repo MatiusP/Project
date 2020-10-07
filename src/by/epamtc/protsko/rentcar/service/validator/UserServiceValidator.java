@@ -4,7 +4,10 @@ import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
 
 public class UserServiceValidator {
 
-    public boolean isRegistrationDataFilled(FullUserDTO userData) {
+    private UserServiceValidator() {
+    }
+
+    public static boolean isRegistrationDataFilled(FullUserDTO userData) {
         String userLogin = userData.getLogin();
         String userPassword = userData.getPassword();
         String userSurname = userData.getSurname();
@@ -25,10 +28,7 @@ public class UserServiceValidator {
         boolean isEMailFilled = ((userEMail != null) && (!userEMail.isEmpty()));
         boolean isPhoneFilled = ((userPhone != null) && (!userPhone.isEmpty()));
 
-        if (isLoginFilled && isPasswordFilled && isSurnameFilled && isNameFilled && isPassportIDFilled
-                && isDriverLicenseFilled && isDateOfBirthFilled && isEMailFilled && isPhoneFilled) {
-            return true;
-        }
-        return false;
+        return (isLoginFilled && isPasswordFilled && isSurnameFilled && isNameFilled && isPassportIDFilled
+                && isDriverLicenseFilled && isDateOfBirthFilled && isEMailFilled && isPhoneFilled);
     }
 }

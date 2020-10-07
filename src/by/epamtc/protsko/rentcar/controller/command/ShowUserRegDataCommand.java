@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ShowUserRegDataCommand implements Command {
+    private static final String SHOW_USER_REG_DATA_PAGE_MAPPING = "WEB-INF/jsp/showUserRegDataPage.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -15,6 +16,6 @@ public class ShowUserRegDataCommand implements Command {
 
         request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
 
-        request.getRequestDispatcher("WEB-INF/jsp/showUserRegDataPage.jsp").forward(request, response);
+        request.getRequestDispatcher(SHOW_USER_REG_DATA_PAGE_MAPPING).forward(request, response);
     }
 }

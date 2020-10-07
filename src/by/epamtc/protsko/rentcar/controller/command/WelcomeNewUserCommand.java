@@ -7,18 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 
 public class WelcomeNewUserCommand implements Command {
+    private static final String USER_REG_PARAMETERS_MAPPING = "WEB-INF/jsp/userRegistrationParameter.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ControllerException {
+            throws ServletException, IOException {
 
         String currentRequestURL = RequestURL.getRequestURL(request);
 
         request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
 
-        request.getRequestDispatcher("WEB-INF/jsp/userRegistrationParameter.jsp").forward(request, response);
+        request.getRequestDispatcher(USER_REG_PARAMETERS_MAPPING).forward(request, response);
     }
 }
