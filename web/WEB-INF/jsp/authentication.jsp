@@ -27,7 +27,7 @@
     <c:out value="${auth_error}"/>
 </c:if>
 
-<form action="mainController" method="get">
+<form action="mainController" method="post">
     <input type="hidden" name="command" value="check_user_auth_data"/>
     ${login} <br/>
     <input type="text" name="login" placeholder="${login}"/><br/>

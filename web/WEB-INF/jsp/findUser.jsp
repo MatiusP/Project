@@ -14,7 +14,7 @@
 
 
 <p>
-<h3>Заполните данные для поиска пользователя</h3><br/>
+<h3>Заполните необходимые поля для поиска пользователя</h3><br/>
 
 <form action="mainController" method="post">
 
@@ -66,10 +66,6 @@
         <c:when test="${not empty sessionScope.noUsersMessage}">
             <h2><c:out value="${sessionScope.noUsersMessage}"/></h2>
         </c:when>
-
-
-
-
         <c:otherwise>
             <c:if test="${not empty requestScope.usersFoundList}">
             <table style="with: 100%" border="1">

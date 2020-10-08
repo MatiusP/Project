@@ -101,9 +101,6 @@ public class UserServiceImpl implements UserService {
             //logger
             e.printStackTrace();
         }
-        if (usersFoundList.isEmpty()) {
-            throw new ServiceException(NO_USERS_FOUND);
-        }
         return usersFoundList;
     }
 

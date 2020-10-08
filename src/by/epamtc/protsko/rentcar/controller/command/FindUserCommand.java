@@ -1,7 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command;
 
 import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.ServiceException;
@@ -17,12 +16,11 @@ import java.util.List;
 public class FindUserCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
-    private static final String FIND_USER_MAPPING = "mainController?command=find_users";
-    private static final String FIND_USER_PAGE_MAPPING = "WEB-INF/jsp/findUser.jsp";
+    private static final String FIND_USER_PAGE_MAPPING = "mainController?command=go_to_find_user_page";
     private static final String NO_USERS_EXC = "No any users in database";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final String searchingId = request.getParameter("id");
         final String searchingLogin = request.getParameter("login");
         final String searchingSurname = request.getParameter("surname");
@@ -72,18 +70,15 @@ public class FindUserCommand implements Command {
         try {
             usersFoundList = userService.getUser(userSearchParameters);
 
-            if (!usersFoundList.isEmpty()) {
+            if (usersFoundList.isEmpty()) {
+                session.setAttribute("noUsersMessage", NO_USERS_EXC);
+            } else {
                 session.removeAttribute("noUsersMessage");
                 request.setAttribute("usersFoundList", usersFoundList);
-                request.getRequestDispatcher(FIND_USER_PAGE_MAPPING).forward(request, response);
-            } else {
-                session.setAttribute("noUsersMessage", NO_USERS_EXC);
-                response.sendRedirect(FIND_USER_MAPPING);
             }
         } catch (ServiceException e) {
-            session.setAttribute("noUsersMessage", e.getMessage());
-            response.sendRedirect(FIND_USER_MAPPING);
+            //logger
         }
-
+        request.getRequestDispatcher(FIND_USER_PAGE_MAPPING).forward(request, response);
     }
 }

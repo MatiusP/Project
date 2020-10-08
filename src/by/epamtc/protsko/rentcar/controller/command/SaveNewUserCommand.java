@@ -17,6 +17,8 @@ import by.epamtc.protsko.rentcar.service.exception.ServiceException;
 public class SaveNewUserCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
+    private static final String REGISTRATION_MAPPING = "mainController?command=registration";
+    private static final String SHOW_USER_REG_DATA_MAPPING = "mainController?command=show_user_reg_data";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
@@ -45,7 +47,7 @@ public class SaveNewUserCommand implements Command {
             } else {
                 registrationError = "Passwords do not match!";
                 request.setAttribute("passwordsError", registrationError);
-                request.getRequestDispatcher("mainController?command=registration").forward(request, response);
+                request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
             }
         } catch (ServiceException e) {
             registrationError = e.getMessage();
@@ -54,7 +56,7 @@ public class SaveNewUserCommand implements Command {
             } else {
                 request.setAttribute("validationError", registrationError);
             }
-            request.getRequestDispatcher("mainController?command=registration").forward(request, response);
+            request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
         }
 
         if (isRegistrationSuccessfully) {
@@ -66,7 +68,7 @@ public class SaveNewUserCommand implements Command {
             session.setAttribute("currentUserRole", registrationUserDTO.getRole());
             session.setAttribute("currentUserID", registrationUserDTO.getId());
             fullUserDTO = null;
-            response.sendRedirect("mainController?command=show_user_reg_data");
+            response.sendRedirect(SHOW_USER_REG_DATA_MAPPING);
         }
     }
 
