@@ -44,11 +44,26 @@
 
     <a href="contactPage">${our_contacts_button}</a>
 
-    <a href="mainController?command=change_locale&&local=ru">Key RUS</a>
+    <form action="mainController" method="post">
+        <input type="hidden" name="command" value="change_locale"/>
+        <input type="hidden" name="local" value="ru"/>
+        <input type="image" src="${pageContext.request.contextPath}/images/rus_ikon.jpg" height="17" align="top"
+               alt="Rus">
+    </form>
 
-    <a href="mainController?command=change_locale&&local=be">Key BE</a>
+    <form action="mainController" method="post">
+        <input type="hidden" name="command" value="change_locale"/>
+        <input type="hidden" name="local" value="be"/>
+        <p><input type="image" src="${pageContext.request.contextPath}/images/be_icon1.jpg" height="17" align="top"
+                  alt="Bel"></p>
+    </form>
 
-    <a href="mainController?command=change_locale&&local=en">Key EN</a>
+    <form action="mainController" method="post">
+        <input type="hidden" name="command" value="change_locale"/>
+        <input type="hidden" name="local" value="en"/>
+        <p><input type="image" src="${pageContext.request.contextPath}/images/en_icon.png" height="17" align="top"
+                  alt="EN"></p>
+    </form>
 
     <c:choose>
         <c:when test="${not empty sessionScope.currentUserLogin}">
@@ -72,10 +87,8 @@
         <a href="mainController?command=go_to_find_user_page">Find user</a>
     </c:if>
 
-
     <a href="mainController?command=sign_out">${sign_out} </a>
 
-    <br/>
 </links>
 
 </body>
