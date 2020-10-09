@@ -7,6 +7,8 @@
     <title>All users page</title>
 
     <jsp:include page="headerPage.jsp"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/table_style.css"/>
+
 </head>
 <body>
 
@@ -18,19 +20,19 @@
         <h3><c:out value="${requestScope.noUsersException}"/></h3>
     </c:when>
     <c:otherwise>
-        <table style="with: 100%" border="1">
+        <table class="table_dark">
             <tr>
-                <td>id</td>
-                <td>login</td>
-                <td>password</td>
-                <td>surname</td>
-                <td>name</td>
-                <td>passportIdNumber</td>
-                <td>driverLicense</td>
-                <td>dateOfBirth</td>
-                <td>eMail</td>
-                <td>phone</td>
-                <td>role</td>
+                <th>id</th>
+                <th>login</th>
+                <th>password</th>
+                <th>surname</th>
+                <th>name</th>
+                <th>passportIdNumber</th>
+                <th>driverLicense</th>
+                <th>dateOfBirth</th>
+                <th>eMail</th>
+                <th>phone</th>
+                <th>role</th>
             </tr>
 
             <c:forEach items="${requestScope.usersList}" var="user">
