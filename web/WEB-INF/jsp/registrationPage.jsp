@@ -35,7 +35,7 @@
     <title>Registration form</title>
 </head>
 
-<jsp:include page="PageHeader.jsp"/>
+<jsp:include page="headerPage.jsp"/>
 
 <body>
 

@@ -1,0 +1,59 @@
+body{
+    margin: 0;
+}
+a{  color: white;
+    text-decoration: none;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: #011b32;
+    font-family: Helvetica;
+    align-items: center;
+}
+.header_logo{
+    font-size: 60px;
+    color: red;
+    font-family: "Algerian";
+    font-variant:small-caps;
+    line-height: 1.2;
+    position: sticky;
+    text-align: left;
+    left: 22.493px;
+    top: 5.374px;
+}
+.header_logotext{
+    font-variant:small-caps;
+    color: white;
+    font-size: 20px;
+    line-height: 1.2;
+    position:absolute;
+    text-align: right;
+    left: 26.493px;
+    top: 56.374px;
+}
+.header_slogan{
+    color: white;
+    font-family: "Segoe Print";
+    font-variant: small-caps;
+    font-size: 30px;
+}
+.header_nav{
+    display: flex;
+    justify-content:space-around;
+    padding: px;
+    background: #011b32;
+    font-family: Helvetica;
+    color: white;
+}
+.header_item {
+    padding: 5px 15px;
+    font-size: 15px;
+    margin-left: 5px;
+}
+.header_item:hover{
+    background-color: red;
+    border-radius: 4px;
+}
+

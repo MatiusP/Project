@@ -5,7 +5,7 @@
 
 <html>
 
-<jsp:include page="PageHeader.jsp"/>
+<jsp:include page="headerPage.jsp"/>
 
 <head>
     <title>Title</title>

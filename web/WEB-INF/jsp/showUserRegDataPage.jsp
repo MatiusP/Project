@@ -23,7 +23,7 @@
 <body>
 
 <jsp:useBean id="userRegData" class="by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO" scope="session"/>
-<jsp:include page="PageHeader.jsp"/>
+<jsp:include page="headerPage.jsp"/>
 
 <p>
 <h2>${main_message}</h2></p><br/>

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToMainPageCommand implements Command {
-    private static final String PAGE_HEADER_MAPPING = "WEB-INF/jsp/PageHeader.jsp";
+    private static final String PAGE_HEADER_MAPPING = "WEB-INF/jsp/headerPage.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
