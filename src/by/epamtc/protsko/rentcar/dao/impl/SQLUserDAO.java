@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.User;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
@@ -35,7 +34,7 @@ public class SQLUserDAO implements UserDAO {
 
 
     @Override
-    public RegistrationUserDTO authentication(String login, String password) throws DAOException {
+    public User authentication(String login, String password) throws DAOException {
 
         return getRegistrationUserData(login, password);
     }
@@ -89,7 +88,6 @@ public class SQLUserDAO implements UserDAO {
 
             if (userPassword.isEmpty()) {
                 preparedStatement = connection.prepareStatement(GET_USER_PASSWORD_QUERY);
-
                 preparedStatement.setInt(1, user.getId());
 
                 resultSet = preparedStatement.executeQuery();
@@ -123,7 +121,7 @@ public class SQLUserDAO implements UserDAO {
             if (preparedStatement != null) {
                 closeStatement(preparedStatement);
             }
-            if (resultSet != null){
+            if (resultSet != null) {
                 closeResultSet(resultSet);
             }
             closeConnection(connection);
@@ -169,15 +167,14 @@ public class SQLUserDAO implements UserDAO {
             connection = connectionPool.takeConnection();
             statement = connection.createStatement();
 
-            if (!searchCriteria.isEmpty()){
+            if (!searchCriteria.isEmpty()) {
                 resultSet = statement.executeQuery(GET_USER_QUERY + "(" + searchCriteria + ")");
-            }else {
+            } else {
                 resultSet = statement.executeQuery(GET_ALL_USERS_QUERY);
             }
 
             while (resultSet.next()) {
                 int i = 0;
-
                 user = new User();
 
                 user.setId(resultSet.getInt(++i));
@@ -210,8 +207,8 @@ public class SQLUserDAO implements UserDAO {
         return users;
     }
 
-    private RegistrationUserDTO getRegistrationUserData(String login, String password) throws DAOException {
-        RegistrationUserDTO user = null;
+    private User getRegistrationUserData(String login, String password) throws DAOException {
+        User user = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -226,8 +223,10 @@ public class SQLUserDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                user = new RegistrationUserDTO();
+                user = new User();
                 user.setId(resultSet.getInt(1));
+                user.setLogin(resultSet.getString(2));
+                user.setPassword(resultSet.getString(3));
                 user.setSurname(resultSet.getString(4));
                 user.setName(resultSet.getString(5));
                 user.setPassportIdNumber(resultSet.getString(6));

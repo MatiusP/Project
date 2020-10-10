@@ -74,7 +74,7 @@ public class UserUtil {
         return true;
     }
 
-    public static String createSearchUserQuery(User userData) {
+    public static String createSearchUserQuery(FullUserDTO userData) {
         final int id = userData.getId();
         final String login = userData.getLogin();
         final String surname = userData.getSurname();

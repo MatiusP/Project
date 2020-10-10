@@ -19,20 +19,20 @@ public class GetAllUsersCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<FullUserDTO> usersList;
-
-        try {
-            usersList = userService.getAllUsers();
-
-            if (!usersList.isEmpty()) {
-                request.setAttribute("usersList", usersList);
-            } else {
-                request.setAttribute("noUsersException", NO_USERS_EXC);
-            }
-        } catch (ServiceException e) {
-            //logger
-            e.printStackTrace();
-        }
-        request.getRequestDispatcher(SHOW_ALL_USERS_PAGE).forward(request, response);
+//        List<FullUserDTO> usersList;
+//
+//        try {
+//            usersList = userService.getAllUsers();
+//
+//            if (!usersList.isEmpty()) {
+//                request.setAttribute("usersList", usersList);
+//            } else {
+//                request.setAttribute("noUsersException", NO_USERS_EXC);
+//            }
+//        } catch (ServiceException e) {
+//            //logger
+//            e.printStackTrace();
+//        }
+//        request.getRequestDispatcher(SHOW_ALL_USERS_PAGE).forward(request, response);
     }
 }

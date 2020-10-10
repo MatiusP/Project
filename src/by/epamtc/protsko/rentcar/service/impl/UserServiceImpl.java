@@ -20,45 +20,47 @@ public class UserServiceImpl implements UserService {
     private static final String LOGIN_OR_PASSWORD_ERROR = "Incorrect login or password";
     private static final String PASSWORD_ERROR = "Incorrect current password";
     private static final String REG_FORM_FILLING_ERROR = "Registration form filling error";
-    private static final String NO_USERS_FOUND = "No users found by the specified criteria";
 
-//    @Override
-//    public RegistrationUserDTO authentication(String login, String password) throws ServiceException {
-//
-//        try {
-//            if (!UserUtil.isAuthenticationDataValid(login, password)) {
-//                throw new ServiceException(LOGIN_OR_PASSWORD_ERROR);
-//            }
-//
-//            return userDAO.authentication(login, password);
-//
-//        } catch (DAOException e) {
-//            throw new ServiceException(e);
-//        }
-//    }
+    @Override
+    public RegistrationUserDTO authentication(String login, String password) throws ServiceException {
+        RegistrationUserDTO regUserData = null;
 
+        try {
+            if (!UserUtil.isAuthenticationDataValid(login, password)) {
+                throw new ServiceException(LOGIN_OR_PASSWORD_ERROR);
+            }
 
-//    @Override
-//    public boolean registration(FullUserDTO userData) throws ServiceException {
-//        User user;
-//
-//        try {
-//            if (!isRegistrationDataFilled(userData)) {
-//                throw new ServiceException(REG_FORM_FILLING_ERROR);
-//            }
-//
-//            if (UserUtil.isRegistrationDataValid(userData)) {
-//                user = buildUserFromRegistrationData(userData);
-//
-//                return userDAO.registration(user);
-//            }
-//        } catch (DAOException e) {
-//            throw new ServiceException(e.getMessage(), e);
-//        }
-//        return false;
-//    }
+            User authenticationData = userDAO.authentication(login, password);
+            regUserData = buildRegistrationUserDTOFromUser(authenticationData);
+            authenticationData = null;
+
+            return regUserData;
+
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 
 
+    @Override
+    public boolean registration(FullUserDTO userData) throws ServiceException {
+        User user;
+
+        try {
+            if (!isRegistrationDataFilled(userData)) {
+                throw new ServiceException(REG_FORM_FILLING_ERROR);
+            }
+
+            if (UserUtil.isRegistrationDataValid(userData)) {
+                user = buildUserFromRegistrationData(userData);
+
+                return userDAO.registration(user);
+            }
+        } catch (DAOException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+        return false;
+    }
 
 
     @Override
@@ -70,9 +72,11 @@ public class UserServiceImpl implements UserService {
 
         try {
             if (!currentUserPassword.isEmpty()) {
-                RegistrationUserDTO authentication = userDAO.authentication(currentUserLogin, currentUserPassword);
+                User authentication = userDAO.authentication(currentUserLogin, currentUserPassword);
+                RegistrationUserDTO authenticationData = buildRegistrationUserDTOFromUser(authentication);
+                authentication = null;
 
-                if (authentication != null) {
+                if (authenticationData != null) {
                     user = buildUserFromEditData(userForEdit);
                     return userDAO.editUserData(user);
                 }
@@ -87,32 +91,33 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-//    @Override
-//    public boolean deleteUser(int userId) throws ServiceException {
-//
-//        try {
-//            return userDAO.deleteUser(userId);
-//        } catch (DAOException e) {
-//            throw new ServiceException("Delete user error", e);
-//        }
-//    }
+    @Override
+    public boolean deleteUser(int userId) throws ServiceException {
+
+        try {
+            return userDAO.deleteUser(userId);
+        } catch (DAOException e) {
+            throw new ServiceException("Delete user error", e);
+        }
+    }
 
     @Override
     public List<FullUserDTO> getUser(FullUserDTO userSearchCriteria) throws ServiceException {
         List<FullUserDTO> usersFoundList = new ArrayList<>();
-//        FullUserDTO foundUser;
-//
-//        try {
-//            final List<User> foundUsers = userDAO.getUser(buildUserFromFullUserDTO(userSearchCriteria));
-//
-//            for (User user : foundUsers) {
-//                foundUser = buildFullUserData(user);
-//                usersFoundList.add(foundUser);
-//            }
-//        } catch (DAOException e) {
-//            //logger
-//            e.printStackTrace();
-//        }
+        FullUserDTO foundUser;
+        String searchCriteria = UserUtil.createSearchUserQuery(userSearchCriteria);
+
+        try {
+            final List<User> foundUsers = userDAO.findUser(searchCriteria);
+
+            for (User user : foundUsers) {
+                foundUser = buildFullUserData(user);
+                usersFoundList.add(foundUser);
+            }
+        } catch (DAOException e) {
+            //logger
+            throw new ServiceException(e);
+        }
         return usersFoundList;
     }
 
@@ -159,6 +164,22 @@ public class UserServiceImpl implements UserService {
         return fullUserData;
     }
 
+    private RegistrationUserDTO buildRegistrationUserDTOFromUser(User user) {
+        RegistrationUserDTO registrationUserData = new RegistrationUserDTO();
+
+        registrationUserData.setId(user.getId());
+        registrationUserData.setSurname(user.getSurname());
+        registrationUserData.setName(user.getName());
+        registrationUserData.setPassportIdNumber(user.getPassportIdNumber());
+        registrationUserData.setDriverLicense(user.getDriverLicense());
+        registrationUserData.setDateOfBirth(user.getDateOfBirth());
+        registrationUserData.seteMail(user.geteMail());
+        registrationUserData.setPhone(user.getPhone());
+        registrationUserData.setRole(user.getRole());
+
+        return registrationUserData;
+    }
+
 
     private User buildUserFromRegistrationData(FullUserDTO fullUserDTO) {
         User user = new User();
@@ -194,21 +215,21 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private User buildUserFromFullUserData(FullUserDTO fullUserDTO) {
-        User user = new User();
-
-        user.setId(fullUserDTO.getId());
-        user.setLogin(fullUserDTO.getLogin());
-        user.setPassword(fullUserDTO.getPassword());
-        user.setSurname(fullUserDTO.getSurname());
-        user.setName(fullUserDTO.getName());
-        user.setPassportIdNumber(fullUserDTO.getPassportIdNumber());
-        user.setDriverLicense(fullUserDTO.getDriverLicense());
-        user.setDateOfBirth(fullUserDTO.getDateOfBirth());
-        user.seteMail(fullUserDTO.geteMail());
-        user.setPhone(fullUserDTO.getPhone());
-        user.setRole(fullUserDTO.getRole());
-
-        return user;
-    }
+//    private User buildUserFromFullUserData(FullUserDTO fullUserDTO) {
+//        User user = new User();
+//
+//        user.setId(fullUserDTO.getId());
+//        user.setLogin(fullUserDTO.getLogin());
+//        user.setPassword(fullUserDTO.getPassword());
+//        user.setSurname(fullUserDTO.getSurname());
+//        user.setName(fullUserDTO.getName());
+//        user.setPassportIdNumber(fullUserDTO.getPassportIdNumber());
+//        user.setDriverLicense(fullUserDTO.getDriverLicense());
+//        user.setDateOfBirth(fullUserDTO.getDateOfBirth());
+//        user.seteMail(fullUserDTO.geteMail());
+//        user.setPhone(fullUserDTO.getPhone());
+//        user.setRole(fullUserDTO.getRole());
+//
+//        return user;
+//    }
 }

@@ -39,6 +39,7 @@ public class CheckUserAuthData implements Command {
             session.setAttribute("userRegData", user);
 
             response.sendRedirect(MAIN_PAGE_MAPPING);
+            return;
         }
         session.setAttribute("authError", AUTH_ERROR);
         response.sendRedirect(AUTHENTICATION_MAPPING);
