@@ -31,14 +31,16 @@ public class UserServiceImpl implements UserService {
             }
 
             User authenticationData = userDAO.authentication(login, password);
-            regUserData = buildRegistrationUserDTOFromUser(authenticationData);
-            authenticationData = null;
+            if (authenticationData != null) {
+                regUserData = buildRegistrationUserDTOFromUser(authenticationData);
+                authenticationData = null;
 
-            return regUserData;
-
+                return regUserData;
+            }
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
+        return regUserData;
     }
 
 
@@ -47,7 +49,7 @@ public class UserServiceImpl implements UserService {
         User user;
 
         try {
-            if (!isRegistrationDataFilled(userData)) {
+            if (!isRegistrationFormFilled(userData)) {
                 throw new ServiceException(REG_FORM_FILLING_ERROR);
             }
 
@@ -121,7 +123,7 @@ public class UserServiceImpl implements UserService {
         return usersFoundList;
     }
 
-    private boolean isRegistrationDataFilled(FullUserDTO userData) {
+    private boolean isRegistrationFormFilled(FullUserDTO userData) {
         String userLogin = userData.getLogin();
         String userPassword = userData.getPassword();
         String userSurname = userData.getSurname();

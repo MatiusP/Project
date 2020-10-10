@@ -74,7 +74,7 @@
                     <nav>
                         <ul class="topmenu">
                             <li><a href="" class="submenu-link">${sessionScope.currentUserLogin}</a>
-                                <c:if test="${sessionScope.currentUserRole == 1}">
+                                <c:if test="${sessionScope.userRegData.role == 1}">
                                     <ul class="submenu">
                                         <li><a href="mainController?command=show_user_reg_data">${show_user_button}</a>
                                         </li>
@@ -84,7 +84,7 @@
                                         <li><a href="">My orders</a></li>
                                     </ul>
                                 </c:if>
-                                <c:if test="${sessionScope.currentUserRole == 2}">
+                                <c:if test="${sessionScope.userRegData.role == 2}">
                                     <ul class="submenu">
                                         <li><a href="mainController?command=show_user_reg_data">${show_user_button}</a>
                                         </li>

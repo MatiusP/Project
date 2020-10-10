@@ -88,7 +88,7 @@
         </tr>
         <tr>
             <td>${enter_date_birth}</td>
-            <td><input type="date" name="date_of_birth" placeholder="" required/></td>
+            <td><input type="text" name="date_of_birth" placeholder="${date_birth}" required/></td>
         </tr>
         <tr>
             <td>${enter_email}</td>

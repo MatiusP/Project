@@ -16,12 +16,14 @@ public class CheckUserAuthData implements Command {
     private static final String AUTH_ERROR = "Incorrect login or password";
     private static final String AUTHENTICATION_MAPPING = "mainController?command=authentication";
     private static final String MAIN_PAGE_MAPPING = "mainController?command=go_to_main_page";
+    private static final String PARAMETER_LOGIN = "login";
+    private static final String PARAMETER_PASSWORD = "password";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        String userLogin = request.getParameter("login");
-        String userPassword = request.getParameter("password");
+        String userLogin = request.getParameter(PARAMETER_LOGIN);
+        String userPassword = request.getParameter(PARAMETER_PASSWORD);
 
         RegistrationUserDTO user = null;
 
@@ -34,8 +36,6 @@ public class CheckUserAuthData implements Command {
         if (user != null) {
             session.removeAttribute("authError");
             session.setAttribute("currentUserLogin", userLogin);
-            session.setAttribute("currentUserRole", user.getRole());
-            session.setAttribute("currentUserID", user.getId());
             session.setAttribute("userRegData", user);
 
             response.sendRedirect(MAIN_PAGE_MAPPING);

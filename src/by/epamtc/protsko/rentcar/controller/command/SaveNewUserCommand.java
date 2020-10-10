@@ -2,6 +2,7 @@ package by.epamtc.protsko.rentcar.controller.command;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +59,10 @@ public class SaveNewUserCommand implements Command {
             }
             request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
         }
+        catch (DateTimeParseException e){
+            request.setAttribute("validationError", "Incorrect date format");
+            request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
+        }
 
         if (isRegistrationSuccessfully) {
             session = request.getSession();
@@ -65,8 +70,6 @@ public class SaveNewUserCommand implements Command {
 
             session.setAttribute("userRegData", registrationUserDTO);
             session.setAttribute("currentUserLogin", fullUserDTO.getLogin());
-            session.setAttribute("currentUserRole", registrationUserDTO.getRole());
-            session.setAttribute("currentUserID", registrationUserDTO.getId());
             fullUserDTO = null;
             response.sendRedirect(SHOW_USER_REG_DATA_MAPPING);
         }

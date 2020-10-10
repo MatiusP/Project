@@ -15,28 +15,41 @@
 <fmt:message bundle="${loc}" key="local.authError.message" var="auth_error"/>
 
 <jsp:include page="headerPage.jsp"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/authentication_style.css"/>
 
 <head>
     <title>Authentication page</title>
 </head>
 
+<style>
+    body {
+        background: url("${pageContext.request.contextPath}/images/page_font.jpg");
+    }
+</style>
+
 <body>
-<h2>${message}</h2>
 
-<c:if test="${not empty sessionScope.get('authError')}">
-    <c:out value="${auth_error}"/>
-</c:if>
+<form class="transparent" action="mainController" method="post">
+    <div class="form-inner">
 
-<form action="mainController" method="post">
-    <input type="hidden" name="command" value="check_user_auth_data"/>
-    ${login} <br/>
-    <input type="text" name="login" placeholder="${login}"/><br/>
-    ${password} <br/>
-    <input type="password" name="password" placeholder="${password}"/><br/><br/>
-    <input type="submit" value="${sign_in}"/><br/>
+        <h3>${message}</h3>
+        <input type="hidden" name="command" value="check_user_auth_data"/>
+        <label>${login}</label>
+        <input type="text" name="login" placeholder="${login}"/><br/>
+        <label>${password}</label>
+        <input type="password" name="password" placeholder="${password}"/>
+        <div class="message">
+            <c:if test="${not empty sessionScope.get('authError')}">
+                <h4><c:out value="${auth_error}"/></h4>
+            </c:if>
+        </div>
+        <input type="submit" value="${sign_in}"/><br/>
+        <div class="message">
+            <h4>${message_1_AuthPage} <a href="mainController?command=registration">${message_2_AuthPage}</a></h4>
+        </div>
+    </div>
 </form>
 
-${message_1_AuthPage} <a href="mainController?command=registration">${message_2_AuthPage}</a>
-
 </body>
+
 </html>
