@@ -36,16 +36,6 @@
     <input type="submit" value="${sign_in}"/><br/>
 </form>
 
-<form>
-    <select name="menu" size="1">
-        <option value="first">First</option>
-        <option value="second">Second</option>
-        <option value="third">Third</option>
-        <option value="four">Four</option>
-        <option value="five">Five</option>
-    </select>
-</form>
-
 ${message_1_AuthPage} <a href="mainController?command=registration">${message_2_AuthPage}</a>
 
 </body>

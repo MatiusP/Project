@@ -113,8 +113,10 @@
     </div>
 </div>
 <main>
-    <img src="${pageContext.request.contextPath}/images/StartPage.jpg"
-         width="100%" height="auto">
+
+
+    <%-- <img src="${pageContext.request.contextPath}/images/StartPage.jpg"
+         width="100%" height="auto"> --%>
 </main>
 </body>
 </html>

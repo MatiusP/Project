@@ -1,4 +1,4 @@
-package by.epamtc.protsko.rentcar.dao.validator;
+package by.epamtc.protsko.rentcar.service.validator;
 
 import java.util.HashMap;
 import java.util.Map;

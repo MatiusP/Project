@@ -21,6 +21,7 @@ public class CommandProvider {
         commands.put(ParameterName.GET_ALL_USERS, new GetAllUsersCommand());
         commands.put(ParameterName.GO_TO_FIND_USER_PAGE, new GoToFindUserCommand());
         commands.put(ParameterName.FIND_USER, new FindUserCommand());
+        commands.put(ParameterName.DELETE_USER, new DeleteUserCommand());
     }
 
     public Command getCommand(String commandName) {

@@ -14,5 +14,6 @@ public enum ParameterName {
 	SIGN_OUT,
 	GET_ALL_USERS,
 	FIND_USER,
-	GO_TO_FIND_USER_PAGE
+	GO_TO_FIND_USER_PAGE,
+	DELETE_USER
 }

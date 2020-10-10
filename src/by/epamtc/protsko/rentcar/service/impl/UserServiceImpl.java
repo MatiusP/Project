@@ -12,7 +12,7 @@ import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.exception.DAOException;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.ServiceException;
-import by.epamtc.protsko.rentcar.service.validator.UserServiceValidator;
+import by.epamtc.protsko.rentcar.service.util.UserUtil;
 
 public class UserServiceImpl implements UserService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
@@ -22,36 +22,44 @@ public class UserServiceImpl implements UserService {
     private static final String REG_FORM_FILLING_ERROR = "Registration form filling error";
     private static final String NO_USERS_FOUND = "No users found by the specified criteria";
 
-    @Override
-    public RegistrationUserDTO authentication(String login, String password) throws ServiceException {
-        RegistrationUserDTO userRegistrationData;
-        try {
-            if ((!login.isEmpty()) && (!password.isEmpty())) {
-                userRegistrationData = userDAO.authentication(login, password);
-            } else {
-                throw new ServiceException(LOGIN_OR_PASSWORD_ERROR);
-            }
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return userRegistrationData;
-    }
+//    @Override
+//    public RegistrationUserDTO authentication(String login, String password) throws ServiceException {
+//
+//        try {
+//            if (!UserUtil.isAuthenticationDataValid(login, password)) {
+//                throw new ServiceException(LOGIN_OR_PASSWORD_ERROR);
+//            }
+//
+//            return userDAO.authentication(login, password);
+//
+//        } catch (DAOException e) {
+//            throw new ServiceException(e);
+//        }
+//    }
 
-    @Override
-    public boolean registration(FullUserDTO userData) throws ServiceException {
-        User user;
-        try {
-            if (UserServiceValidator.isRegistrationDataFilled(userData)) {
-                user = buildUserFromRegistrationData(userData);
 
-                return userDAO.registration(user);
-            } else {
-                throw new ServiceException(REG_FORM_FILLING_ERROR);
-            }
-        } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(), e);
-        }
-    }
+//    @Override
+//    public boolean registration(FullUserDTO userData) throws ServiceException {
+//        User user;
+//
+//        try {
+//            if (!isRegistrationDataFilled(userData)) {
+//                throw new ServiceException(REG_FORM_FILLING_ERROR);
+//            }
+//
+//            if (UserUtil.isRegistrationDataValid(userData)) {
+//                user = buildUserFromRegistrationData(userData);
+//
+//                return userDAO.registration(user);
+//            }
+//        } catch (DAOException e) {
+//            throw new ServiceException(e.getMessage(), e);
+//        }
+//        return false;
+//    }
+
+
+
 
     @Override
     public boolean editUserData(EditUserDTO userForEdit) throws ServiceException {
@@ -79,47 +87,58 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public boolean deleteUser(int userId) throws ServiceException {
-        // TODO Auto-generated method stub
-        return false;
-    }
+//    @Override
+//    public boolean deleteUser(int userId) throws ServiceException {
+//
+//        try {
+//            return userDAO.deleteUser(userId);
+//        } catch (DAOException e) {
+//            throw new ServiceException("Delete user error", e);
+//        }
+//    }
 
     @Override
     public List<FullUserDTO> getUser(FullUserDTO userSearchCriteria) throws ServiceException {
         List<FullUserDTO> usersFoundList = new ArrayList<>();
-        FullUserDTO foundUser;
-
-        try {
-            final List<User> foundUsers = userDAO.getUser(buildUserFromFullUserDTO(userSearchCriteria));
-
-            for (User user : foundUsers) {
-                foundUser = buildFullUserData(user);
-                usersFoundList.add(foundUser);
-            }
-        } catch (DAOException e) {
-            //logger
-            e.printStackTrace();
-        }
+//        FullUserDTO foundUser;
+//
+//        try {
+//            final List<User> foundUsers = userDAO.getUser(buildUserFromFullUserDTO(userSearchCriteria));
+//
+//            for (User user : foundUsers) {
+//                foundUser = buildFullUserData(user);
+//                usersFoundList.add(foundUser);
+//            }
+//        } catch (DAOException e) {
+//            //logger
+//            e.printStackTrace();
+//        }
         return usersFoundList;
     }
 
-    @Override
-    public List<FullUserDTO> getAllUsers() throws ServiceException {
-        List<FullUserDTO> usersList = new ArrayList<>();
-        FullUserDTO fullUserData;
+    private boolean isRegistrationDataFilled(FullUserDTO userData) {
+        String userLogin = userData.getLogin();
+        String userPassword = userData.getPassword();
+        String userSurname = userData.getSurname();
+        String userName = userData.getName();
+        String userPassportID = userData.getPassportIdNumber();
+        String userDriverLicense = userData.getDriverLicense();
+        String userDateOfBirth = String.valueOf(userData.getDateOfBirth());
+        String userEMail = userData.geteMail();
+        String userPhone = userData.getPhone();
 
-        try {
-            List<User> users = userDAO.getAllUsers();
+        boolean isLoginFilled = ((userLogin != null) && (!userLogin.isEmpty()));
+        boolean isPasswordFilled = ((userPassword != null) && (!userPassword.isEmpty()));
+        boolean isSurnameFilled = ((userSurname != null) && (!userSurname.isEmpty()));
+        boolean isNameFilled = ((userName != null) && (!userName.isEmpty()));
+        boolean isPassportIDFilled = ((userPassportID != null) && (!userPassportID.isEmpty()));
+        boolean isDriverLicenseFilled = ((userDriverLicense != null) && (!userDriverLicense.isEmpty()));
+        boolean isDateOfBirthFilled = ((userDateOfBirth != null) && (!userDateOfBirth.isEmpty()));
+        boolean isEMailFilled = ((userEMail != null) && (!userEMail.isEmpty()));
+        boolean isPhoneFilled = ((userPhone != null) && (!userPhone.isEmpty()));
 
-            for (User user : users) {
-                fullUserData = buildFullUserData(user);
-                usersList.add(fullUserData);
-            }
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return usersList;
+        return (isLoginFilled && isPasswordFilled && isSurnameFilled && isNameFilled && isPassportIDFilled
+                && isDriverLicenseFilled && isDateOfBirthFilled && isEMailFilled && isPhoneFilled);
     }
 
     private FullUserDTO buildFullUserData(User user) {
@@ -175,7 +194,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private User buildUserFromFullUserDTO(FullUserDTO fullUserDTO) {
+    private User buildUserFromFullUserData(FullUserDTO fullUserDTO) {
         User user = new User();
 
         user.setId(fullUserDTO.getId());

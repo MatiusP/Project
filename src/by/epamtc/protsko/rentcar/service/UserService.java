@@ -9,16 +9,14 @@ import by.epamtc.protsko.rentcar.service.exception.ServiceException;
 
 public interface UserService {
 	
-	RegistrationUserDTO authentication(String login, String password) throws ServiceException;
-	
-	boolean registration(FullUserDTO fullUserDTO) throws ServiceException;
+//	RegistrationUserDTO authentication(String login, String password) throws ServiceException;
+//
+//	boolean registration(FullUserDTO fullUserDTO) throws ServiceException;
 	
 	boolean editUserData(EditUserDTO user) throws ServiceException;
 	
-	boolean deleteUser(int userId) throws ServiceException;
+//	boolean deleteUser(int userId) throws ServiceException;
 	
 	List<FullUserDTO> getUser(FullUserDTO userDTO) throws ServiceException;
-
-	List<FullUserDTO> getAllUsers() throws ServiceException;
 
 }

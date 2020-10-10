@@ -24,16 +24,14 @@ public class CheckUserAuthData implements Command {
         String userPassword = request.getParameter("password");
 
         RegistrationUserDTO user = null;
+
         try {
             user = userService.authentication(userLogin, userPassword);
         } catch (ServiceException e) {
             //log
         }
 
-        if (user == null) {
-            session.setAttribute("authError", AUTH_ERROR);
-            response.sendRedirect(AUTHENTICATION_MAPPING);
-        } else {
+        if (user != null) {
             session.removeAttribute("authError");
             session.setAttribute("currentUserLogin", userLogin);
             session.setAttribute("currentUserRole", user.getRole());
@@ -42,5 +40,7 @@ public class CheckUserAuthData implements Command {
 
             response.sendRedirect(MAIN_PAGE_MAPPING);
         }
+        session.setAttribute("authError", AUTH_ERROR);
+        response.sendRedirect(AUTHENTICATION_MAPPING);
     }
 }

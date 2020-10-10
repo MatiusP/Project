@@ -1,9 +1,10 @@
-package by.epamtc.protsko.rentcar.dao.util;
+package by.epamtc.protsko.rentcar.service.util;
 
+import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.User;
-import by.epamtc.protsko.rentcar.dao.exception.DAOException;
-import by.epamtc.protsko.rentcar.dao.validator.CommandProvider;
-import by.epamtc.protsko.rentcar.dao.validator.UserCredentialType;
+import by.epamtc.protsko.rentcar.service.exception.ServiceException;
+import by.epamtc.protsko.rentcar.service.validator.CommandProvider;
+import by.epamtc.protsko.rentcar.service.validator.UserCredentialType;
 
 import java.time.LocalDate;
 
@@ -13,7 +14,7 @@ public class UserUtil {
     private UserUtil() {
     }
 
-    public static boolean isAuthenticationDataValid(String login, String password) throws DAOException {
+    public static boolean isAuthenticationDataValid(String login, String password) throws ServiceException {
         boolean isLoginValid = validatorCommandProvider.getValidator(UserCredentialType.LOGIN).execute(login);
         boolean isPassportValid = validatorCommandProvider.getValidator(UserCredentialType.PASSWORD)
                 .execute(password);
@@ -21,11 +22,11 @@ public class UserUtil {
         if (isLoginValid && isPassportValid) {
             return true;
         } else {
-            throw new DAOException("Invalid login or password");
+            throw new ServiceException("Invalid login or password");
         }
     }
 
-    public static boolean isRegistrationDataValid(User user) throws DAOException {
+    public static boolean isRegistrationDataValid(FullUserDTO user) throws ServiceException {
         String userLogin = user.getLogin();
         String userPassword = user.getPassword();
         String userSurname = user.getSurname();
@@ -52,23 +53,23 @@ public class UserUtil {
         boolean isPhoneValid = validatorCommandProvider.getValidator(UserCredentialType.PHONE).execute(userPhone);
 
         if (!isLoginValid) {
-            throw new DAOException("Login invalid");
+            throw new ServiceException("Login invalid");
         } else if (!isPasswordValid) {
-            throw new DAOException("Password invalid");
+            throw new ServiceException("Password invalid");
         } else if (!isSurnameValid) {
-            throw new DAOException("Surname invalid");
+            throw new ServiceException("Surname invalid");
         } else if (!isNameValid) {
-            throw new DAOException("Name invalid");
+            throw new ServiceException("Name invalid");
         } else if (!isPassportIDValid) {
-            throw new DAOException("PassportID invalid");
+            throw new ServiceException("PassportID invalid");
         } else if (!isDriverLicenseValid) {
-            throw new DAOException("DriverLicense invalid");
+            throw new ServiceException("DriverLicense invalid");
         } else if (!isDateOfBirthValid) {
-            throw new DAOException("Date of birth invalid");
+            throw new ServiceException("Date of birth invalid");
         } else if (!isEMailValid) {
-            throw new DAOException("E-mail invalid");
+            throw new ServiceException("E-mail invalid");
         } else if (!isPhoneValid) {
-            throw new DAOException("Phone invalid");
+            throw new ServiceException("Phone invalid");
         }
         return true;
     }
@@ -85,39 +86,39 @@ public class UserUtil {
         final String phone = userData.getPhone();
         final int role = userData.getRole();
 
-        StringBuffer searchUserCriteria = new StringBuffer();
+        StringBuilder searchUserCriteria = new StringBuilder();
 
         if (id != 0) {
-            searchUserCriteria.append("id=" + id).append(" ");
+            searchUserCriteria.append("id=").append(id).append(" ");
         }
         if (login != null) {
-            searchUserCriteria.append("login=" + "'" + login + "'").append(" ");
+            searchUserCriteria.append("login=" + "'").append(login).append("'").append(" ");
         }
         if (surname != null) {
-            searchUserCriteria.append("surname=" + "'" + surname + "'").append(" ");
+            searchUserCriteria.append("surname=" + "'").append(surname).append("'").append(" ");
         }
         if (name != null) {
-            searchUserCriteria.append("name=" + "'" + name + "'").append(" ");
+            searchUserCriteria.append("name=" + "'").append(name).append("'").append(" ");
         }
         if (passportIdNumber != null) {
-            searchUserCriteria.append("passport_id_number=" + "'" + passportIdNumber + "'").append(" ");
+            searchUserCriteria.append("passport_id_number=" + "'").append(passportIdNumber).append("'").append(" ");
         }
         if (driverLicense != null) {
-            searchUserCriteria.append("driver_license=" + "'" + driverLicense + "'").append(" ");
+            searchUserCriteria.append("driver_license=" + "'").append(driverLicense).append("'").append(" ");
         }
         if (dateOfBirth != null) {
-            searchUserCriteria.append("date_of_birth=" + "'" + dateOfBirth + "'").append(" ");
+            searchUserCriteria.append("date_of_birth=" + "'").append(dateOfBirth).append("'").append(" ");
         }
         if (eMail != null) {
-            searchUserCriteria.append("e_mail=" + "'" + eMail + "'").append(" ");
+            searchUserCriteria.append("e_mail=" + "'").append(eMail).append("'").append(" ");
         }
         if (phone != null) {
-            searchUserCriteria.append("phone=" + "'" + phone + "'").append(" ");
+            searchUserCriteria.append("phone=" + "'").append(phone).append("'").append(" ");
         }
         if (role != 0) {
-            searchUserCriteria.append("role_id=" + role).append(" ");
+            searchUserCriteria.append("role_id=").append(role).append(" ");
         }
 
-        return searchUserCriteria.toString().trim().replaceAll(" ", " AND ");
+        return searchUserCriteria.toString().trim().replace(" ", " AND ");
     }
 }

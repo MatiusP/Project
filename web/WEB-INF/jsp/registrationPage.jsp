@@ -88,11 +88,11 @@
         </tr>
         <tr>
             <td>${enter_date_birth}</td>
-            <td><input type="text" name="date_of_birth" placeholder="${date_birth}" required/></td>
+            <td><input type="date" name="date_of_birth" placeholder="" required/></td>
         </tr>
         <tr>
             <td>${enter_email}</td>
-            <td><input type="text" name="e_mail" placeholder="e-mail" required/></td>
+            <td><input type="email" name="e_mail" placeholder="e-mail" required/></td>
         </tr>
         <tr>
             <td>${enter_phone}</td>
