@@ -30,10 +30,6 @@ nav ul {
     padding: 0;
 }
 
-.topmenu:after {
-
-}
-
 .topmenu>li {
     float: none;
     position: relative;

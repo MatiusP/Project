@@ -45,11 +45,11 @@
         </tr>
         <tr>
             <td>User date of birth</td>
-            <td><input type="text" name="dateOfBirth" placeholder="date of birth"/></td>
+            <td><input type="date" name="dateOfBirth" placeholder="date of birth"/></td>
         </tr>
         <tr>
             <td>User e-mail</td>
-            <td><input type="text" name="eMail" placeholder="e-mail"/></td>
+            <td><input type="email" name="eMail" placeholder="e-mail"/></td>
         </tr>
         <tr>
             <td>User phone</td>
