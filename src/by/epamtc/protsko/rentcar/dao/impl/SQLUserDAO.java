@@ -286,11 +286,3 @@ public class SQLUserDAO implements UserDAO {
         return false;
     }
 }
-
-
-class Main {
-    public static void main(String[] args) {
-        String s = "";
-        System.out.println(s.isEmpty());
-    }
-}

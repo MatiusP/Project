@@ -36,12 +36,19 @@
 </head>
 
 <jsp:include page="headerPage.jsp"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/regForm_style.css"/>
+
+<style>
+    body {
+        background: url("${pageContext.request.contextPath}/images/page_font.jpg");
+    }
+</style>
 
 <body>
 
 <h2>${mainMessage}</h2>
 
-<form action="mainController" method="post">
+<form action="mainController" method="post" class="form-3">
     <input type="hidden" name="command" value="save_new_user">
 
     <c:if test="${not empty requestScope.get('fillRegDataError')}">
@@ -52,55 +59,57 @@
         <c:out value="${validationError}"/><br/>
     </c:if><br/>
 
-    <table style="with: 50%">
-        <tr>
-            <td>${enter_login}</td>
-            <td><input type="text" name="login" placeholder="${login}" required/></td>
-        </tr>
-        <tr>
-            <td>${enter_pass}</td>
-            <td><input type="text" name="password" placeholder="${password}" required/></td>
-        </tr>
-        <tr>
-            <td>${repeat_pass}</td>
-            <td><input type="text" name="password_repeat" placeholder="${repeat_password}" required/>
-                <c:if test="${not empty requestScope.get('passwordsError')}">
-                    <c:out value="${passwords_error}"/>
-                </c:if>
-            </td>
 
-        </tr>
-        <tr>
-            <td>${enter_surname}</td>
-            <td><input type="text" name="surname" placeholder="${surname}" required/></td>
-        </tr>
-        <tr>
-            <td>${enter_name}</td>
-            <td><input type="text" name="name" placeholder="${name}" required/></td>
-        </tr>
-        <tr>
-            <td>${enter_passport_ID}</td>
-            <td><input type="text" name="passport_Id_Number" placeholder="${passport}" required/></td>
-        </tr>
-        <tr>
-            <td>${enter_driver_license}</td>
-            <td><input type="text" name="driver_license" placeholder="${driver_license}" required/></td>
-        </tr>
-        <tr>
-            <td>${enter_date_birth}</td>
-            <td><input type="text" name="date_of_birth" placeholder="${date_birth}" required/></td>
-        </tr>
-        <tr>
-            <td>${enter_email}</td>
-            <td><input type="email" name="e_mail" placeholder="e-mail" required/></td>
-        </tr>
-        <tr>
-            <td>${enter_phone}</td>
-            <td><input type="text" name="phone" placeholder="+xxx xx xxx xx xx" required/></td>
-        </tr>
-    </table>
-    <input type="submit" value="${button}"><br/>
-</form>
+
+        <p class="clearfix">
+            <label>${enter_login}</label>
+            <input type="text" name="login" placeholder="${login}" required/>
+        </p>
+        <p class="clearfix">
+            <label>${enter_pass}</label>
+            <input type="text" name="password" placeholder="${password}" required/>
+        </p>
+        <p class="clearfix">
+            <label>${repeat_pass}</label>
+            <input type="text" name="password_repeat" placeholder="${repeat_password}" required/>
+            <c:if test="${not empty requestScope.get('passwordsError')}">
+                <c:out value="${passwords_error}"/>
+            </c:if>
+        </p>
+        <p class="clearfix">
+            <label>${enter_surname}</label>
+            <input type="text" name="surname" placeholder="${surname}" required/>
+        </p>
+        <p class="clearfix">
+            <label>${enter_name}</label>
+            <input type="text" name="name" placeholder="${name}" required/>
+        </p>
+        <p class="clearfix">
+            <label>${enter_passport_ID}</label>
+            <input type="text" name="passport_Id_Number" placeholder="${passport}" required/>
+        </p>
+        <p class="clearfix">
+            <label>${enter_driver_license}</label>
+            <input type="text" name="driver_license" placeholder="${driver_license}" required/>
+        </p>
+        <p class="clearfix">
+            <label>${enter_date_birth}</label>
+            <input type="text" name="date_of_birth" placeholder="${date_birth}" required/>
+        </p>
+        <p class="clearfix">
+            <label>${enter_email}</label>
+            <input type="email" name="e_mail" placeholder="e-mail" required/>
+        </p>
+        <p class="clearfix">
+            <label>${enter_phone}</label>
+            <input type="text" name="phone" placeholder="+xxx xx xxx xx xx" required/>
+        </p>
+        <p class="clearfix">
+            <input type="submit" value="${button}"><br/>
+        </p>
+    </form>
+
+
 </body>
 
 </html>

@@ -40,12 +40,12 @@
         <input type="password" name="password" placeholder="${password}"/>
         <div class="message">
             <c:if test="${not empty sessionScope.get('authError')}">
-                <h4><c:out value="${auth_error}"/></h4>
+                <c:out value="${auth_error}"/>
             </c:if>
         </div>
         <input type="submit" value="${sign_in}"/><br/>
         <div class="message">
-            <h4>${message_1_AuthPage} <a href="mainController?command=registration">${message_2_AuthPage}</a></h4>
+            ${message_1_AuthPage} <a href="mainController?command=registration">${message_2_AuthPage}</a>
         </div>
     </div>
 </form>
