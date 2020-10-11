@@ -20,51 +20,59 @@
 <head>
     <title>Title</title>
 </head>
-<body>
 
 <jsp:useBean id="userRegData" class="by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO" scope="session"/>
 <jsp:include page="headerPage.jsp"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/showUserProfile_style.css"/>
 
-<p>
-<h2>${main_message}</h2></p><br/>
-<h3>${page_message}</h3><br/>
+<style>
+    body {
+        background: url("${pageContext.request.contextPath}/images/page_font.jpg");
+    }
+</style>
 
-<form action="mainController" method="post">
-    <input type="hidden" name="command" value="show_user_reg_data">
-    <table style="with: 50%" border="1">
-        <tr>
-            <td>${reg_surname_mess}</td>
-            <td><b><c:out value="${userRegData.surname}"/></b></td>
-        </tr>
-        <tr>
-            <td>${reg_name_mess}</td>
-            <td><b><c:out value="${userRegData.name}"/></b></td>
-        </tr>
-        <tr>
-            <td>${reg_passportID_mess}</td>
-            <td><b><c:out value="${userRegData.passportIdNumber}"/></b></td>
-        </tr>
-        <tr>
-            <td>${reg_driver_license_mess}</td>
-            <td><b><c:out value="${userRegData.driverLicense}"/></b></td>
-        </tr>
-        <tr>
-            <td>${reg_date_birth_mess}</td>
-            <td><b><c:out value="${userRegData.dateOfBirth}"/></b></td>
-        </tr>
-        <tr>
-            <td>${reg_email_mess}</td>
-            <td><b><c:out value="${userRegData.eMail}"/></b></td>
-        </tr>
-        <tr>
-            <td>${reg_phone_mess}</td>
-            <td><b><c:out value="${userRegData.phone}"/></b></td>
-        </tr>
-    </table>
-</form>
 
-<form action="mainController?command=go_to_main_page" method="post">
-    <input type="submit" value="Back"/>
+<body>
+
+
+<form action="mainController" method="post" class="form-3">
+    <input type="hidden" name="command" value="go_to_main_page">
+
+    <h3>${page_message}</h3>
+
+    <p class="clearfix">
+        <label>${reg_surname_mess}</label>
+        <output>${userRegData.surname}</output>
+    </p>
+    <p class="clearfix">
+        <label>${reg_name_mess}</label>
+        <output>${userRegData.name}"</output>
+    </p>
+    <p class="clearfix">
+        <label> ${reg_passportID_mess}</label>
+        <output>${userRegData.passportIdNumber}</output>
+    </p>
+    <p class="clearfix">
+        <label>${reg_driver_license_mess}</label>
+        <output>${userRegData.driverLicense}</output>
+    </p>
+    <p class="clearfix">
+        <label>${reg_date_birth_mess}</label>
+        <output>${userRegData.dateOfBirth}</output>
+    </p>
+    <p class="clearfix">
+        <label>${reg_email_mess}</label>
+        <output>${userRegData.eMail}</output>
+    </p>
+    <p class="clearfix">
+        <label>${reg_phone_mess}</label>
+        <output>${userRegData.phone}</output>
+    </p>
+    <p class="clearfix">
+
+        <input type="submit" value="Back"/>
+
+    </p>
 </form>
 
 

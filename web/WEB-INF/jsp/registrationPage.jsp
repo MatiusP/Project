@@ -89,7 +89,7 @@
     </p>
     <p class="clearfix">
         <label>${enter_email}</label>
-        <input type="text" name="e_mail" placeholder="e-mail" required/>
+        <input type="email" name="e_mail" placeholder="e-mail" required/>
     </p>
     <p class="clearfix">
         <label>${enter_phone}</label>
