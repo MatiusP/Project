@@ -30,8 +30,12 @@
 
 <form action="mainController" method="post">
     <input type="hidden" name="command" value="edit_user_data">
-    <input type="hidden" name="currentUserID" value="${sessionScope.get('currentUserID')}"/>
-    <input type="hidden" name="currentLogin" value="${sessionScope.get('currentUserLogin')}">
+    <input type="hidden" name="currentUserID" value="${sessionScope.userRegData.id}"/>
+    <input type="hidden" name="currentLogin" value="${sessionScope.currentUserLogin}">
+
+    <c:if test="${not empty sessionScope.get('validationError')}">
+        <h4><c:out value="${validationError}"/></h4>
+    </c:if>
 
     <table style="with: 50%" border="1">
         <tr>

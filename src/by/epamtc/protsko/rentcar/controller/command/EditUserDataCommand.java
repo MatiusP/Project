@@ -11,11 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class EditUserDataCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
-    private static final String EDIT_USER_DATA_MAPPING = "mainController?command=edit_user_data";
+    private static final String EDIT_USER_DATA_MAPPING = "mainController?command=go_to_edit_user_data_page";
     private static final String SHOW_USER_REG_DATA_MAPPING = "mainController?command=show_user_reg_data";
     private static final String VALIDATION_ERROR = "validationError";
 
@@ -23,6 +24,7 @@ public class EditUserDataCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         EditUserDTO editUserData = null;
         boolean isEditUserDataSuccessfully = false;
+        HttpSession session = request.getSession(false);
         String editUserDataError;
 
         try {
@@ -45,18 +47,17 @@ public class EditUserDataCommand implements Command {
             isEditUserDataSuccessfully = userService.editUserData(editUserData);
         } catch (ServiceException e) {
             editUserDataError = e.getMessage();
-            request.setAttribute(VALIDATION_ERROR, editUserDataError);
+            session.setAttribute(VALIDATION_ERROR, editUserDataError);
+            response.sendRedirect(EDIT_USER_DATA_MAPPING);
+        } catch (DateTimeParseException e) {
+            session.setAttribute(VALIDATION_ERROR, "Incorrect date");
             response.sendRedirect(EDIT_USER_DATA_MAPPING);
         }
 
         if (isEditUserDataSuccessfully) {
             RegistrationUserDTO registrationUserDTO = getUserRegistrationData(editUserData);
-            HttpSession session = request.getSession(false);
-
             session.setAttribute("userRegData", registrationUserDTO);
             session.setAttribute("currentUserLogin", editUserData.getNewLogin());
-            session.setAttribute("currentUserRole", registrationUserDTO.getRole());
-            session.setAttribute("currentUserID", registrationUserDTO.getId());
             editUserData = null;
             response.sendRedirect(SHOW_USER_REG_DATA_MAPPING);
         }
@@ -78,11 +79,3 @@ public class EditUserDataCommand implements Command {
         return userRegData;
     }
 }
-
-
-
-
-
-
-
-

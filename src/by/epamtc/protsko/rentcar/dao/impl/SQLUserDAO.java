@@ -23,10 +23,11 @@ public class SQLUserDAO implements UserDAO {
 
     private static final String IS_USER_EXIST_QUERY = "SELECT * FROM users WHERE (login=? AND password=?)";
     private static final String IS_LOGIN_EXISTS_QUERY = "SELECT * FROM users WHERE login=?";
-    private static final String GET_USER_PASSWORD_QUERY = "SELECT password FROM users WHERE id=?";
     private static final String INSERT_USER_TO_DATABASE_QUERY = "INSERT INTO users (login, password, surname,"
             + " name, passport_id_number, driver_license, date_of_birth, e_mail, phone) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String EDIT_USER_DATA_QUERY = "UPDATE users SET login=?, password=?, surname=?, name=?, passport_id_number=?, " +
+    private static final String EDIT_FULL_USER_DATA_QUERY = "UPDATE users SET login=?, password=?, surname=?, name=?, passport_id_number=?, " +
+            "driver_license=?, date_of_birth=?, e_mail=?, phone=?, role_id=? WHERE id=?";
+    private static final String EDIT_USER_DATA_QUERY = "UPDATE users SET login=?, surname=?, name=?, passport_id_number=?, " +
             "driver_license=?, date_of_birth=?, e_mail=?, phone=?, role_id=? WHERE id=?";
     private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id=?";
     private static final String GET_ALL_USERS_QUERY = "SELECT * FROM users";
@@ -78,40 +79,44 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public boolean editUserData(User user) throws DAOException {
-        String userPassword = user.getPassword();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
             connection = connectionPool.takeConnection();
+            if (!user.getPassword().isEmpty()) {
+                preparedStatement = connection.prepareStatement(EDIT_FULL_USER_DATA_QUERY);
 
-            if (userPassword.isEmpty()) {
-                preparedStatement = connection.prepareStatement(GET_USER_PASSWORD_QUERY);
-                preparedStatement.setInt(1, user.getId());
+                preparedStatement.setString(1, user.getLogin());
+                preparedStatement.setString(2, user.getPassword());
+                preparedStatement.setString(3, user.getSurname());
+                preparedStatement.setString(4, user.getName());
+                preparedStatement.setString(5, user.getPassportIdNumber());
+                preparedStatement.setString(6, user.getDriverLicense());
+                preparedStatement.setDate(7, Date.valueOf(user.getDateOfBirth()));
+                preparedStatement.setString(8, user.geteMail());
+                preparedStatement.setString(9, user.getPhone().replace(" ", ""));
+                preparedStatement.setInt(10, user.getRole());
+                preparedStatement.setInt(11, user.getId());
 
-                resultSet = preparedStatement.executeQuery();
+                preparedStatement.executeUpdate();
+            }else{
+                preparedStatement = connection.prepareStatement(EDIT_USER_DATA_QUERY);
 
-                if (resultSet.next()) {
-                    user.setPassword(resultSet.getString(1));
-                }
+                preparedStatement.setString(1, user.getLogin());
+                preparedStatement.setString(2, user.getSurname());
+                preparedStatement.setString(3, user.getName());
+                preparedStatement.setString(4, user.getPassportIdNumber());
+                preparedStatement.setString(5, user.getDriverLicense());
+                preparedStatement.setDate(6, Date.valueOf(user.getDateOfBirth()));
+                preparedStatement.setString(7, user.geteMail());
+                preparedStatement.setString(8, user.getPhone().replace(" ", ""));
+                preparedStatement.setInt(9, user.getRole());
+                preparedStatement.setInt(10, user.getId());
+
+                preparedStatement.executeUpdate();
             }
-
-            preparedStatement = connection.prepareStatement(EDIT_USER_DATA_QUERY);
-
-            preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getSurname());
-            preparedStatement.setString(4, user.getName());
-            preparedStatement.setString(5, user.getPassportIdNumber());
-            preparedStatement.setString(6, user.getDriverLicense());
-            preparedStatement.setDate(7, Date.valueOf(user.getDateOfBirth()));
-            preparedStatement.setString(8, user.geteMail());
-            preparedStatement.setString(9, user.getPhone().replace(" ", ""));
-            preparedStatement.setInt(10, user.getRole());
-            preparedStatement.setInt(11, user.getId());
-
-            preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             throw new DAOException(SAVE_USER_ERROR_MESSAGE, e);

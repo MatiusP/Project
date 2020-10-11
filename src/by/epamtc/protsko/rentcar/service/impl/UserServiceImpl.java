@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
         return regUserData;
     }
 
-
     @Override
     public boolean registration(FullUserDTO userData) throws ServiceException {
         User user;
@@ -64,33 +63,30 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-
     @Override
     public boolean editUserData(EditUserDTO userForEdit) throws ServiceException {
-        String currentUserLogin = userForEdit.getCurrentLogin();
-        String currentUserPassword = userForEdit.getCurrentPassword();
-        String newUserPassword = userForEdit.getNewPassword();
+        String currentLogin = userForEdit.getCurrentLogin();
+        String currentPassword = userForEdit.getCurrentPassword();
+        String newPassword = userForEdit.getNewPassword();
         User user;
 
         try {
-            if (!currentUserPassword.isEmpty()) {
-                User authentication = userDAO.authentication(currentUserLogin, currentUserPassword);
-                RegistrationUserDTO authenticationData = buildRegistrationUserDTOFromUser(authentication);
-                authentication = null;
-
-                if (authenticationData != null) {
+            if (UserUtil.isEditUserDataValid(userForEdit)) {
+                if ((currentPassword.isEmpty()) && (newPassword.isEmpty())) {
                     user = buildUserFromEditData(userForEdit);
                     return userDAO.editUserData(user);
                 }
-            } else if ((currentUserPassword.isEmpty()) && (newUserPassword.isEmpty())) {
-
+                if (((!currentPassword.isEmpty()) && (authentication(currentLogin, currentPassword) == null))
+                        || ((currentPassword.isEmpty() && !newPassword.isEmpty()))) {
+                    throw new ServiceException(PASSWORD_ERROR);
+                }
                 user = buildUserFromEditData(userForEdit);
                 return userDAO.editUserData(user);
             }
-            throw new ServiceException(PASSWORD_ERROR);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
+        return false;
     }
 
     @Override
