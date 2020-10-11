@@ -44,7 +44,7 @@
         <a href="rentalConditionsPage">${our_conditions_button}</a>
     </div>
     <div class="header_item header_button">
-        <a href="contactPage">${our_contacts_button}</a>
+        <a href="mainController?command=go_to_contact_page">${our_contacts_button}</a>
     </div>
     <div>
         <form action="mainController" method="post">
@@ -112,11 +112,15 @@
         <a href="mainController?command=sign_out">${sign_out}</a>
     </div>
 </div>
-<main>
+
+<style>
+    body {
+        background: url("${pageContext.request.contextPath}/images/StartPage.jpg");
+        width: 100%;
+        height: auto;
+    }
+</style>
 
 
-    <%-- <img src="${pageContext.request.contextPath}/images/StartPage.jpg"
-         width="100%" height="auto"> --%>
-</main>
 </body>
 </html>
