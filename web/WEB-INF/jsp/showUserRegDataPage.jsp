@@ -64,7 +64,7 @@
 </form>
 
 <form action="mainController?command=go_to_main_page" method="post">
-    <input type="submit" value="Main page"/>
+    <input type="submit" value="Back"/>
 </form>
 
 

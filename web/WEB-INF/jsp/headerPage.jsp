@@ -17,6 +17,7 @@
     <fmt:message bundle="${loc}" key="local.signOut.href" var="sign_out"/>
     <fmt:message bundle="${loc}" key="local.showUserRegData.button" var="show_user_button"/>
     <fmt:message bundle="${loc}" key="local.editUserData.button" var="edit_user_button"/>
+    <fmt:message bundle="${loc}" key="local.users.href" var="user_managment_button"/>
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/headerPage_style.css"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/menu_style.css"/>
@@ -91,9 +92,6 @@
                                         <li>
                                             <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
                                         </li>
-                                        <li><a href="">Drop user</a></li>
-                                        <li><a href="mainController?command=get_all_users">Show all users</a></li>
-                                        <li><a href="mainController?command=go_to_find_user_page">Find user</a></li>
                                     </ul>
                                 </c:if>
                             </li>
@@ -108,18 +106,34 @@
             </c:otherwise>
         </c:choose>
     </div>
+    <c:if test="${sessionScope.userRegData.role == 2}">
+        <div>
+            <nav>
+                <ul class="topmenu">
+                    <li><a href="" class="submenu-link">${user_managment_button}</a>
+                        <ul class="submenu">
+                            <li><a href="">Drop user</a></li>
+                            <li><a href="mainController?command=go_to_find_user_page">Find user</a></li>
+                            <li><a href="mainController?command=go_to_find_user_page">Edit User Data</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </c:if>
+
     <div class="header_item header_button">
         <a href="mainController?command=sign_out">${sign_out}</a>
     </div>
 </div>
 
-<style>
+<%--<style>
     body {
         background: url("${pageContext.request.contextPath}/images/StartPage.jpg");
         width: 100%;
-        height: auto;
+        height: 100%;
     }
-</style>
+</style> --%>
 
 
 </body>
