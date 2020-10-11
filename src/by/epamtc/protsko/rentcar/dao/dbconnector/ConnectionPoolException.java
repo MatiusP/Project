@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.dao.dbconnector;
 
-public class ConnectionPoolException extends Exception {
+public class ConnectionPoolException extends RuntimeException {
 
     private static final long serialVersionUID = -4771111713482544208L;
 

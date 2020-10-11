@@ -5,7 +5,7 @@ public class DBConnectionParameter {
     public static final String JDBC_URL = "jdbc.url";
     public static final String DB_CONNECTION_LOGIN = "db.connection.login";
     public static final String DB_CONNECTION_PASSWORD = "db.connection.password";
-    public static final String DB_POOLSIZE = "db.poolsize";
+    public static final String DB_POOL_SIZE = "db.poolsize";
 
     private DBConnectionParameter() {
     }

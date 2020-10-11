@@ -1,7 +1,6 @@
 package by.epamtc.protsko.rentcar.dao.dbconnector;
 
 import java.sql.*;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -9,8 +8,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
 public final class ConnectionPool {
-    private static final ConnectionPool instance = new ConnectionPool();
-
     private BlockingQueue<Connection> connectionQueue;
     private BlockingQueue<Connection> givenAwayConnectionQueue;
 
@@ -20,7 +17,7 @@ public final class ConnectionPool {
     private String connectionPassword;
     private int poolSize;
 
-    private ConnectionPool() {
+    public ConnectionPool() {
         DBConnectionManager dbConnectionManager = DBConnectionManager.getInstance();
 
         driverName = dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_DRIVER);
@@ -28,96 +25,23 @@ public final class ConnectionPool {
         connectionLogin = dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_CONNECTION_LOGIN);
         connectionPassword = dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_CONNECTION_PASSWORD);
         try {
-            poolSize = Integer.parseInt(dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_POOLSIZE));
+            poolSize = Integer.parseInt(dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_POOL_SIZE));
         } catch (NumberFormatException e) {
             poolSize = 10;
         }
-        connectionQueue = new ArrayBlockingQueue<>(poolSize);
-        givenAwayConnectionQueue = new ArrayBlockingQueue<>(poolSize);
+        initConnectionPool();
     }
 
-    public static ConnectionPool getInstance() {
-        try {
-            if ((instance.connectionQueue.size() == 0) && (instance.givenAwayConnectionQueue.size() == 0)) {
-                instance.initConnectionPool();
-            }
-        } catch (ConnectionPoolException e) {
-            throw new RuntimeException("Create connection pool exception", e);
-        }
-        return instance;
-    }
-
-    public Connection takeConnection() throws ConnectionPoolException {
-        Connection connection;
-        try {
-            if (connectionQueue.size() != 0) {
-                connection = connectionQueue.take();
-                givenAwayConnectionQueue.add(connection);
-            } else {
-                throw new ConnectionPoolException("No any free connections");
-            }
-        } catch (InterruptedException e) {
-            throw new ConnectionPoolException("Error connection to the data source", e);
-        }
-        return connection;
-    }
-
-    public void returnConnection(Connection connection) throws ConnectionPoolException {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.setAutoCommit(true);
-                givenAwayConnectionQueue.remove(connection);
-                connectionQueue.add(connection);
-            }
-        } catch (SQLException e) {
-            throw new ConnectionPoolException(e);
-        }
-    }
-
-    public void dispose() {
-        clearConnectionQueue();
-    }
-
-    public void closeConnection(Connection connection, Statement statement, ResultSet resultSet) {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            //log
-        }
-        try {
-            statement.close();
-        } catch (SQLException e) {
-            //log
-        }
-        try {
-            resultSet.close();
-        } catch (SQLException e) {
-            //log
-        }
-    }
-
-    public void closeConnection(Connection connection, Statement statement) {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            //log
-        }
-        try {
-            statement.close();
-        } catch (SQLException e) {
-            //log
-        }
-    }
-
-    private void initConnectionPool() throws ConnectionPoolException {
-        Locale.setDefault(Locale.ENGLISH);
-        Connection connection;
+    private void initConnectionPool() {
 
         try {
             Class.forName(driverName);
+            connectionQueue = new ArrayBlockingQueue<>(poolSize);
+            givenAwayConnectionQueue = new ArrayBlockingQueue<>(poolSize);
+
             for (int i = 0; i < poolSize; i++) {
-                connection = DriverManager.getConnection(jdbcUrl, connectionLogin, connectionPassword);
-                PooledConnection pooledConnection = new PooledConnection(connection);
+                Connection connection = DriverManager.getConnection(jdbcUrl, connectionLogin, connectionPassword);
+                PooledConnection pooledConnection = new ConnectionPool.PooledConnection(connection);
                 connectionQueue.add(pooledConnection);
             }
         } catch (ClassNotFoundException e) {
@@ -127,13 +51,51 @@ public final class ConnectionPool {
         }
     }
 
-    private void clearConnectionQueue() {
+    public Connection takeConnection() {
+        Connection connection;
+
         try {
-            closeConnectionQueue(givenAwayConnectionQueue);
-            closeConnectionQueue(connectionQueue);
+            connection = connectionQueue.take();
+            givenAwayConnectionQueue.add(connection);
+        } catch (InterruptedException e) {
+
+            Thread.currentThread().interrupt();
+            throw new ConnectionPoolException("Error connection to the data source", e);
+        }
+        return connection;
+    }
+
+    public void closeConnection(Connection connection) {
+        try {
+            connection.close();
         } catch (SQLException e) {
             //log
         }
+    }
+
+    public void closeStatement(Statement statement) {
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            //log
+        }
+    }
+
+    public void closeResultSet(ResultSet resultSet) {
+        try {
+            resultSet.close();
+        } catch (SQLException e) {
+            //log
+        }
+    }
+
+    public void dispose() throws SQLException {
+        clearConnectionQueue();
+    }
+
+    private void clearConnectionQueue() throws SQLException {
+        closeConnectionQueue(connectionQueue);
+        closeConnectionQueue(givenAwayConnectionQueue);
     }
 
     private void closeConnectionQueue(BlockingQueue<Connection> queue) throws SQLException {
