@@ -77,7 +77,7 @@
                             <li><a href="" class="submenu-link">${sessionScope.currentUserLogin}</a>
                                 <c:if test="${sessionScope.userRegData.role == 1}">
                                     <ul class="submenu">
-                                        <li><a href="mainController?command=show_user_reg_data">${show_user_button}</a>
+                                        <li><a href="mainController?command=go_to_show_user_profile_page">${show_user_button}</a>
                                         </li>
                                         <li>
                                             <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
@@ -87,7 +87,7 @@
                                 </c:if>
                                 <c:if test="${sessionScope.userRegData.role == 2}">
                                     <ul class="submenu">
-                                        <li><a href="mainController?command=show_user_reg_data">${show_user_button}</a>
+                                        <li><a href="mainController?command=go_to_show_user_profile_page">${show_user_button}</a>
                                         </li>
                                         <li>
                                             <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>

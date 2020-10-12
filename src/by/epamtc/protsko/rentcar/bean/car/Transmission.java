@@ -1,4 +1,6 @@
 package by.epamtc.protsko.rentcar.bean.car;
 
-public class Transmission {
+public enum Transmission {
+    MANUAL_TRANSMISSION,
+    AUTOMATIC_TRANSMISSION
 }

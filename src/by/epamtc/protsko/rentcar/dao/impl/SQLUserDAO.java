@@ -13,34 +13,40 @@ import by.epamtc.protsko.rentcar.bean.user.User;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPoolException;
-import by.epamtc.protsko.rentcar.dao.exception.DAOException;
+import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SQLUserDAO implements UserDAO {
-    private static ConnectionPool connectionPool = new ConnectionPool();
+    private static final ConnectionPool connectionPool = new ConnectionPool();
+
     private static final String USER_EXISTS_MESSAGE = "Sorry, but the login you entered exists. Try a different login.";
     private static final String SAVE_USER_ERROR_MESSAGE = "Save new user error";
     private static final String CONNECTION_ERROR_MESSAGE = "Connection pool exception";
+
     private static final String IS_USER_EXIST_QUERY = "SELECT * FROM users WHERE login=?";
     private static final String IS_LOGIN_EXISTS_QUERY = "SELECT * FROM users WHERE login=?";
-    private static final String INSERT_USER_TO_DATABASE_QUERY = "INSERT INTO users (login, password, surname,"
-            + " name, passport_id_number, driver_license, date_of_birth, e_mail, phone) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String EDIT_USER_DATA_QUERY = "UPDATE users SET login=?, password=coalesce(?, password), surname=?, name=?, passport_id_number=?, " +
-            "driver_license=?, date_of_birth=?, e_mail=?, phone=?, role_id=? WHERE id=?";
+    private static final String INSERT_USER_TO_DATABASE_QUERY = "INSERT INTO users" +
+            "(login, password, surname, name, passport_id_number," +
+            " driver_license, date_of_birth, e_mail, phone)" +
+            " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String EDIT_USER_DATA_QUERY = "UPDATE users SET" +
+            " login=?, password=coalesce(?, password), surname=?, name=?, passport_id_number=?, " +
+            " driver_license=?, date_of_birth=?, e_mail=?, phone=?, role_id=? WHERE id=?";
+
     private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id=?";
     private static final String GET_ALL_USERS_QUERY = "SELECT * FROM users";
     private static final String GET_USER_QUERY = "SELECT * FROM users WHERE ";
 
     @Override
-    public User authentication(String login, String password) throws DAOException {
+    public User authentication(String login, String password) throws UserDAOException {
         return getRegistrationUserData(login, password);
     }
 
     @Override
-    public boolean registration(User user) throws DAOException {
+    public boolean registration(User user) throws UserDAOException {
 
         if (isLoginExist(user.getLogin())) {
-            throw new DAOException(USER_EXISTS_MESSAGE);
+            throw new UserDAOException(USER_EXISTS_MESSAGE);
         }
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -64,22 +70,19 @@ public class SQLUserDAO implements UserDAO {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException(SAVE_USER_ERROR_MESSAGE, e);
+            throw new UserDAOException(SAVE_USER_ERROR_MESSAGE, e);
         } catch (ConnectionPoolException e) {
-            throw new DAOException(CONNECTION_ERROR_MESSAGE, e);
+            throw new UserDAOException(CONNECTION_ERROR_MESSAGE, e);
         } finally {
-            if (preparedStatement != null) {
-                connectionPool.closeStatement(preparedStatement);
-            }
             if (connection != null) {
-                connectionPool.closeConnection(connection);
+                connectionPool.closeConnection(connection, preparedStatement);
             }
         }
         return true;
     }
 
     @Override
-    public boolean editUserData(User user) throws DAOException {
+    public boolean editUserData(User user) throws UserDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -88,7 +91,6 @@ public class SQLUserDAO implements UserDAO {
             if (user.getPassword().isEmpty()) {
                 user.setPassword(null);
             }
-
             preparedStatement = connection.prepareStatement(EDIT_USER_DATA_QUERY);
 
             preparedStatement.setString(1, user.getLogin());
@@ -105,15 +107,12 @@ public class SQLUserDAO implements UserDAO {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException(SAVE_USER_ERROR_MESSAGE, e);
+            throw new UserDAOException(SAVE_USER_ERROR_MESSAGE, e);
         } catch (ConnectionPoolException e) {
-            throw new DAOException(CONNECTION_ERROR_MESSAGE, e);
+            throw new UserDAOException(CONNECTION_ERROR_MESSAGE, e);
         } finally {
-            if (preparedStatement != null) {
-                connectionPool.closeStatement(preparedStatement);
-            }
             if (connection != null) {
-                connectionPool.closeConnection(connection);
+                connectionPool.closeConnection(connection, preparedStatement);
             }
         }
         return true;
@@ -139,11 +138,8 @@ public class SQLUserDAO implements UserDAO {
             //logger
             e.printStackTrace();
         } finally {
-            if (preparedStatement != null) {
-                connectionPool.closeStatement(preparedStatement);
-            }
             if (connection != null) {
-                connectionPool.closeConnection(connection);
+                connectionPool.closeConnection(connection, preparedStatement);
             }
         }
         return false;
@@ -192,20 +188,14 @@ public class SQLUserDAO implements UserDAO {
             //logger
             e.printStackTrace();
         } finally {
-            if (resultSet != null) {
-                connectionPool.closeResultSet(resultSet);
-            }
-            if (statement != null) {
-                connectionPool.closeStatement(statement);
-            }
             if (connection != null) {
-                connectionPool.closeConnection(connection);
+                connectionPool.closeConnection(connection, statement, resultSet);
             }
         }
         return users;
     }
 
-    private User getRegistrationUserData(String login, String password) throws DAOException {
+    private User getRegistrationUserData(String login, String password) throws UserDAOException {
         User user = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -237,24 +227,18 @@ public class SQLUserDAO implements UserDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new UserDAOException(e);
         } catch (ConnectionPoolException e) {
-            throw new DAOException(e);
+            throw new UserDAOException(e);
         } finally {
-            if (resultSet != null) {
-                connectionPool.closeResultSet(resultSet);
-            }
-            if (preparedStatement != null) {
-                connectionPool.closeStatement(preparedStatement);
-            }
             if (connection != null) {
-                connectionPool.closeConnection(connection);
+                connectionPool.closeConnection(connection, preparedStatement, resultSet);
             }
         }
         return user;
     }
 
-    private boolean isLoginExist(String login) throws DAOException {
+    private boolean isLoginExist(String login) throws UserDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -269,18 +253,12 @@ public class SQLUserDAO implements UserDAO {
                 return true;
             }
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new UserDAOException(e);
         } catch (ConnectionPoolException e) {
-            throw new DAOException(e);
+            throw new UserDAOException(e);
         } finally {
-            if (resultSet != null) {
-                connectionPool.closeResultSet(resultSet);
-            }
-            if (preparedStatement != null) {
-                connectionPool.closeStatement(preparedStatement);
-            }
             if (connection != null) {
-                connectionPool.closeConnection(connection);
+                connectionPool.closeConnection(connection, preparedStatement, resultSet);
             }
         }
         return false;

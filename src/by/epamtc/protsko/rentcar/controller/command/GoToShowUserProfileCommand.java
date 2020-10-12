@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ShowUserRegDataCommand implements Command {
-    private static final String SHOW_USER_REG_DATA_PAGE_MAPPING = "WEB-INF/jsp/showUserRegDataPage.jsp";
+public class GoToShowUserProfileCommand implements Command {
+    private static final String SHOW_USER_REG_DATA_PAGE_MAPPING = "WEB-INF/jsp/showUserProfilePage.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -19,7 +19,7 @@ public class SaveNewUserCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
     private static final String REGISTRATION_MAPPING = "mainController?command=registration";
-    private static final String SHOW_USER_REG_DATA_MAPPING = "mainController?command=show_user_reg_data";
+    private static final String SHOW_USER_REG_DATA_MAPPING = "mainController?command=go_to_show_user_profile_page";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)

@@ -9,7 +9,7 @@ import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.User;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
-import by.epamtc.protsko.rentcar.dao.exception.DAOException;
+import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.ServiceException;
 import by.epamtc.protsko.rentcar.service.util.UserUtil;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
                 return regUserData;
             }
-        } catch (DAOException e) {
+        } catch (UserDAOException e) {
             throw new ServiceException(e);
         }
         return regUserData;
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
                 return userDAO.registration(user);
             }
-        } catch (DAOException e) {
+        } catch (UserDAOException e) {
             throw new ServiceException(e.getMessage(), e);
         }
         return false;
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
                 user = buildUserFromEditData(userForEdit);
                 return userDAO.editUserData(user);
             }
-        } catch (DAOException e) {
+        } catch (UserDAOException e) {
             throw new ServiceException(e);
         }
         return false;
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             return userDAO.deleteUser(userId);
-        } catch (DAOException e) {
+        } catch (UserDAOException e) {
             throw new ServiceException("Delete user error", e);
         }
     }
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
                 foundUser = buildFullUserData(user);
                 usersFoundList.add(foundUser);
             }
-        } catch (DAOException e) {
+        } catch (UserDAOException e) {
             //logger
             throw new ServiceException(e);
         }

@@ -17,7 +17,7 @@ public class EditUserDataCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
     private static final String EDIT_USER_DATA_MAPPING = "mainController?command=go_to_edit_user_data_page";
-    private static final String SHOW_USER_REG_DATA_MAPPING = "mainController?command=show_user_reg_data";
+    private static final String SHOW_USER_REG_DATA_MAPPING = "mainController?command=go_to_show_user_profile_page";
     private static final String VALIDATION_ERROR = "validationError";
 
     @Override

@@ -13,7 +13,7 @@ public class CommandProvider {
         commands.put(ParameterName.AUTHENTICATION, new GoToAuthPageCommand());
         commands.put(ParameterName.CHECK_USER_AUTH_DATA, new CheckUserAuthData());
         commands.put(ParameterName.REGISTRATION, new GoToRegistrationPageCommand());
-        commands.put(ParameterName.SHOW_USER_REG_DATA, new ShowUserRegDataCommand());
+        commands.put(ParameterName.GO_TO_SHOW_USER_PROFILE_PAGE, new GoToShowUserProfileCommand());
         commands.put(ParameterName.CHANGE_LOCALE, new ChangeLocaleCommand());
         commands.put(ParameterName.GO_TO_EDIT_USER_DATA_PAGE, new GoToEditUserDataCommand());
         commands.put(ParameterName.EDIT_USER_DATA, new EditUserDataCommand());

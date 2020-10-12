@@ -46,7 +46,7 @@
     </p>
     <p class="clearfix">
         <label>${reg_name_mess}</label>
-        <output>${userRegData.name}"</output>
+        <output>${userRegData.name}</output>
     </p>
     <p class="clearfix">
         <label> ${reg_passportID_mess}</label>
