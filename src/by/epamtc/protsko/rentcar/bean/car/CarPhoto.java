@@ -7,7 +7,6 @@ public class CarPhoto implements Serializable {
 
     private int id;
     private String pictureName;
-    private String fileUrl;
     private int carId;
 
     public int getId() {
@@ -24,14 +23,6 @@ public class CarPhoto implements Serializable {
 
     public void setPictureName(String pictureName) {
         this.pictureName = pictureName;
-    }
-
-    public String getFileUrl() {
-        return fileUrl;
-    }
-
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
     }
 
     public int getCarId() {
@@ -51,16 +42,13 @@ public class CarPhoto implements Serializable {
 
         if (id != carPhoto.id) return false;
         if (carId != carPhoto.carId) return false;
-        if (pictureName != null ? !pictureName.equals(carPhoto.pictureName) : carPhoto.pictureName != null)
-            return false;
-        return fileUrl != null ? fileUrl.equals(carPhoto.fileUrl) : carPhoto.fileUrl == null;
+        return pictureName != null ? pictureName.equals(carPhoto.pictureName) : carPhoto.pictureName == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
         result = 31 * result + (pictureName != null ? pictureName.hashCode() : 0);
-        result = 31 * result + (fileUrl != null ? fileUrl.hashCode() : 0);
         result = 31 * result + carId;
         return result;
     }
@@ -70,7 +58,6 @@ public class CarPhoto implements Serializable {
         return "CarPhoto{" +
                 "id=" + id +
                 ", pictureName='" + pictureName + '\'' +
-                ", fileUrl='" + fileUrl + '\'' +
                 ", carId=" + carId +
                 '}';
     }

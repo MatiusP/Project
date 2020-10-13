@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface CarDAO {
 
-    boolean addCar(Car car) throws CarDAOException;
+    boolean addCar(FullCarData car) throws CarDAOException;
 
     boolean editCarData(Car car) throws CarDAOException;
 
     boolean deleteCar(int carId) throws CarDAOException;
 
-    List<Car> findCar(String criteria) throws CarDAOException;
+    List<FullCarData> findCar(String criteria) throws CarDAOException;
 
     List<FullCarData> getAllCars() throws CarDAOException;
 }
