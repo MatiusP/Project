@@ -22,6 +22,8 @@ public class SQLUserDAO implements UserDAO {
     private static final String USER_EXISTS_MESSAGE = "Sorry, but the login you entered exists. Try a different login.";
     private static final String SAVE_USER_ERROR_MESSAGE = "Save new user error";
     private static final String CONNECTION_ERROR_MESSAGE = "Connection pool exception";
+    private static final String DELETE_USER_ERROR_MESSAGE = "Delete user error";
+    private static final String FIND_USER_ERROR_MESSAGE = "Find user error";
 
     private static final String IS_USER_EXIST_QUERY = "SELECT * FROM users WHERE login=?";
     private static final String IS_LOGIN_EXISTS_QUERY = "SELECT * FROM users WHERE login=?";
@@ -32,7 +34,6 @@ public class SQLUserDAO implements UserDAO {
     private static final String EDIT_USER_DATA_QUERY = "UPDATE users SET" +
             " login=?, password=coalesce(?, password), surname=?, name=?, passport_id_number=?, " +
             " driver_license=?, date_of_birth=?, e_mail=?, phone=?, role_id=? WHERE id=?";
-
     private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id=?";
     private static final String GET_ALL_USERS_QUERY = "SELECT * FROM users";
     private static final String GET_USER_QUERY = "SELECT * FROM users WHERE ";
@@ -119,7 +120,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean deleteUser(int userId) {
+    public boolean deleteUser(int userId) throws UserDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -133,10 +134,10 @@ public class SQLUserDAO implements UserDAO {
             }
         } catch (ConnectionPoolException e) {
             //logger
-            e.printStackTrace();
+            throw new UserDAOException(CONNECTION_ERROR_MESSAGE, e);
         } catch (SQLException e) {
             //logger
-            e.printStackTrace();
+            throw new UserDAOException(DELETE_USER_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
@@ -146,7 +147,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public List<User> findUser(String searchCriteria) {
+    public List<User> findUser(String searchCriteria) throws UserDAOException {
         Connection connection = null;
         ResultSet resultSet = null;
         Statement statement = null;
@@ -183,10 +184,10 @@ public class SQLUserDAO implements UserDAO {
             }
         } catch (ConnectionPoolException e) {
             //logger
-            e.printStackTrace();
+            throw new UserDAOException(CONNECTION_ERROR_MESSAGE, e);
         } catch (SQLException e) {
             //logger
-            e.printStackTrace();
+            throw new UserDAOException(FIND_USER_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, statement, resultSet);

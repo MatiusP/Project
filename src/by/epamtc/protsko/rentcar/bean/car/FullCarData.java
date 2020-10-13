@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class FullCarData implements Serializable {
-    private static final long serialVersionUID = 8171195274806642073L;
+    private static final long serialVersionUID = 783148212779076662L;
 
     private int id;
     private String carVIN;
@@ -12,6 +12,7 @@ public class FullCarData implements Serializable {
     private int enginePower;
     private int fuelConsumption;
     private boolean isValidateToRent;
+    private boolean isDeleted;
     private Transmission transmissionType;
     private CarClass carClassType;
     private String carModel;
@@ -66,6 +67,14 @@ public class FullCarData implements Serializable {
         isValidateToRent = validateToRent;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     public Transmission getTransmissionType() {
         return transmissionType;
     }
@@ -118,6 +127,7 @@ public class FullCarData implements Serializable {
         if (enginePower != that.enginePower) return false;
         if (fuelConsumption != that.fuelConsumption) return false;
         if (isValidateToRent != that.isValidateToRent) return false;
+        if (isDeleted != that.isDeleted) return false;
         if (carVIN != null ? !carVIN.equals(that.carVIN) : that.carVIN != null) return false;
         if (transmissionType != that.transmissionType) return false;
         if (carClassType != that.carClassType) return false;
@@ -134,6 +144,7 @@ public class FullCarData implements Serializable {
         result = 31 * result + enginePower;
         result = 31 * result + fuelConsumption;
         result = 31 * result + (isValidateToRent ? 1 : 0);
+        result = 31 * result + (isDeleted ? 1 : 0);
         result = 31 * result + (transmissionType != null ? transmissionType.hashCode() : 0);
         result = 31 * result + (carClassType != null ? carClassType.hashCode() : 0);
         result = 31 * result + (carModel != null ? carModel.hashCode() : 0);
@@ -151,10 +162,11 @@ public class FullCarData implements Serializable {
                 ", enginePower=" + enginePower +
                 ", fuelConsumption=" + fuelConsumption +
                 ", isValidateToRent=" + isValidateToRent +
+                ", isDeleted=" + isDeleted +
                 ", transmissionType=" + transmissionType +
                 ", carClassType=" + carClassType +
-                ", carModel=" + carModel +
-                ", carBrand=" + carBrand +
+                ", carModel='" + carModel + '\'' +
+                ", carBrand='" + carBrand + '\'' +
                 ", carPhotos=" + carPhotos +
                 '}';
     }

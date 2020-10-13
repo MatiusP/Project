@@ -12,7 +12,9 @@ public interface CarDAO {
 
     boolean editCarData(Car car) throws CarDAOException;
 
-    boolean deleteCar(int carId) throws CarDAOException;
+    boolean deleteCarFromDatabase(int carId) throws CarDAOException;
+
+    boolean deleteCarFromSystem(int carId) throws CarDAOException;
 
     List<FullCarData> findCar(String criteria) throws CarDAOException;
 

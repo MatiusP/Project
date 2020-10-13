@@ -3,7 +3,7 @@ package by.epamtc.protsko.rentcar.bean.car;
 import java.io.Serializable;
 
 public class Car implements Serializable {
-    private static final long serialVersionUID = 3633303370783740518L;
+    private static final long serialVersionUID = -366766068992637127L;
 
     private int id;
     private String carVIN;
@@ -11,6 +11,7 @@ public class Car implements Serializable {
     private int enginePower;
     private int fuelConsumption;
     private boolean isValidateToRent;
+    private boolean isDeleted;
     private Transmission transmissionType;
     private CarClass carClassType;
     private CarModel carModel;
@@ -63,6 +64,14 @@ public class Car implements Serializable {
         isValidateToRent = validateToRent;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     public Transmission getTransmissionType() {
         return transmissionType;
     }
@@ -99,10 +108,10 @@ public class Car implements Serializable {
         if (enginePower != car.enginePower) return false;
         if (fuelConsumption != car.fuelConsumption) return false;
         if (isValidateToRent != car.isValidateToRent) return false;
+        if (isDeleted != car.isDeleted) return false;
         if (carVIN != null ? !carVIN.equals(car.carVIN) : car.carVIN != null) return false;
-        if (transmissionType != null ? !transmissionType.equals(car.transmissionType) : car.transmissionType != null)
-            return false;
-        if (carClassType != null ? !carClassType.equals(car.carClassType) : car.carClassType != null) return false;
+        if (transmissionType != car.transmissionType) return false;
+        if (carClassType != car.carClassType) return false;
         return carModel != null ? carModel.equals(car.carModel) : car.carModel == null;
     }
 
@@ -114,6 +123,7 @@ public class Car implements Serializable {
         result = 31 * result + enginePower;
         result = 31 * result + fuelConsumption;
         result = 31 * result + (isValidateToRent ? 1 : 0);
+        result = 31 * result + (isDeleted ? 1 : 0);
         result = 31 * result + (transmissionType != null ? transmissionType.hashCode() : 0);
         result = 31 * result + (carClassType != null ? carClassType.hashCode() : 0);
         result = 31 * result + (carModel != null ? carModel.hashCode() : 0);
@@ -129,6 +139,7 @@ public class Car implements Serializable {
                 ", enginePower=" + enginePower +
                 ", fuelConsumption=" + fuelConsumption +
                 ", isValidateToRent=" + isValidateToRent +
+                ", isDeleted=" + isDeleted +
                 ", transmissionType=" + transmissionType +
                 ", carClassType=" + carClassType +
                 ", carModel=" + carModel +
