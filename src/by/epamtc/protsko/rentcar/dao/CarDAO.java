@@ -1,19 +1,20 @@
 package by.epamtc.protsko.rentcar.dao;
 
 import by.epamtc.protsko.rentcar.bean.car.Car;
-import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;
+import by.epamtc.protsko.rentcar.bean.car.FullCarData;
+import by.epamtc.protsko.rentcar.dao.exception.CarDAOException;
 
 import java.util.List;
 
 public interface CarDAO {
 
-    boolean addCar(Car car) throws UserDAOException;
+    boolean addCar(Car car) throws CarDAOException;
 
-    boolean editCarData(Car car) throws UserDAOException;
+    boolean editCarData(Car car) throws CarDAOException;
 
-    boolean deleteCar(int carId) throws UserDAOException;
+    boolean deleteCar(int carId) throws CarDAOException;
 
-    List<Car> findCar(String criteria) throws UserDAOException;
+    List<Car> findCar(String criteria) throws CarDAOException;
 
-    List<Car> showAllCars() throws UserDAOException;
+    List<FullCarData> getAllCars() throws CarDAOException;
 }

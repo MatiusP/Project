@@ -134,7 +134,11 @@
         height: 100%;
     }
 </style> --%>
+<select name="user_role">
+    <option value="CLIENT">CLIENT</option>
+    <option value="ADMIN">ADMIN</option>
 
+</select>
 
 </body>
 </html>
