@@ -3,8 +3,8 @@ package by.epamtc.protsko.rentcar.bean.car;
 import java.io.Serializable;
 import java.util.List;
 
-public class FullCarData implements Serializable {
-    private static final long serialVersionUID = 783148212779076662L;
+public class CarDTO implements Serializable {
+    private static final long serialVersionUID = -5668015365181927122L;
 
     private int id;
     private String carVIN;
@@ -17,7 +17,7 @@ public class FullCarData implements Serializable {
     private CarClass carClassType;
     private String carModel;
     private String carBrand;
-    private List<CarPhoto> carPhotos;
+    private List<String> carPhotos;
 
     public int getId() {
         return id;
@@ -107,33 +107,33 @@ public class FullCarData implements Serializable {
         this.carBrand = carBrand;
     }
 
-    public List<CarPhoto> getCarPhotos() {
+    public List<String> getCarPhotos() {
         return carPhotos;
     }
 
-    public void setCarPhotos(List<CarPhoto> carPhotos) {
+    public void setCarPhotos(List<String> carPhotos) {
         this.carPhotos = carPhotos;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof FullCarData)) return false;
+        if (!(o instanceof CarDTO)) return false;
 
-        FullCarData that = (FullCarData) o;
+        CarDTO carDTO = (CarDTO) o;
 
-        if (id != that.id) return false;
-        if (manufactureDate != that.manufactureDate) return false;
-        if (enginePower != that.enginePower) return false;
-        if (fuelConsumption != that.fuelConsumption) return false;
-        if (isValidateToRent != that.isValidateToRent) return false;
-        if (isDeleted != that.isDeleted) return false;
-        if (carVIN != null ? !carVIN.equals(that.carVIN) : that.carVIN != null) return false;
-        if (transmissionType != that.transmissionType) return false;
-        if (carClassType != that.carClassType) return false;
-        if (carModel != null ? !carModel.equals(that.carModel) : that.carModel != null) return false;
-        if (carBrand != null ? !carBrand.equals(that.carBrand) : that.carBrand != null) return false;
-        return carPhotos != null ? carPhotos.equals(that.carPhotos) : that.carPhotos == null;
+        if (id != carDTO.id) return false;
+        if (manufactureDate != carDTO.manufactureDate) return false;
+        if (enginePower != carDTO.enginePower) return false;
+        if (fuelConsumption != carDTO.fuelConsumption) return false;
+        if (isValidateToRent != carDTO.isValidateToRent) return false;
+        if (isDeleted != carDTO.isDeleted) return false;
+        if (carVIN != null ? !carVIN.equals(carDTO.carVIN) : carDTO.carVIN != null) return false;
+        if (transmissionType != carDTO.transmissionType) return false;
+        if (carClassType != carDTO.carClassType) return false;
+        if (carModel != null ? !carModel.equals(carDTO.carModel) : carDTO.carModel != null) return false;
+        if (carBrand != null ? !carBrand.equals(carDTO.carBrand) : carDTO.carBrand != null) return false;
+        return carPhotos != null ? carPhotos.equals(carDTO.carPhotos) : carDTO.carPhotos == null;
     }
 
     @Override
@@ -155,7 +155,7 @@ public class FullCarData implements Serializable {
 
     @Override
     public String toString() {
-        return "FullCarData{" +
+        return "CarDTO{" +
                 "id=" + id +
                 ", carVIN='" + carVIN + '\'' +
                 ", manufactureDate=" + manufactureDate +

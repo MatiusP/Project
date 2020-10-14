@@ -2,7 +2,7 @@ package by.epamtc.protsko.rentcar.service.util;
 
 import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
-import by.epamtc.protsko.rentcar.service.exception.ServiceException;
+import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 import by.epamtc.protsko.rentcar.service.validator.CommandProvider;
 import by.epamtc.protsko.rentcar.service.validator.UserCredentialType;
 
@@ -14,7 +14,7 @@ public class UserUtil {
     private UserUtil() {
     }
 
-    public static boolean isAuthenticationDataValid(String login, String password) throws ServiceException {
+    public static boolean isAuthenticationDataValid(String login, String password) throws UserServiceException {
         boolean isLoginValid = validatorCommandProvider.getValidator(UserCredentialType.LOGIN).execute(login);
         boolean isPassportValid = validatorCommandProvider.getValidator(UserCredentialType.PASSWORD)
                 .execute(password);
@@ -22,11 +22,11 @@ public class UserUtil {
         if (isLoginValid && isPassportValid) {
             return true;
         } else {
-            throw new ServiceException("Invalid login or password");
+            throw new UserServiceException("Invalid login or password");
         }
     }
 
-    public static boolean isRegistrationDataValid(FullUserDTO user) throws ServiceException {
+    public static boolean isRegistrationDataValid(FullUserDTO user) throws UserServiceException {
         String userLogin = user.getLogin();
         String userPassword = user.getPassword();
         String userSurname = user.getSurname();
@@ -53,28 +53,28 @@ public class UserUtil {
         boolean isPhoneValid = validatorCommandProvider.getValidator(UserCredentialType.PHONE).execute(userPhone);
 
         if (!isLoginValid) {
-            throw new ServiceException("Login invalid");
+            throw new UserServiceException("Login invalid");
         } else if (!isPasswordValid) {
-            throw new ServiceException("Password invalid");
+            throw new UserServiceException("Password invalid");
         } else if (!isSurnameValid) {
-            throw new ServiceException("Surname invalid");
+            throw new UserServiceException("Surname invalid");
         } else if (!isNameValid) {
-            throw new ServiceException("Name invalid");
+            throw new UserServiceException("Name invalid");
         } else if (!isPassportIDValid) {
-            throw new ServiceException("PassportID invalid");
+            throw new UserServiceException("PassportID invalid");
         } else if (!isDriverLicenseValid) {
-            throw new ServiceException("DriverLicense invalid");
+            throw new UserServiceException("DriverLicense invalid");
         } else if (!isDateOfBirthValid) {
-            throw new ServiceException("Date of birth invalid");
+            throw new UserServiceException("Date of birth invalid");
         } else if (!isEMailValid) {
-            throw new ServiceException("E-mail invalid");
+            throw new UserServiceException("E-mail invalid");
         } else if (!isPhoneValid) {
-            throw new ServiceException("Phone invalid");
+            throw new UserServiceException("Phone invalid");
         }
         return true;
     }
 
-    public static boolean isEditUserDataValid(EditUserDTO user) throws ServiceException {
+    public static boolean isEditUserDataValid(EditUserDTO user) throws UserServiceException {
         String userLogin = user.getNewLogin();
         String newUserPassword = user.getNewPassword();
         String userSurname = user.getSurname();
@@ -106,23 +106,23 @@ public class UserUtil {
         boolean isPhoneValid = validatorCommandProvider.getValidator(UserCredentialType.PHONE).execute(userPhone);
 
         if (!isLoginValid) {
-            throw new ServiceException("Login invalid");
+            throw new UserServiceException("Login invalid");
         } else if (!isNewUserPasswordValid) {
-            throw new ServiceException("New password invalid");
+            throw new UserServiceException("New password invalid");
         } else if (!isSurnameValid) {
-            throw new ServiceException("Surname invalid");
+            throw new UserServiceException("Surname invalid");
         } else if (!isNameValid) {
-            throw new ServiceException("Name invalid");
+            throw new UserServiceException("Name invalid");
         } else if (!isPassportIDValid) {
-            throw new ServiceException("PassportID invalid");
+            throw new UserServiceException("PassportID invalid");
         } else if (!isDriverLicenseValid) {
-            throw new ServiceException("DriverLicense invalid");
+            throw new UserServiceException("DriverLicense invalid");
         } else if (!isDateOfBirthValid) {
-            throw new ServiceException("Date of birth invalid");
+            throw new UserServiceException("Date of birth invalid");
         } else if (!isEMailValid) {
-            throw new ServiceException("E-mail invalid");
+            throw new UserServiceException("E-mail invalid");
         } else if (!isPhoneValid) {
-            throw new ServiceException("Phone invalid");
+            throw new UserServiceException("Phone invalid");
         }
         return true;
     }

@@ -4,7 +4,7 @@ import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
-import by.epamtc.protsko.rentcar.service.exception.ServiceException;
+import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,7 +45,7 @@ public class EditUserDataCommand implements Command {
             editUserData.setRole(Integer.parseInt(request.getParameter("role")));
 
             isEditUserDataSuccessfully = userService.editUserData(editUserData);
-        } catch (ServiceException e) {
+        } catch (UserServiceException e) {
             editUserDataError = e.getMessage();
             session.setAttribute(VALIDATION_ERROR, editUserDataError);
             response.sendRedirect(EDIT_USER_DATA_MAPPING);

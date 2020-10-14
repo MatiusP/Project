@@ -3,7 +3,7 @@ package by.epamtc.protsko.rentcar.controller.command;
 import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
-import by.epamtc.protsko.rentcar.service.exception.ServiceException;
+import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -76,7 +76,7 @@ public class FindUserCommand implements Command {
                 session.removeAttribute("noUsersMessage");
                 request.setAttribute("usersFoundList", usersFoundList);
             }
-        } catch (ServiceException e) {
+        } catch (UserServiceException e) {
             //logger
         }
         request.getRequestDispatcher(FIND_USER_PAGE_MAPPING).forward(request, response);

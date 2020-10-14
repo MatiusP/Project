@@ -13,7 +13,7 @@ import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
-import by.epamtc.protsko.rentcar.service.exception.ServiceException;
+import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 
 public class SaveNewUserCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -50,7 +50,7 @@ public class SaveNewUserCommand implements Command {
                 request.setAttribute("passwordsError", registrationError);
                 request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
             }
-        } catch (ServiceException e) {
+        } catch (UserServiceException e) {
             registrationError = e.getMessage();
             if (registrationError.contains("filling error")) {
                 request.setAttribute("fillRegDataError", registrationError);
@@ -79,7 +79,7 @@ public class SaveNewUserCommand implements Command {
         RegistrationUserDTO user = null;
         try {
             user = userService.authentication(fullUserDTO.getLogin(), fullUserDTO.getPassword());
-        } catch (ServiceException e) {
+        } catch (UserServiceException e) {
             //loger;
         }
         return user;

@@ -1,6 +1,7 @@
 package by.epamtc.protsko.rentcar.bean.car;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Car implements Serializable {
     private static final long serialVersionUID = -366766068992637127L;
@@ -14,7 +15,9 @@ public class Car implements Serializable {
     private boolean isDeleted;
     private Transmission transmissionType;
     private CarClass carClassType;
-    private CarModel carModel;
+    private String carModel;
+    private String carBrand;
+    private List<CarPhoto> carPhotos;
 
     public int getId() {
         return id;
@@ -88,12 +91,28 @@ public class Car implements Serializable {
         this.carClassType = carClassType;
     }
 
-    public CarModel getCarModel() {
+    public String getCarModel() {
         return carModel;
     }
 
-    public void setCarModel(CarModel carModel) {
+    public void setCarModel(String carModel) {
         this.carModel = carModel;
+    }
+
+    public String getCarBrand() {
+        return carBrand;
+    }
+
+    public void setCarBrand(String carBrand) {
+        this.carBrand = carBrand;
+    }
+
+    public List<CarPhoto> getCarPhotos() {
+        return carPhotos;
+    }
+
+    public void setCarPhotos(List<CarPhoto> carPhotos) {
+        this.carPhotos = carPhotos;
     }
 
     @Override
@@ -112,7 +131,9 @@ public class Car implements Serializable {
         if (carVIN != null ? !carVIN.equals(car.carVIN) : car.carVIN != null) return false;
         if (transmissionType != car.transmissionType) return false;
         if (carClassType != car.carClassType) return false;
-        return carModel != null ? carModel.equals(car.carModel) : car.carModel == null;
+        if (carModel != null ? !carModel.equals(car.carModel) : car.carModel != null) return false;
+        if (carBrand != null ? !carBrand.equals(car.carBrand) : car.carBrand != null) return false;
+        return carPhotos != null ? carPhotos.equals(car.carPhotos) : car.carPhotos == null;
     }
 
     @Override
@@ -127,6 +148,8 @@ public class Car implements Serializable {
         result = 31 * result + (transmissionType != null ? transmissionType.hashCode() : 0);
         result = 31 * result + (carClassType != null ? carClassType.hashCode() : 0);
         result = 31 * result + (carModel != null ? carModel.hashCode() : 0);
+        result = 31 * result + (carBrand != null ? carBrand.hashCode() : 0);
+        result = 31 * result + (carPhotos != null ? carPhotos.hashCode() : 0);
         return result;
     }
 
@@ -142,7 +165,9 @@ public class Car implements Serializable {
                 ", isDeleted=" + isDeleted +
                 ", transmissionType=" + transmissionType +
                 ", carClassType=" + carClassType +
-                ", carModel=" + carModel +
+                ", carModel='" + carModel + '\'' +
+                ", carBrand='" + carBrand + '\'' +
+                ", carPhotos=" + carPhotos +
                 '}';
     }
 }

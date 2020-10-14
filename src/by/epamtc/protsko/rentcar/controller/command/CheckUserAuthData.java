@@ -3,7 +3,7 @@ package by.epamtc.protsko.rentcar.controller.command;
 import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
-import by.epamtc.protsko.rentcar.service.exception.ServiceException;
+import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +29,7 @@ public class CheckUserAuthData implements Command {
 
         try {
             user = userService.authentication(userLogin, userPassword);
-        } catch (ServiceException e) {
+        } catch (UserServiceException e) {
             //log
         }
 

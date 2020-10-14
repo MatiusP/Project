@@ -11,7 +11,7 @@ import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;
 import by.epamtc.protsko.rentcar.service.UserService;
-import by.epamtc.protsko.rentcar.service.exception.ServiceException;
+import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 import by.epamtc.protsko.rentcar.service.util.UserUtil;
 
 public class UserServiceImpl implements UserService {
@@ -22,12 +22,12 @@ public class UserServiceImpl implements UserService {
     private static final String REG_FORM_FILLING_ERROR = "Registration form filling error";
 
     @Override
-    public RegistrationUserDTO authentication(String login, String password) throws ServiceException {
+    public RegistrationUserDTO authentication(String login, String password) throws UserServiceException {
         RegistrationUserDTO regUserData = null;
 
         try {
             if (!UserUtil.isAuthenticationDataValid(login, password)) {
-                throw new ServiceException(LOGIN_OR_PASSWORD_ERROR);
+                throw new UserServiceException(LOGIN_OR_PASSWORD_ERROR);
             }
 
             User authenticationData = userDAO.authentication(login, password);
@@ -38,18 +38,18 @@ public class UserServiceImpl implements UserService {
                 return regUserData;
             }
         } catch (UserDAOException e) {
-            throw new ServiceException(e);
+            throw new UserServiceException(e);
         }
         return regUserData;
     }
 
     @Override
-    public boolean registration(FullUserDTO userData) throws ServiceException {
+    public boolean registration(FullUserDTO userData) throws UserServiceException {
         User user;
 
         try {
             if (!isRegistrationFormFilled(userData)) {
-                throw new ServiceException(REG_FORM_FILLING_ERROR);
+                throw new UserServiceException(REG_FORM_FILLING_ERROR);
             }
 
             if (UserUtil.isRegistrationDataValid(userData)) {
@@ -58,13 +58,13 @@ public class UserServiceImpl implements UserService {
                 return userDAO.registration(user);
             }
         } catch (UserDAOException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new UserServiceException(e.getMessage(), e);
         }
         return false;
     }
 
     @Override
-    public boolean editUserData(EditUserDTO userForEdit) throws ServiceException {
+    public boolean editUserData(EditUserDTO userForEdit) throws UserServiceException {
         String currentLogin = userForEdit.getCurrentLogin();
         String currentPassword = userForEdit.getCurrentPassword();
         String newPassword = userForEdit.getNewPassword();
@@ -78,29 +78,29 @@ public class UserServiceImpl implements UserService {
                 }
                 if (((!currentPassword.isEmpty()) && (authentication(currentLogin, currentPassword) == null))
                         || ((currentPassword.isEmpty() && !newPassword.isEmpty()))) {
-                    throw new ServiceException(PASSWORD_ERROR);
+                    throw new UserServiceException(PASSWORD_ERROR);
                 }
                 user = buildUserFromEditData(userForEdit);
                 return userDAO.editUserData(user);
             }
         } catch (UserDAOException e) {
-            throw new ServiceException(e);
+            throw new UserServiceException(e);
         }
         return false;
     }
 
     @Override
-    public boolean deleteUser(int userId) throws ServiceException {
+    public boolean deleteUser(int userId) throws UserServiceException {
 
         try {
             return userDAO.deleteUser(userId);
         } catch (UserDAOException e) {
-            throw new ServiceException("Delete user error", e);
+            throw new UserServiceException("Delete user error", e);
         }
     }
 
     @Override
-    public List<FullUserDTO> getUser(FullUserDTO userSearchCriteria) throws ServiceException {
+    public List<FullUserDTO> getUser(FullUserDTO userSearchCriteria) throws UserServiceException {
         List<FullUserDTO> usersFoundList = new ArrayList<>();
         FullUserDTO foundUser;
         String searchCriteria = UserUtil.createSearchUserQuery(userSearchCriteria);
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (UserDAOException e) {
             //logger
-            throw new ServiceException(e);
+            throw new UserServiceException(e);
         }
         return usersFoundList;
     }
