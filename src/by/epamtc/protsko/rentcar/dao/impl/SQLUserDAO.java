@@ -87,14 +87,14 @@ public class SQLUserDAO implements UserDAO {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         BCryptPasswordEncoder bCryptPasswordEncoder;
+        String hashPassword = null;
 
         try {
             connection = connectionPool.takeConnection();
-            if (user.getPassword().isEmpty()) {
-                user.setPassword(null);
+            if (!user.getPassword().isEmpty()) {
+                bCryptPasswordEncoder = new BCryptPasswordEncoder();
+                hashPassword = bCryptPasswordEncoder.encode(user.getPassword());
             }
-            bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            String hashPassword = bCryptPasswordEncoder.encode(user.getPassword());
 
             preparedStatement = connection.prepareStatement(EDIT_USER_DATA_QUERY);
 
@@ -111,6 +111,7 @@ public class SQLUserDAO implements UserDAO {
             preparedStatement.setInt(11, user.getId());
 
             preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             throw new UserDAOException(SAVE_USER_ERROR_MESSAGE, e);
         } catch (ConnectionPoolException e) {

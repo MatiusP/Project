@@ -22,6 +22,7 @@
 <fmt:message bundle="${loc}" key="local.editEMail.message" var="e_mail"/>
 <fmt:message bundle="${loc}" key="local.editPhone.message" var="phone"/>
 <fmt:message bundle="${loc}" key="local.editRole.message" var="role"/>
+<fmt:message bundle="${loc}" key="local.editUser.button" var="button"/>
 
 <jsp:useBean id="userRegData" class="by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO" scope="session"/>
 <jsp:include page="headerPage.jsp"/>
@@ -33,6 +34,7 @@
     <input type="hidden" name="command" value="edit_user_data">
     <input type="hidden" name="currentUserID" value="${sessionScope.userRegData.id}"/>
     <input type="hidden" name="currentLogin" value="${sessionScope.currentUserLogin}">
+    <input type="hidden" name="role" value="${sessionScope.userRegData.role}"/>
 
     <h3>${page_message}</h3>
 

@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.service.validator;
 
-public interface CommandValidator {
+public interface UserCommandValidator {
 
     boolean execute(String userDataParameter);
 

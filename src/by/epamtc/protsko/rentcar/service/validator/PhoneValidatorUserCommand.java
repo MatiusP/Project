@@ -2,16 +2,16 @@ package by.epamtc.protsko.rentcar.service.validator;
 
 import java.util.regex.Pattern;
 
-public class NameValidatorCommand implements CommandValidator {
+public class PhoneValidatorUserCommand implements UserCommandValidator {
     private ValidatorManager validatorManager = ValidatorManager.getInstance();
     private Pattern pattern;
 
     @Override
-    public boolean execute(String userName) {
-        String validatorRegex = validatorManager.getValidatorRegex(ValidatorParameter.NAME);
+    public boolean execute(String userPhone) {
+        String validatorRegex = validatorManager.getValidatorRegex(ValidatorParameter.PHONE);
         pattern = Pattern.compile(validatorRegex);
 
-        return pattern.matcher(userName).matches();
+        return pattern.matcher(userPhone).matches();
     }
 
     @Override

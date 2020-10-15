@@ -3,20 +3,20 @@ package by.epamtc.protsko.rentcar.service.util;
 import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
-import by.epamtc.protsko.rentcar.service.validator.CommandProvider;
+import by.epamtc.protsko.rentcar.service.validator.UserCommandProvider;
 import by.epamtc.protsko.rentcar.service.validator.UserCredentialType;
 
 import java.time.LocalDate;
 
 public class UserUtil {
-    private static final CommandProvider validatorCommandProvider = new CommandProvider();
+    private static final UserCommandProvider VALIDATOR_USER_COMMAND_PROVIDER = new UserCommandProvider();
 
     private UserUtil() {
     }
 
     public static boolean isAuthenticationDataValid(String login, String password) throws UserServiceException {
-        boolean isLoginValid = validatorCommandProvider.getValidator(UserCredentialType.LOGIN).execute(login);
-        boolean isPassportValid = validatorCommandProvider.getValidator(UserCredentialType.PASSWORD)
+        boolean isLoginValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.LOGIN).execute(login);
+        boolean isPassportValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.PASSWORD)
                 .execute(password);
 
         if (isLoginValid && isPassportValid) {
@@ -37,20 +37,20 @@ public class UserUtil {
         String userEMail = user.geteMail();
         String userPhone = user.getPhone();
 
-        boolean isLoginValid = validatorCommandProvider.getValidator(UserCredentialType.LOGIN).execute(userLogin);
-        boolean isPasswordValid = validatorCommandProvider.getValidator(UserCredentialType.PASSWORD)
+        boolean isLoginValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.LOGIN).execute(userLogin);
+        boolean isPasswordValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.PASSWORD)
                 .execute(userPassword);
-        boolean isSurnameValid = validatorCommandProvider.getValidator(UserCredentialType.SURNAME)
+        boolean isSurnameValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.SURNAME)
                 .execute(userSurname);
-        boolean isNameValid = validatorCommandProvider.getValidator(UserCredentialType.NAME).execute(userName);
-        boolean isPassportIDValid = validatorCommandProvider.getValidator(UserCredentialType.PASSPORT_ID_NUMBER)
+        boolean isNameValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.NAME).execute(userName);
+        boolean isPassportIDValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.PASSPORT_ID_NUMBER)
                 .execute(userPassportID);
-        boolean isDriverLicenseValid = validatorCommandProvider.getValidator(UserCredentialType.DRIVER_LICENSE)
+        boolean isDriverLicenseValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.DRIVER_LICENSE)
                 .execute(userDriverLicense);
-        boolean isDateOfBirthValid = validatorCommandProvider.getValidator(UserCredentialType.DATE_OF_BIRTH)
+        boolean isDateOfBirthValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.DATE_OF_BIRTH)
                 .execute(userDateOfBirth);
-        boolean isEMailValid = validatorCommandProvider.getValidator(UserCredentialType.E_MAIL).execute(userEMail);
-        boolean isPhoneValid = validatorCommandProvider.getValidator(UserCredentialType.PHONE).execute(userPhone);
+        boolean isEMailValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.E_MAIL).execute(userEMail);
+        boolean isPhoneValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.PHONE).execute(userPhone);
 
         if (!isLoginValid) {
             throw new UserServiceException("Login invalid");
@@ -85,25 +85,25 @@ public class UserUtil {
         String userEMail = user.geteMail();
         String userPhone = user.getPhone();
 
-        boolean isLoginValid = validatorCommandProvider.getValidator(UserCredentialType.LOGIN).execute(userLogin);
+        boolean isLoginValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.LOGIN).execute(userLogin);
         boolean isNewUserPasswordValid;
         if (!newUserPassword.isEmpty()) {
-            isNewUserPasswordValid = validatorCommandProvider.getValidator(UserCredentialType.PASSWORD)
+            isNewUserPasswordValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.PASSWORD)
                     .execute(newUserPassword);
         } else {
             isNewUserPasswordValid = true;
         }
-        boolean isSurnameValid = validatorCommandProvider.getValidator(UserCredentialType.SURNAME)
+        boolean isSurnameValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.SURNAME)
                 .execute(userSurname);
-        boolean isNameValid = validatorCommandProvider.getValidator(UserCredentialType.NAME).execute(userName);
-        boolean isPassportIDValid = validatorCommandProvider.getValidator(UserCredentialType.PASSPORT_ID_NUMBER)
+        boolean isNameValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.NAME).execute(userName);
+        boolean isPassportIDValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.PASSPORT_ID_NUMBER)
                 .execute(userPassportID);
-        boolean isDriverLicenseValid = validatorCommandProvider.getValidator(UserCredentialType.DRIVER_LICENSE)
+        boolean isDriverLicenseValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.DRIVER_LICENSE)
                 .execute(userDriverLicense);
-        boolean isDateOfBirthValid = validatorCommandProvider.getValidator(UserCredentialType.DATE_OF_BIRTH)
+        boolean isDateOfBirthValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.DATE_OF_BIRTH)
                 .execute(userDateOfBirth);
-        boolean isEMailValid = validatorCommandProvider.getValidator(UserCredentialType.E_MAIL).execute(userEMail);
-        boolean isPhoneValid = validatorCommandProvider.getValidator(UserCredentialType.PHONE).execute(userPhone);
+        boolean isEMailValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.E_MAIL).execute(userEMail);
+        boolean isPhoneValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.PHONE).execute(userPhone);
 
         if (!isLoginValid) {
             throw new UserServiceException("Login invalid");

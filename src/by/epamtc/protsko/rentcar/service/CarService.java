@@ -15,7 +15,7 @@ public interface CarService {
 
     boolean deleteCarFromSystem(int carId) throws CarServiceException;
 
-    List<CarDTO> findCar(String criteria) throws CarServiceException;
+    List<CarDTO> findCar(CarDTO criteria) throws CarServiceException;
 
     List<CarDTO> getAllCars() throws CarServiceException;
 }

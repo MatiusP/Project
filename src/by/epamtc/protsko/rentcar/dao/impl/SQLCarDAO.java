@@ -64,8 +64,8 @@ public class SQLCarDAO implements CarDAO {
             preparedStatement.setString(1, car.getCarVIN());
             preparedStatement.setInt(2, car.getManufactureDate());
             preparedStatement.setInt(3, car.getEnginePower());
-            preparedStatement.setInt(4, car.getFuelConsumption());
-            preparedStatement.setBoolean(5, car.isValidateToRent());
+            preparedStatement.setDouble(4, car.getFuelConsumption());
+            preparedStatement.setBoolean(5, car.isAvailableToRent());
             preparedStatement.setInt(6, (car.getTransmissionType().ordinal() + 1));
             preparedStatement.setInt(7, (car.getCarClassType().ordinal() + 1));
             preparedStatement.setInt(8, carModelId);
@@ -101,8 +101,8 @@ public class SQLCarDAO implements CarDAO {
             preparedStatement.setString(1, car.getCarVIN());
             preparedStatement.setInt(2, car.getManufactureDate());
             preparedStatement.setInt(3, car.getEnginePower());
-            preparedStatement.setInt(4, car.getFuelConsumption());
-            preparedStatement.setBoolean(5, car.isValidateToRent());
+            preparedStatement.setDouble(4, car.getFuelConsumption());
+            preparedStatement.setBoolean(5, car.isAvailableToRent());
             preparedStatement.setInt(6, (car.getTransmissionType().ordinal() + 1));
             preparedStatement.setInt(7, (car.getCarClassType().ordinal() + 1));
             preparedStatement.setInt(8, carModelId);
@@ -389,7 +389,7 @@ public class SQLCarDAO implements CarDAO {
                 car.setManufactureDate(resultSet.getInt(++i));
                 car.setEnginePower(resultSet.getInt(++i));
                 car.setFuelConsumption(resultSet.getInt(++i));
-                car.setValidateToRent(resultSet.getBoolean(++i));
+                car.setAvailableToRent(resultSet.getBoolean(++i));
                 car.setDeleted(resultSet.getBoolean(++i));
                 car.setTransmissionType(Transmission.valueOf(resultSet.getString(++i)));
                 car.setCarClassType(CarClass.valueOf(resultSet.getString(++i)));

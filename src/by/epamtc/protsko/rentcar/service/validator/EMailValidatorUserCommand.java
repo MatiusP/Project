@@ -2,7 +2,7 @@ package by.epamtc.protsko.rentcar.service.validator;
 
 import java.util.regex.Pattern;
 
-public class EMailValidatorCommand implements CommandValidator {
+public class EMailValidatorUserCommand implements UserCommandValidator {
     private ValidatorManager validatorManager = ValidatorManager.getInstance();
     private Pattern pattern;
 

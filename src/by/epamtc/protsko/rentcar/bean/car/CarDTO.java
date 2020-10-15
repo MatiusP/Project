@@ -10,14 +10,14 @@ public class CarDTO implements Serializable {
     private String carVIN;
     private int manufactureDate;
     private int enginePower;
-    private int fuelConsumption;
-    private boolean isValidateToRent;
+    private double fuelConsumption;
+    private boolean isAvailableToRent;
     private boolean isDeleted;
-    private Transmission transmissionType;
-    private CarClass carClassType;
+    private String transmissionType;
+    private String carClassType;
     private String carModel;
     private String carBrand;
-    private List<String> carPhotos;
+    private List<CarPhoto> carPhotos;
 
     public int getId() {
         return id;
@@ -51,20 +51,20 @@ public class CarDTO implements Serializable {
         this.enginePower = enginePower;
     }
 
-    public int getFuelConsumption() {
+    public double getFuelConsumption() {
         return fuelConsumption;
     }
 
-    public void setFuelConsumption(int fuelConsumption) {
+    public void setFuelConsumption(double fuelConsumption) {
         this.fuelConsumption = fuelConsumption;
     }
 
-    public boolean isValidateToRent() {
-        return isValidateToRent;
+    public boolean isAvailableToRent() {
+        return isAvailableToRent;
     }
 
-    public void setValidateToRent(boolean validateToRent) {
-        isValidateToRent = validateToRent;
+    public void setAvailableToRent(boolean availableToRent) {
+        isAvailableToRent = availableToRent;
     }
 
     public boolean isDeleted() {
@@ -75,19 +75,19 @@ public class CarDTO implements Serializable {
         isDeleted = deleted;
     }
 
-    public Transmission getTransmissionType() {
+    public String getTransmissionType() {
         return transmissionType;
     }
 
-    public void setTransmissionType(Transmission transmissionType) {
+    public void setTransmissionType(String transmissionType) {
         this.transmissionType = transmissionType;
     }
 
-    public CarClass getCarClassType() {
+    public String getCarClassType() {
         return carClassType;
     }
 
-    public void setCarClassType(CarClass carClassType) {
+    public void setCarClassType(String carClassType) {
         this.carClassType = carClassType;
     }
 
@@ -107,11 +107,11 @@ public class CarDTO implements Serializable {
         this.carBrand = carBrand;
     }
 
-    public List<String> getCarPhotos() {
+    public List<CarPhoto> getCarPhotos() {
         return carPhotos;
     }
 
-    public void setCarPhotos(List<String> carPhotos) {
+    public void setCarPhotos(List<CarPhoto> carPhotos) {
         this.carPhotos = carPhotos;
     }
 
@@ -125,12 +125,14 @@ public class CarDTO implements Serializable {
         if (id != carDTO.id) return false;
         if (manufactureDate != carDTO.manufactureDate) return false;
         if (enginePower != carDTO.enginePower) return false;
-        if (fuelConsumption != carDTO.fuelConsumption) return false;
-        if (isValidateToRent != carDTO.isValidateToRent) return false;
+        if (Double.compare(carDTO.fuelConsumption, fuelConsumption) != 0) return false;
+        if (isAvailableToRent != carDTO.isAvailableToRent) return false;
         if (isDeleted != carDTO.isDeleted) return false;
         if (carVIN != null ? !carVIN.equals(carDTO.carVIN) : carDTO.carVIN != null) return false;
-        if (transmissionType != carDTO.transmissionType) return false;
-        if (carClassType != carDTO.carClassType) return false;
+        if (transmissionType != null ? !transmissionType.equals(carDTO.transmissionType) : carDTO.transmissionType != null)
+            return false;
+        if (carClassType != null ? !carClassType.equals(carDTO.carClassType) : carDTO.carClassType != null)
+            return false;
         if (carModel != null ? !carModel.equals(carDTO.carModel) : carDTO.carModel != null) return false;
         if (carBrand != null ? !carBrand.equals(carDTO.carBrand) : carDTO.carBrand != null) return false;
         return carPhotos != null ? carPhotos.equals(carDTO.carPhotos) : carDTO.carPhotos == null;
@@ -138,12 +140,15 @@ public class CarDTO implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result;
+        long temp;
+        result = id;
         result = 31 * result + (carVIN != null ? carVIN.hashCode() : 0);
         result = 31 * result + manufactureDate;
         result = 31 * result + enginePower;
-        result = 31 * result + fuelConsumption;
-        result = 31 * result + (isValidateToRent ? 1 : 0);
+        temp = Double.doubleToLongBits(fuelConsumption);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (isAvailableToRent ? 1 : 0);
         result = 31 * result + (isDeleted ? 1 : 0);
         result = 31 * result + (transmissionType != null ? transmissionType.hashCode() : 0);
         result = 31 * result + (carClassType != null ? carClassType.hashCode() : 0);
@@ -161,10 +166,10 @@ public class CarDTO implements Serializable {
                 ", manufactureDate=" + manufactureDate +
                 ", enginePower=" + enginePower +
                 ", fuelConsumption=" + fuelConsumption +
-                ", isValidateToRent=" + isValidateToRent +
+                ", isAvailableToRent=" + isAvailableToRent +
                 ", isDeleted=" + isDeleted +
-                ", transmissionType=" + transmissionType +
-                ", carClassType=" + carClassType +
+                ", transmissionType='" + transmissionType + '\'' +
+                ", carClassType='" + carClassType + '\'' +
                 ", carModel='" + carModel + '\'' +
                 ", carBrand='" + carBrand + '\'' +
                 ", carPhotos=" + carPhotos +
