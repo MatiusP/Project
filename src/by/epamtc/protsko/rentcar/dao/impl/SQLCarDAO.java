@@ -18,8 +18,8 @@ public class SQLCarDAO implements CarDAO {
     private static final String GET_ALL_UNDELETED_CARS_QUERY = "SELECT * FROM fullCarsData WHERE is_deleted=0";
     private static final String GET_ALL_CARS_QUERY = "SELECT * FROM fullCarsData";
     private static final String FIND_CAR_QUERY = "SELECT * FROM fullCarsData WHERE is_deleted=0 ";
-    private static final String GET_CAR_PHOTOS_QUERY = "SELECT * FROM carPhotos WHERE cars_id=?";
-    //private static final String ADD_CAR_PHOTOS_QUERY = "INSERT INTO carphotos (picture_name, cars_id) VALUES (?,?)";
+    private static final String GET_CAR_PHOTOS_QUERY = "SELECT picture_name FROM carPhotos WHERE cars_id=?";
+    private static final String ADD_CAR_PHOTOS_QUERY = "INSERT INTO carphotos (picture_name, cars_id) VALUES (?,?)";
     private static final String DELETE_CAR_PHOTO_QUERY = "DELETE FROM carphotos WHERE cars_id=?";
     private static final String ADD_NEW_CAR_QUERY =
             "INSERT INTO cars" +
@@ -48,30 +48,35 @@ public class SQLCarDAO implements CarDAO {
         final String CAR_VIN_EXISTS = "Car VIN already exists in database";
         final String ADD_CAR_SQL_ERROR = "Add new car SQL exception";
 
-        if (isCarVINExist(car.getCarVIN())) {
+        if (isCarVINExist(car.getVIN())) {
             throw new CarDAOException(CAR_VIN_EXISTS);
         }
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
-            int carBrandId = getCarBrandId(car.getCarBrand());
-            int carModelId = getCarModelId(car.getCarModel(), carBrandId);
+            int carBrandId = getCarBrandId(car.getBrand());
+            int carModelId = getCarModelId(car.getModel(), carBrandId);
 
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(ADD_NEW_CAR_QUERY);
 
-            preparedStatement.setString(1, car.getCarVIN());
+            preparedStatement.setString(1, car.getVIN());
             preparedStatement.setInt(2, car.getManufactureDate());
             preparedStatement.setInt(3, car.getEnginePower());
             preparedStatement.setDouble(4, car.getFuelConsumption());
             preparedStatement.setBoolean(5, car.isAvailableToRent());
             preparedStatement.setInt(6, (car.getTransmissionType().ordinal() + 1));
-            preparedStatement.setInt(7, (car.getCarClassType().ordinal() + 1));
+            preparedStatement.setInt(7, (car.getClassType().ordinal() + 1));
             preparedStatement.setInt(8, carModelId);
 
             int addedRowsCount = preparedStatement.executeUpdate();
+
             if (addedRowsCount > 0) {
+                if (car.getPhotos() != null && !car.getPhotos().isEmpty()) {
+                    int carId = getCarId(car.getVIN());
+                    addCarPhotos(car.getPhotos(), carId);
+                }
                 return true;
             }
         } catch (SQLException e) {
@@ -92,19 +97,19 @@ public class SQLCarDAO implements CarDAO {
         PreparedStatement preparedStatement = null;
 
         try {
-            int carBrandId = getCarBrandId(car.getCarBrand());
-            int carModelId = getCarModelId(car.getCarModel(), carBrandId);
+            int carBrandId = getCarBrandId(car.getBrand());
+            int carModelId = getCarModelId(car.getModel(), carBrandId);
 
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(EDIT_CAR_DATA_QUERY);
 
-            preparedStatement.setString(1, car.getCarVIN());
+            preparedStatement.setString(1, car.getVIN());
             preparedStatement.setInt(2, car.getManufactureDate());
             preparedStatement.setInt(3, car.getEnginePower());
             preparedStatement.setDouble(4, car.getFuelConsumption());
             preparedStatement.setBoolean(5, car.isAvailableToRent());
             preparedStatement.setInt(6, (car.getTransmissionType().ordinal() + 1));
-            preparedStatement.setInt(7, (car.getCarClassType().ordinal() + 1));
+            preparedStatement.setInt(7, (car.getClassType().ordinal() + 1));
             preparedStatement.setInt(8, carModelId);
             preparedStatement.setInt(9, car.getId());
 
@@ -194,7 +199,7 @@ public class SQLCarDAO implements CarDAO {
             if (!searchCriteria.isEmpty()) {
                 resultSet = statement.executeQuery(FIND_CAR_QUERY + "AND " + searchCriteria);
             } else {
-                resultSet = statement.executeQuery(GET_ALL_UNDELETED_CARS_QUERY);
+                resultSet = statement.executeQuery(GET_ALL_CARS_QUERY);
             }
 
             foundCarsList = getCarsList(resultSet);
@@ -217,7 +222,7 @@ public class SQLCarDAO implements CarDAO {
 
         try {
             connection = connectionPool.takeConnection();
-            preparedStatement = connection.prepareStatement(GET_ALL_CARS_QUERY);
+            preparedStatement = connection.prepareStatement(GET_ALL_UNDELETED_CARS_QUERY);
             resultSet = preparedStatement.executeQuery();
 
             carsList = getCarsList(resultSet);
@@ -229,6 +234,92 @@ public class SQLCarDAO implements CarDAO {
             }
         }
         return carsList;
+    }
+
+    private List<Car> getCarsList(ResultSet resultSet) throws CarDAOException {
+        final String CREATE_FULL_CAR_DATA_SQL_ERROR = "Get cars list SQL error";
+        List<Car> cars = new ArrayList<>();
+        Car car;
+
+        try {
+            while (resultSet.next()) {
+                int i = 0;
+                car = new Car();
+
+                car.setId(resultSet.getInt(++i));
+                car.setVIN(resultSet.getString(++i));
+                car.setManufactureDate(resultSet.getInt(++i));
+                car.setEnginePower(resultSet.getInt(++i));
+                car.setFuelConsumption(resultSet.getInt(++i));
+                car.setAvailableToRent(resultSet.getBoolean(++i));
+                car.setDeleted(resultSet.getBoolean(++i));
+                car.setTransmissionType(Transmission.valueOf(resultSet.getString(++i)));
+                car.setClassType(CarClass.valueOf(resultSet.getString(++i)));
+                car.setModel(resultSet.getString(++i));
+                car.setBrand(resultSet.getString(++i));
+                car.setPhotos(getCarPhotos(car.getId()));
+
+                cars.add(car);
+            }
+        } catch (SQLException e) {
+            throw new CarDAOException(CREATE_FULL_CAR_DATA_SQL_ERROR, e);
+        }
+        return cars;
+    }
+
+    public List<String> getCarPhotos(int carId) throws CarDAOException {
+        final String GET_CAR_PHOTO_SQL_ERROR = "Get cars photo SQL connection error";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<String> carPhotos = new ArrayList<>();
+
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(GET_CAR_PHOTOS_QUERY);
+            preparedStatement.setInt(1, carId);
+
+            resultSet = preparedStatement.executeQuery();
+
+
+            while (resultSet.next()) {
+                int i = 1;
+                carPhotos.add(resultSet.getString(i));
+            }
+        } catch (SQLException e) {
+            throw new CarDAOException(GET_CAR_PHOTO_SQL_ERROR, e);
+        } finally {
+            if (connection != null) {
+                connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            }
+        }
+        return carPhotos;
+    }
+
+    private void addCarPhotos(List<String> photoList, int carId) throws CarDAOException {
+        final String ADD_PHOTOS_ERROR = "Edd new car photos error";
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            if (!photoList.isEmpty()) {
+                connection = connectionPool.takeConnection();
+                preparedStatement = connection.prepareStatement(ADD_CAR_PHOTOS_QUERY);
+
+                for (String photo : photoList) {
+                    preparedStatement.setString(1, photo);
+                    preparedStatement.setInt(2, carId);
+                    preparedStatement.addBatch();
+                }
+                preparedStatement.executeBatch();
+            }
+        } catch (SQLException e) {
+            throw new CarDAOException(ADD_PHOTOS_ERROR, e);
+        } finally {
+            if (connection != null) {
+                connectionPool.closeConnection(connection, preparedStatement);
+            }
+        }
     }
 
     private int getCarBrandId(String carBrand) throws CarDAOException {
@@ -308,103 +399,6 @@ public class SQLCarDAO implements CarDAO {
         }
     }
 
-    private int getCarId(String carVIN) throws CarDAOException {
-        final String GET_CAR_ID_SQL_ERROR = "Get car id sql error";
-        final String CAR_VIN_NOT_FOUND = "Car VIN not found in system";
-
-        if (isCarVINExist(carVIN)) {
-            throw new CarDAOException(CAR_VIN_NOT_FOUND);
-        }
-
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = connectionPool.takeConnection();
-            preparedStatement = connection.prepareStatement(GET_CAR_ID_QUERY);
-            preparedStatement.setString(1, carVIN);
-
-            resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-
-            return resultSet.getInt(1);
-        } catch (SQLException e) {
-            throw new CarDAOException(GET_CAR_ID_SQL_ERROR, e);
-        } finally {
-            if (connection != null) {
-                connectionPool.closeConnection(connection, preparedStatement, resultSet);
-            }
-        }
-    }
-
-    private List<CarPhoto> getCarPhotos(int carId) throws CarDAOException {
-        final String GET_CAR_PHOTO_SQL_ERROR = "Get cars photo SQL connection error";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        CarPhoto carPhoto;
-        List<CarPhoto> carPhotos = new ArrayList<>();
-
-        try {
-            connection = connectionPool.takeConnection();
-            preparedStatement = connection.prepareStatement(GET_CAR_PHOTOS_QUERY);
-
-            preparedStatement.setInt(1, carId);
-            resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                int i = 0;
-
-                carPhoto = new CarPhoto();
-                carPhoto.setId(resultSet.getInt(++i));
-                carPhoto.setPictureName(resultSet.getString(++i));
-                carPhoto.setCarId(resultSet.getInt(++i));
-
-                carPhotos.add(carPhoto);
-            }
-        } catch (SQLException e) {
-            throw new CarDAOException(GET_CAR_PHOTO_SQL_ERROR, e);
-        } finally {
-            if (connection != null) {
-                connectionPool.closeConnection(connection, preparedStatement, resultSet);
-            }
-        }
-        return carPhotos;
-    }
-
-    private List<Car> getCarsList(ResultSet resultSet) throws CarDAOException {
-        final String CREATE_FULL_CAR_DATA_SQL_ERROR = "Get cars list SQL error";
-        List<Car> cars = new ArrayList<>();
-        Car car;
-
-        try {
-            while (resultSet.next()) {
-                int i = 0;
-
-                car = new Car();
-
-                car.setId(resultSet.getInt(++i));
-                car.setCarVIN(resultSet.getString(++i));
-                car.setManufactureDate(resultSet.getInt(++i));
-                car.setEnginePower(resultSet.getInt(++i));
-                car.setFuelConsumption(resultSet.getInt(++i));
-                car.setAvailableToRent(resultSet.getBoolean(++i));
-                car.setDeleted(resultSet.getBoolean(++i));
-                car.setTransmissionType(Transmission.valueOf(resultSet.getString(++i)));
-                car.setCarClassType(CarClass.valueOf(resultSet.getString(++i)));
-                car.setCarModel(resultSet.getString(++i));
-                car.setCarBrand(resultSet.getString(++i));
-                car.setCarPhotos(getCarPhotos(car.getId()));
-
-                cars.add(car);
-            }
-        } catch (SQLException e) {
-            throw new CarDAOException(CREATE_FULL_CAR_DATA_SQL_ERROR, e);
-        }
-        return cars;
-    }
-
     private boolean isCarVINExist(String carVIN) throws CarDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -428,5 +422,35 @@ public class SQLCarDAO implements CarDAO {
             }
         }
         return false;
+    }
+
+    private int getCarId(String carVIN) throws CarDAOException {
+        final String GET_CAR_ID_SQL_ERROR = "Get car id sql error";
+        final String CAR_VIN_NOT_FOUND = "Car VIN not found in system";
+
+        if (!isCarVINExist(carVIN)) {
+            throw new CarDAOException(CAR_VIN_NOT_FOUND);
+        }
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(GET_CAR_ID_QUERY);
+            preparedStatement.setString(1, carVIN);
+
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            throw new CarDAOException(GET_CAR_ID_SQL_ERROR, e);
+        } finally {
+            if (connection != null) {
+                connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            }
+        }
     }
 }

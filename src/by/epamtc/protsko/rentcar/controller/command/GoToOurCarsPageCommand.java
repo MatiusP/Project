@@ -1,21 +1,20 @@
 package by.epamtc.protsko.rentcar.controller.command;
 
 import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
+import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GoToMainPageCommand implements Command {
-    private static final String PAGE_HEADER_MAPPING = "WEB-INF/jsp/mainPage.jsp";
+public class GoToOurCarsPageCommand implements Command {
+    private static final String OUR_CARS_PAGE_MAPPING = "WEB-INF/jsp/ourCarsPage.jsp";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
         String currentRequestURL = RequestURL.getRequestURL(request);
-
         request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
-
-        request.getRequestDispatcher(PAGE_HEADER_MAPPING).forward(request, response);
+        request.getRequestDispatcher(OUR_CARS_PAGE_MAPPING).forward(request, response);
     }
 }

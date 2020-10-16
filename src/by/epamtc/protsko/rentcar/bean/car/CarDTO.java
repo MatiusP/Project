@@ -7,17 +7,17 @@ public class CarDTO implements Serializable {
     private static final long serialVersionUID = -5668015365181927122L;
 
     private int id;
-    private String carVIN;
+    private String VIN;
     private int manufactureDate;
     private int enginePower;
     private double fuelConsumption;
     private boolean isAvailableToRent;
     private boolean isDeleted;
     private String transmissionType;
-    private String carClassType;
-    private String carModel;
-    private String carBrand;
-    private List<CarPhoto> carPhotos;
+    private String classType;
+    private String model;
+    private String brand;
+    private List<String> photos;
 
     public int getId() {
         return id;
@@ -27,12 +27,12 @@ public class CarDTO implements Serializable {
         this.id = id;
     }
 
-    public String getCarVIN() {
-        return carVIN;
+    public String getVIN() {
+        return VIN;
     }
 
-    public void setCarVIN(String carVIN) {
-        this.carVIN = carVIN;
+    public void setVIN(String VIN) {
+        this.VIN = VIN;
     }
 
     public int getManufactureDate() {
@@ -83,36 +83,36 @@ public class CarDTO implements Serializable {
         this.transmissionType = transmissionType;
     }
 
-    public String getCarClassType() {
-        return carClassType;
+    public String getClassType() {
+        return classType;
     }
 
-    public void setCarClassType(String carClassType) {
-        this.carClassType = carClassType;
+    public void setClassType(String classType) {
+        this.classType = classType;
     }
 
-    public String getCarModel() {
-        return carModel;
+    public String getModel() {
+        return model;
     }
 
-    public void setCarModel(String carModel) {
-        this.carModel = carModel;
+    public void setModel(String model) {
+        this.model = model;
     }
 
-    public String getCarBrand() {
-        return carBrand;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setCarBrand(String carBrand) {
-        this.carBrand = carBrand;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
-    public List<CarPhoto> getCarPhotos() {
-        return carPhotos;
+    public List<String> getPhotos() {
+        return photos;
     }
 
-    public void setCarPhotos(List<CarPhoto> carPhotos) {
-        this.carPhotos = carPhotos;
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
     }
 
     @Override
@@ -128,14 +128,14 @@ public class CarDTO implements Serializable {
         if (Double.compare(carDTO.fuelConsumption, fuelConsumption) != 0) return false;
         if (isAvailableToRent != carDTO.isAvailableToRent) return false;
         if (isDeleted != carDTO.isDeleted) return false;
-        if (carVIN != null ? !carVIN.equals(carDTO.carVIN) : carDTO.carVIN != null) return false;
+        if (VIN != null ? !VIN.equals(carDTO.VIN) : carDTO.VIN != null) return false;
         if (transmissionType != null ? !transmissionType.equals(carDTO.transmissionType) : carDTO.transmissionType != null)
             return false;
-        if (carClassType != null ? !carClassType.equals(carDTO.carClassType) : carDTO.carClassType != null)
+        if (classType != null ? !classType.equals(carDTO.classType) : carDTO.classType != null)
             return false;
-        if (carModel != null ? !carModel.equals(carDTO.carModel) : carDTO.carModel != null) return false;
-        if (carBrand != null ? !carBrand.equals(carDTO.carBrand) : carDTO.carBrand != null) return false;
-        return carPhotos != null ? carPhotos.equals(carDTO.carPhotos) : carDTO.carPhotos == null;
+        if (model != null ? !model.equals(carDTO.model) : carDTO.model != null) return false;
+        if (brand != null ? !brand.equals(carDTO.brand) : carDTO.brand != null) return false;
+        return photos != null ? photos.equals(carDTO.photos) : carDTO.photos == null;
     }
 
     @Override
@@ -143,7 +143,7 @@ public class CarDTO implements Serializable {
         int result;
         long temp;
         result = id;
-        result = 31 * result + (carVIN != null ? carVIN.hashCode() : 0);
+        result = 31 * result + (VIN != null ? VIN.hashCode() : 0);
         result = 31 * result + manufactureDate;
         result = 31 * result + enginePower;
         temp = Double.doubleToLongBits(fuelConsumption);
@@ -151,10 +151,10 @@ public class CarDTO implements Serializable {
         result = 31 * result + (isAvailableToRent ? 1 : 0);
         result = 31 * result + (isDeleted ? 1 : 0);
         result = 31 * result + (transmissionType != null ? transmissionType.hashCode() : 0);
-        result = 31 * result + (carClassType != null ? carClassType.hashCode() : 0);
-        result = 31 * result + (carModel != null ? carModel.hashCode() : 0);
-        result = 31 * result + (carBrand != null ? carBrand.hashCode() : 0);
-        result = 31 * result + (carPhotos != null ? carPhotos.hashCode() : 0);
+        result = 31 * result + (classType != null ? classType.hashCode() : 0);
+        result = 31 * result + (model != null ? model.hashCode() : 0);
+        result = 31 * result + (brand != null ? brand.hashCode() : 0);
+        result = 31 * result + (photos != null ? photos.hashCode() : 0);
         return result;
     }
 
@@ -162,17 +162,17 @@ public class CarDTO implements Serializable {
     public String toString() {
         return "CarDTO{" +
                 "id=" + id +
-                ", carVIN='" + carVIN + '\'' +
+                ", carVIN='" + VIN + '\'' +
                 ", manufactureDate=" + manufactureDate +
                 ", enginePower=" + enginePower +
                 ", fuelConsumption=" + fuelConsumption +
                 ", isAvailableToRent=" + isAvailableToRent +
                 ", isDeleted=" + isDeleted +
                 ", transmissionType='" + transmissionType + '\'' +
-                ", carClassType='" + carClassType + '\'' +
-                ", carModel='" + carModel + '\'' +
-                ", carBrand='" + carBrand + '\'' +
-                ", carPhotos=" + carPhotos +
+                ", carClassType='" + classType + '\'' +
+                ", carModel='" + model + '\'' +
+                ", carBrand='" + brand + '\'' +
+                ", carPhotos=" + photos +
                 '}';
     }
 }

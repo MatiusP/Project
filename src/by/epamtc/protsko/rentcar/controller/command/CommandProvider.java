@@ -9,7 +9,6 @@ public class CommandProvider {
     public CommandProvider() {
         commands.put(ParameterName.GO_TO_MAIN_PAGE, new GoToMainPageCommand());
         commands.put(ParameterName.SAVE_NEW_USER, new SaveNewUserCommand());
-        commands.put(ParameterName.WELCOME_NEW_USER, new WelcomeNewUserCommand());
         commands.put(ParameterName.AUTHENTICATION, new GoToAuthPageCommand());
         commands.put(ParameterName.CHECK_USER_AUTH_DATA, new CheckUserAuthData());
         commands.put(ParameterName.REGISTRATION, new GoToRegistrationPageCommand());
@@ -23,6 +22,8 @@ public class CommandProvider {
         commands.put(ParameterName.FIND_USER, new FindUserCommand());
         commands.put(ParameterName.DELETE_USER, new DeleteUserCommand());
         commands.put(ParameterName.GO_TO_CONTACT_PAGE, new GoToContactPage());
+        commands.put(ParameterName.GO_TO_OUR_CARS_PAGE, new GoToOurCarsPageCommand());
+        commands.put(ParameterName.GET_ALL_CARS, new GetAllCarsCommand());
     }
 
     public Command getCommand(String commandName) {

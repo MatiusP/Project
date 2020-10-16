@@ -7,17 +7,17 @@ public class Car implements Serializable {
     private static final long serialVersionUID = -366766068992637127L;
 
     private int id;
-    private String carVIN;
+    private String VIN;
     private int manufactureDate;
     private int enginePower;
     private double fuelConsumption;
     private boolean isAvailableToRent;
     private boolean isDeleted;
     private Transmission transmissionType;
-    private CarClass carClassType;
-    private String carModel;
-    private String carBrand;
-    private List<CarPhoto> carPhotos;
+    private CarClass classType;
+    private String model;
+    private String brand;
+    private List<String> photos;
 
     public int getId() {
         return id;
@@ -27,12 +27,12 @@ public class Car implements Serializable {
         this.id = id;
     }
 
-    public String getCarVIN() {
-        return carVIN;
+    public String getVIN() {
+        return VIN;
     }
 
-    public void setCarVIN(String carVIN) {
-        this.carVIN = carVIN;
+    public void setVIN(String VIN) {
+        this.VIN = VIN;
     }
 
     public int getManufactureDate() {
@@ -83,36 +83,36 @@ public class Car implements Serializable {
         this.transmissionType = transmissionType;
     }
 
-    public CarClass getCarClassType() {
-        return carClassType;
+    public CarClass getClassType() {
+        return classType;
     }
 
-    public void setCarClassType(CarClass carClassType) {
-        this.carClassType = carClassType;
+    public void setClassType(CarClass classType) {
+        this.classType = classType;
     }
 
-    public String getCarModel() {
-        return carModel;
+    public String getModel() {
+        return model;
     }
 
-    public void setCarModel(String carModel) {
-        this.carModel = carModel;
+    public void setModel(String model) {
+        this.model = model;
     }
 
-    public String getCarBrand() {
-        return carBrand;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setCarBrand(String carBrand) {
-        this.carBrand = carBrand;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
-    public List<CarPhoto> getCarPhotos() {
-        return carPhotos;
+    public List<String> getPhotos() {
+        return photos;
     }
 
-    public void setCarPhotos(List<CarPhoto> carPhotos) {
-        this.carPhotos = carPhotos;
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
     }
 
     @Override
@@ -128,12 +128,12 @@ public class Car implements Serializable {
         if (Double.compare(car.fuelConsumption, fuelConsumption) != 0) return false;
         if (isAvailableToRent != car.isAvailableToRent) return false;
         if (isDeleted != car.isDeleted) return false;
-        if (carVIN != null ? !carVIN.equals(car.carVIN) : car.carVIN != null) return false;
+        if (VIN != null ? !VIN.equals(car.VIN) : car.VIN != null) return false;
         if (transmissionType != car.transmissionType) return false;
-        if (carClassType != car.carClassType) return false;
-        if (carModel != null ? !carModel.equals(car.carModel) : car.carModel != null) return false;
-        if (carBrand != null ? !carBrand.equals(car.carBrand) : car.carBrand != null) return false;
-        return carPhotos != null ? carPhotos.equals(car.carPhotos) : car.carPhotos == null;
+        if (classType != car.classType) return false;
+        if (model != null ? !model.equals(car.model) : car.model != null) return false;
+        if (brand != null ? !brand.equals(car.brand) : car.brand != null) return false;
+        return photos != null ? photos.equals(car.photos) : car.photos == null;
     }
 
     @Override
@@ -141,7 +141,7 @@ public class Car implements Serializable {
         int result;
         long temp;
         result = id;
-        result = 31 * result + (carVIN != null ? carVIN.hashCode() : 0);
+        result = 31 * result + (VIN != null ? VIN.hashCode() : 0);
         result = 31 * result + manufactureDate;
         result = 31 * result + enginePower;
         temp = Double.doubleToLongBits(fuelConsumption);
@@ -149,10 +149,10 @@ public class Car implements Serializable {
         result = 31 * result + (isAvailableToRent ? 1 : 0);
         result = 31 * result + (isDeleted ? 1 : 0);
         result = 31 * result + (transmissionType != null ? transmissionType.hashCode() : 0);
-        result = 31 * result + (carClassType != null ? carClassType.hashCode() : 0);
-        result = 31 * result + (carModel != null ? carModel.hashCode() : 0);
-        result = 31 * result + (carBrand != null ? carBrand.hashCode() : 0);
-        result = 31 * result + (carPhotos != null ? carPhotos.hashCode() : 0);
+        result = 31 * result + (classType != null ? classType.hashCode() : 0);
+        result = 31 * result + (model != null ? model.hashCode() : 0);
+        result = 31 * result + (brand != null ? brand.hashCode() : 0);
+        result = 31 * result + (photos != null ? photos.hashCode() : 0);
         return result;
     }
 
@@ -160,17 +160,17 @@ public class Car implements Serializable {
     public String toString() {
         return "Car{" +
                 "id=" + id +
-                ", carVIN='" + carVIN + '\'' +
+                ", carVIN='" + VIN + '\'' +
                 ", manufactureDate=" + manufactureDate +
                 ", enginePower=" + enginePower +
                 ", fuelConsumption=" + fuelConsumption +
                 ", isAvailableToRent=" + isAvailableToRent +
                 ", isDeleted=" + isDeleted +
                 ", transmissionType=" + transmissionType +
-                ", carClassType=" + carClassType +
-                ", carModel='" + carModel + '\'' +
-                ", carBrand='" + carBrand + '\'' +
-                ", carPhotos=" + carPhotos +
+                ", carClassType=" + classType +
+                ", carModel='" + model + '\'' +
+                ", carBrand='" + brand + '\'' +
+                ", carPhotos=" + photos +
                 '}';
     }
 }

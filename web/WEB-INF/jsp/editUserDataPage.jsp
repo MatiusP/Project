@@ -28,6 +28,12 @@
 <jsp:include page="headerPage.jsp"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/editUserForm_style.css"/>
 
+<style>
+    body {
+        background: url("${pageContext.request.contextPath}/images/page_font.jpg");
+    }
+</style>
+
 <body>
 
 <form action="mainController" method="post" class="form-3">
@@ -44,11 +50,11 @@
     </p>
     <p class="clearfix">
         <label>${current_password}</label>
-        <h4><input type="password" name="currentPassword" placeholder="current_password"/></h4>
+    <h4><input type="password" name="currentPassword" placeholder="current_password"/></h4>
     </p>
     <p class="clearfix">
         <label>${new_password}</label>
-        <h4><input type="password" name="newPassword" placeholder="new_password"/></h4>
+    <h4><input type="password" name="newPassword" placeholder="new_password"/></h4>
     </p>
     <p class="clearfix">
         <label>${surname}</label>
@@ -101,15 +107,6 @@
         <input type="submit" value="${button}"><br/>
     </p>
 </form>
-
-<form>
-    <input type="submit" value="Edit user data"/>
-</form>
-
-<form action="mainController?command=go_to_main_page" method="post">
-    <input type="submit" value="Exit"/>
-</form>
-
 
 </body>
 </html>

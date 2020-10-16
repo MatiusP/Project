@@ -9,16 +9,16 @@ public class CarUtil {
 
     public static String createSearchCarQuery(CarDTO searchingCar) {
         final int carId = searchingCar.getId();
-        final String carVIN = searchingCar.getCarVIN();
+        final String carVIN = searchingCar.getVIN();
         final int carManufactureDate = searchingCar.getManufactureDate();
         final int carEnginePower = searchingCar.getEnginePower();
         final double carFuelConsumption = searchingCar.getFuelConsumption();
         final boolean isAvailableToRent = searchingCar.isAvailableToRent();
         final boolean isDeleted = searchingCar.isDeleted();
         final String carTransmission = searchingCar.getTransmissionType();
-        final String carClass = searchingCar.getCarClassType();
-        final String carModel = searchingCar.getCarModel();
-        final String carBrand = searchingCar.getCarBrand();
+        final String carClass = searchingCar.getClassType();
+        final String carModel = searchingCar.getModel();
+        final String carBrand = searchingCar.getBrand();
 
         StringBuilder searchCarCriteria = new StringBuilder();
 

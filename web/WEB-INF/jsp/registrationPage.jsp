@@ -27,6 +27,8 @@
 <fmt:message bundle="${loc}" key="local.message.driver_license" var="driver_license"/>
 <fmt:message bundle="${loc}" key="local.message.date_birth" var="date_birth"/>
 <fmt:message bundle="${loc}" key="local.button.regPage" var="button"/>
+<fmt:message bundle="${loc}" key="local.goToAuthentication.message1" var="go_to_auth"/>
+<fmt:message bundle="${loc}" key="local.goToAuthentication.message2" var="sign_in"/>
 <fmt:message bundle="${loc}" key="local.passwordsError.message" var="passwords_error"/>
 <fmt:message bundle="${loc}" key="local.fillRegDataError.message" var="fill_reg_data_error"/>
 
@@ -109,6 +111,11 @@
     <p class="clearfix">
         <input type="submit" value="${button}"><br/>
     </p>
+    <p class="message">
+        ${go_to_auth} <a href="mainController?command=authentication">${sign_in}</a>
+    </p>
+
+
 </form>
 
 </body>

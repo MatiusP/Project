@@ -3,7 +3,6 @@ package by.epamtc.protsko.rentcar.controller.command;
 public enum ParameterName {
 	GO_TO_MAIN_PAGE,
 	SAVE_NEW_USER,
-	WELCOME_NEW_USER,
 	AUTHENTICATION,
 	REGISTRATION,
 	GO_TO_SHOW_USER_PROFILE_PAGE,
@@ -16,5 +15,7 @@ public enum ParameterName {
 	FIND_USER,
 	GO_TO_FIND_USER_PAGE,
 	DELETE_USER,
-	GO_TO_CONTACT_PAGE
+	GO_TO_CONTACT_PAGE,
+	GO_TO_OUR_CARS_PAGE,
+	GET_ALL_CARS
 }

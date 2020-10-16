@@ -106,17 +106,17 @@ public class CarServiceImpl implements CarService {
         CarDTO carDTO = new CarDTO();
 
         carDTO.setId(car.getId());
-        carDTO.setCarVIN(car.getCarVIN());
+        carDTO.setVIN(car.getVIN());
         carDTO.setManufactureDate(car.getManufactureDate());
         carDTO.setEnginePower(car.getEnginePower());
         carDTO.setFuelConsumption(car.getFuelConsumption());
         carDTO.setAvailableToRent(car.isAvailableToRent());
         carDTO.setDeleted(car.isDeleted());
-        carDTO.setTransmissionType(car.getTransmissionType().toString());       //TODO разобраться
-        carDTO.setCarClassType(car.getCarClassType().toString());               //TODO разобраться
-        carDTO.setCarModel(car.getCarModel());
-        carDTO.setCarBrand(car.getCarBrand());
-        carDTO.setCarPhotos(car.getCarPhotos());
+        carDTO.setTransmissionType(car.getTransmissionType().toString());
+        carDTO.setClassType(car.getClassType().toString());
+        carDTO.setModel(car.getModel());
+        carDTO.setBrand(car.getBrand());
+        carDTO.setPhotos(car.getPhotos());
 
         return carDTO;
     }
@@ -125,18 +125,31 @@ public class CarServiceImpl implements CarService {
         Car car = new Car();
 
         car.setId(carDTO.getId());
-        car.setCarVIN(carDTO.getCarVIN());
+        car.setVIN(carDTO.getVIN());
         car.setManufactureDate(carDTO.getManufactureDate());
         car.setEnginePower(carDTO.getEnginePower());
         car.setFuelConsumption(carDTO.getFuelConsumption());
         car.setAvailableToRent(carDTO.isAvailableToRent());
         car.setDeleted(carDTO.isDeleted());
         car.setTransmissionType(Transmission.valueOf(carDTO.getTransmissionType()));
-        car.setCarClassType(CarClass.valueOf(carDTO.getCarClassType()));
-        car.setCarModel(carDTO.getCarModel());
-        car.setCarBrand(carDTO.getCarBrand());
-        car.setCarPhotos(carDTO.getCarPhotos());
+        car.setClassType(CarClass.valueOf(carDTO.getClassType()));
+        car.setModel(carDTO.getModel());
+        car.setBrand(carDTO.getBrand());
+        car.setPhotos(carDTO.getPhotos());
 
         return car;
     }
+}
+
+
+class Main {
+    public static void main(String[] args) throws CarServiceException {
+        CarServiceImpl o = new CarServiceImpl();
+        CarDTO car = new CarDTO();
+        car.setVIN("123");
+        car.setTransmissionType("automatic");
+
+        o.findCar(car);
+    }
+
 }

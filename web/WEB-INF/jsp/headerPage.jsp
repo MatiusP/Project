@@ -36,10 +36,10 @@
 </div>
 <div class="header_nav">
     <div class=" header_item header_button">
-        <a href="mainPage">${home_button}</a>
+        <a href="mainController?command=go_to_main_page">${home_button}</a>
     </div>
     <div class="header_item header_button">
-        <a href="carsPage">${our_cars_button}</a>
+        <a href="mainController?command=go_to_our_cars_page">${our_cars_button}</a>
     </div>
     <div class="header_item header_button">
         <a href="rentalConditionsPage">${our_conditions_button}</a>
@@ -126,19 +126,6 @@
         <a href="mainController?command=sign_out">${sign_out}</a>
     </div>
 </div>
-
-<%--<style>
-    body {
-        background: url("${pageContext.request.contextPath}/images/StartPage.jpg");
-        width: 100%;
-        height: 100%;
-    }
-</style> --%>
-<select name="user_role">
-    <option value="CLIENT">CLIENT</option>
-    <option value="ADMIN">ADMIN</option>
-
-</select>
 
 </body>
 </html>
