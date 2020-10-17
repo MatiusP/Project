@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.epamtc.protsko.rentcar.bean.user.Role;
 import by.epamtc.protsko.rentcar.bean.user.User;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
@@ -24,7 +25,7 @@ public class SQLUserDAO implements UserDAO {
     private static final String CONNECTION_ERROR_MESSAGE = "Connection pool exception";
     private static final String DELETE_USER_ERROR_MESSAGE = "Delete user error";
     private static final String FIND_USER_ERROR_MESSAGE = "Find user error";
-
+    private static final String AUTH_USER_ERROR_MESSAGE = "Incorrect login or password";
     private static final String IS_USER_EXIST_QUERY = "SELECT * FROM users WHERE login=?";
     private static final String IS_LOGIN_EXISTS_QUERY = "SELECT * FROM users WHERE login=?";
     private static final String INSERT_USER_TO_DATABASE_QUERY = "INSERT INTO users" +
@@ -34,13 +35,18 @@ public class SQLUserDAO implements UserDAO {
     private static final String EDIT_USER_DATA_QUERY = "UPDATE users SET" +
             " login=?, password=coalesce(?, password), surname=?, name=?, passport_id_number=?, " +
             " driver_license=?, date_of_birth=?, e_mail=?, phone=?, role_id=? WHERE id=?";
-    private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id=?";
+    private static final String DELETE_USER_QUERY = "UPDATE users SET is_deleted=1 WHERE id=?";
     private static final String GET_ALL_USERS_QUERY = "SELECT * FROM users";
     private static final String GET_USER_QUERY = "SELECT * FROM users WHERE ";
 
     @Override
     public User authentication(String login, String password) throws UserDAOException {
-        return getRegistrationUserData(login, password);
+        User registrationUserData = getRegistrationUserData(login, password);
+
+        if (registrationUserData == null || registrationUserData.isDeleted()) {
+            throw new UserDAOException(AUTH_USER_ERROR_MESSAGE);
+        }
+        return registrationUserData;
     }
 
     @Override
@@ -107,11 +113,10 @@ public class SQLUserDAO implements UserDAO {
             preparedStatement.setDate(7, Date.valueOf(user.getDateOfBirth()));
             preparedStatement.setString(8, user.geteMail());
             preparedStatement.setString(9, user.getPhone().replace(" ", ""));
-            preparedStatement.setInt(10, user.getRole());
+            preparedStatement.setInt(10, user.getRole().ordinal() + 1);
             preparedStatement.setInt(11, user.getId());
 
             preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
             throw new UserDAOException(SAVE_USER_ERROR_MESSAGE, e);
         } catch (ConnectionPoolException e) {
@@ -183,7 +188,7 @@ public class SQLUserDAO implements UserDAO {
                 user.setDateOfBirth(resultSet.getDate(++i).toLocalDate());
                 user.seteMail(resultSet.getString(++i));
                 user.setPhone(resultSet.getString(++i));
-                user.setRole(resultSet.getInt(++i));
+                user.setRole(Role.getByOrderCode(resultSet.getInt(++i)));
 
                 users.add(user);
             }
@@ -202,11 +207,11 @@ public class SQLUserDAO implements UserDAO {
     }
 
     private User getRegistrationUserData(String login, String password) throws UserDAOException {
-        User user = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        User user = null;
 
         try {
             connection = connectionPool.takeConnection();
@@ -229,8 +234,12 @@ public class SQLUserDAO implements UserDAO {
                     user.setDateOfBirth(resultSet.getDate(8).toLocalDate());
                     user.seteMail(resultSet.getString(9));
                     user.setPhone(resultSet.getString(10));
-                    user.setRole(resultSet.getInt(11));
+                    user.setDeleted(resultSet.getBoolean(11));
+                    user.setRole(Role.getByOrderCode(resultSet.getInt(12)));
+
+                    return user;
                 }
+                throw new UserDAOException(AUTH_USER_ERROR_MESSAGE);
             }
         } catch (SQLException e) {
             throw new UserDAOException(e);

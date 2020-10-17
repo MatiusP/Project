@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class User implements Serializable {
-    private static final long serialVersionUID = -7140832636495909933L;
+    private static final long serialVersionUID = -4978206016101095848L;
 
     private int id;
     private String login;
@@ -16,7 +16,8 @@ public class User implements Serializable {
     private LocalDate dateOfBirth;
     private String eMail;
     private String phone;
-    private int role;
+    private boolean isDeleted;
+    private Role role;
 
     public User() {
     }
@@ -101,97 +102,77 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
-    public int getRole() {
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (id != user.id) return false;
+        if (isDeleted != user.isDeleted) return false;
+        if (login != null ? !login.equals(user.login) : user.login != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (surname != null ? !surname.equals(user.surname) : user.surname != null) return false;
+        if (name != null ? !name.equals(user.name) : user.name != null) return false;
+        if (passportIdNumber != null ? !passportIdNumber.equals(user.passportIdNumber) : user.passportIdNumber != null)
+            return false;
+        if (driverLicense != null ? !driverLicense.equals(user.driverLicense) : user.driverLicense != null)
+            return false;
+        if (dateOfBirth != null ? !dateOfBirth.equals(user.dateOfBirth) : user.dateOfBirth != null) return false;
+        if (eMail != null ? !eMail.equals(user.eMail) : user.eMail != null) return false;
+        if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
+        return role == user.role;
+    }
+
+    @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
-        result = prime * result + ((driverLicense == null) ? 0 : driverLicense.hashCode());
-        result = prime * result + ((eMail == null) ? 0 : eMail.hashCode());
-        result = prime * result + id;
-        result = prime * result + ((login == null) ? 0 : login.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((passportIdNumber == null) ? 0 : passportIdNumber.hashCode());
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((phone == null) ? 0 : phone.hashCode());
-        result = prime * result + role;
-        result = prime * result + ((surname == null) ? 0 : surname.hashCode());
+        int result = id;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (passportIdNumber != null ? passportIdNumber.hashCode() : 0);
+        result = 31 * result + (driverLicense != null ? driverLicense.hashCode() : 0);
+        result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
+        result = 31 * result + (eMail != null ? eMail.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (isDeleted ? 1 : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        User other = (User) obj;
-        if (dateOfBirth == null) {
-            if (other.dateOfBirth != null)
-                return false;
-        } else if (!dateOfBirth.equals(other.dateOfBirth))
-            return false;
-        if (driverLicense == null) {
-            if (other.driverLicense != null)
-                return false;
-        } else if (!driverLicense.equals(other.driverLicense))
-            return false;
-        if (eMail == null) {
-            if (other.eMail != null)
-                return false;
-        } else if (!eMail.equals(other.eMail))
-            return false;
-        if (id != other.id)
-            return false;
-        if (login == null) {
-            if (other.login != null)
-                return false;
-        } else if (!login.equals(other.login))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (passportIdNumber == null) {
-            if (other.passportIdNumber != null)
-                return false;
-        } else if (!passportIdNumber.equals(other.passportIdNumber))
-            return false;
-        if (password == null) {
-            if (other.password != null)
-                return false;
-        } else if (!password.equals(other.password))
-            return false;
-        if (phone == null) {
-            if (other.phone != null)
-                return false;
-        } else if (!phone.equals(other.phone))
-            return false;
-        if (role != other.role)
-            return false;
-        if (surname == null) {
-            if (other.surname != null)
-                return false;
-        } else if (!surname.equals(other.surname))
-            return false;
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "User [id=" + id + ", login=" + login + ", password=" + password + ", surname=" + surname + ", name="
-                + name + ", passportIdNumber=" + passportIdNumber + ", driverLicense=" + driverLicense
-                + ", dateOfBirth=" + dateOfBirth + ", eMail=" + eMail + ", phone=" + phone + ", role=" + role + "]";
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", surname='" + surname + '\'' +
+                ", name='" + name + '\'' +
+                ", passportIdNumber='" + passportIdNumber + '\'' +
+                ", driverLicense='" + driverLicense + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", eMail='" + eMail + '\'' +
+                ", phone='" + phone + '\'' +
+                ", isDeleted=" + isDeleted +
+                ", role=" + role +
+                '}';
     }
 }

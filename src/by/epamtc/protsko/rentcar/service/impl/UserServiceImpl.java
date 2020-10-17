@@ -3,10 +3,7 @@ package by.epamtc.protsko.rentcar.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
-import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
-import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
-import by.epamtc.protsko.rentcar.bean.user.User;
+import by.epamtc.protsko.rentcar.bean.user.*;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;
@@ -157,7 +154,7 @@ public class UserServiceImpl implements UserService {
         fullUserData.setDateOfBirth(user.getDateOfBirth());
         fullUserData.seteMail(user.geteMail());
         fullUserData.setPhone(user.getPhone());
-        fullUserData.setRole(user.getRole());
+        fullUserData.setRole(user.getRole().toString());
 
         return fullUserData;
     }
@@ -173,7 +170,7 @@ public class UserServiceImpl implements UserService {
         registrationUserData.setDateOfBirth(user.getDateOfBirth());
         registrationUserData.seteMail(user.geteMail());
         registrationUserData.setPhone(user.getPhone());
-        registrationUserData.setRole(user.getRole());
+        registrationUserData.setRole(user.getRole().toString());
 
         return registrationUserData;
     }
@@ -208,7 +205,7 @@ public class UserServiceImpl implements UserService {
         user.setDateOfBirth(editUserData.getDateOfBirth());
         user.seteMail(editUserData.geteMail());
         user.setPhone(editUserData.getPhone());
-        user.setRole(editUserData.getRole());
+        user.setRole(Role.valueOf(editUserData.getRole()));
 
         return user;
     }

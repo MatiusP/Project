@@ -16,7 +16,7 @@ public class FullUserDTO implements Serializable {
     private LocalDate dateOfBirth;
     private String eMail;
     private String phone;
-    private int role;
+    private String role;
 
     public FullUserDTO() {
     }
@@ -101,11 +101,11 @@ public class FullUserDTO implements Serializable {
         this.phone = phone;
     }
 
-    public int getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -117,7 +117,6 @@ public class FullUserDTO implements Serializable {
         FullUserDTO that = (FullUserDTO) o;
 
         if (id != that.id) return false;
-        if (role != that.role) return false;
         if (login != null ? !login.equals(that.login) : that.login != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (surname != null ? !surname.equals(that.surname) : that.surname != null) return false;
@@ -128,7 +127,8 @@ public class FullUserDTO implements Serializable {
             return false;
         if (dateOfBirth != null ? !dateOfBirth.equals(that.dateOfBirth) : that.dateOfBirth != null) return false;
         if (eMail != null ? !eMail.equals(that.eMail) : that.eMail != null) return false;
-        return phone != null ? phone.equals(that.phone) : that.phone == null;
+        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        return role != null ? role.equals(that.role) : that.role == null;
     }
 
     @Override
@@ -143,7 +143,7 @@ public class FullUserDTO implements Serializable {
         result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
         result = 31 * result + (eMail != null ? eMail.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + role;
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 
@@ -160,7 +160,7 @@ public class FullUserDTO implements Serializable {
                 ", dateOfBirth=" + dateOfBirth +
                 ", eMail='" + eMail + '\'' +
                 ", phone='" + phone + '\'' +
-                ", role=" + role +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

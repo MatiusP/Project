@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class EditUserDTO implements Serializable {
-    private static final long serialVersionUID = -1740501815014536535L;
+    private static final long serialVersionUID = 1170269122551339937L;
 
     private int id;
     private String currentLogin;
@@ -18,7 +18,8 @@ public class EditUserDTO implements Serializable {
     private LocalDate dateOfBirth;
     private String eMail;
     private String phone;
-    private int role;
+    private boolean isDeleted;
+    private String role;
 
     public EditUserDTO() {
     }
@@ -119,11 +120,19 @@ public class EditUserDTO implements Serializable {
         this.phone = phone;
     }
 
-    public int getRole() {
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public String getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -135,7 +144,7 @@ public class EditUserDTO implements Serializable {
         EditUserDTO that = (EditUserDTO) o;
 
         if (id != that.id) return false;
-        if (role != that.role) return false;
+        if (isDeleted != that.isDeleted) return false;
         if (currentLogin != null ? !currentLogin.equals(that.currentLogin) : that.currentLogin != null) return false;
         if (newLogin != null ? !newLogin.equals(that.newLogin) : that.newLogin != null) return false;
         if (currentPassword != null ? !currentPassword.equals(that.currentPassword) : that.currentPassword != null)
@@ -149,7 +158,8 @@ public class EditUserDTO implements Serializable {
             return false;
         if (dateOfBirth != null ? !dateOfBirth.equals(that.dateOfBirth) : that.dateOfBirth != null) return false;
         if (eMail != null ? !eMail.equals(that.eMail) : that.eMail != null) return false;
-        return phone != null ? phone.equals(that.phone) : that.phone == null;
+        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        return role != null ? role.equals(that.role) : that.role == null;
     }
 
     @Override
@@ -166,7 +176,8 @@ public class EditUserDTO implements Serializable {
         result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
         result = 31 * result + (eMail != null ? eMail.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + role;
+        result = 31 * result + (isDeleted ? 1 : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 
@@ -182,10 +193,11 @@ public class EditUserDTO implements Serializable {
                 ", name='" + name + '\'' +
                 ", passportIdNumber='" + passportIdNumber + '\'' +
                 ", driverLicense='" + driverLicense + '\'' +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
                 ", eMail='" + eMail + '\'' +
                 ", phone='" + phone + '\'' +
-                ", role=" + role +
+                ", isDeleted=" + isDeleted +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

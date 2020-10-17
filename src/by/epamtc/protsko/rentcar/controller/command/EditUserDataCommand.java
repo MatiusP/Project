@@ -42,7 +42,7 @@ public class EditUserDataCommand implements Command {
             editUserData.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth")));
             editUserData.seteMail(request.getParameter("eMail"));
             editUserData.setPhone(request.getParameter("phone"));
-            editUserData.setRole(Integer.parseInt(request.getParameter("role")));
+            editUserData.setRole(request.getParameter("user_role"));
 
             isEditUserDataSuccessfully = userService.editUserData(editUserData);
         } catch (UserServiceException e) {

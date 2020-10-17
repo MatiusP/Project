@@ -14,7 +14,7 @@ public class RegistrationUserDTO implements Serializable {
     private LocalDate dateOfBirth;
     private String eMail;
     private String phone;
-    private int role;
+    private String role;
 
     public RegistrationUserDTO() {
     }
@@ -83,85 +83,60 @@ public class RegistrationUserDTO implements Serializable {
         this.phone = phone;
     }
 
-    public int getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RegistrationUserDTO)) return false;
+
+        RegistrationUserDTO that = (RegistrationUserDTO) o;
+
+        if (id != that.id) return false;
+        if (surname != null ? !surname.equals(that.surname) : that.surname != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (passportIdNumber != null ? !passportIdNumber.equals(that.passportIdNumber) : that.passportIdNumber != null)
+            return false;
+        if (driverLicense != null ? !driverLicense.equals(that.driverLicense) : that.driverLicense != null)
+            return false;
+        if (dateOfBirth != null ? !dateOfBirth.equals(that.dateOfBirth) : that.dateOfBirth != null) return false;
+        if (eMail != null ? !eMail.equals(that.eMail) : that.eMail != null) return false;
+        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        return role != null ? role.equals(that.role) : that.role == null;
+    }
+
+    @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
-        result = prime * result + ((driverLicense == null) ? 0 : driverLicense.hashCode());
-        result = prime * result + ((eMail == null) ? 0 : eMail.hashCode());
-        result = prime * result + id;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((passportIdNumber == null) ? 0 : passportIdNumber.hashCode());
-        result = prime * result + ((phone == null) ? 0 : phone.hashCode());
-        result = prime * result + role;
-        result = prime * result + ((surname == null) ? 0 : surname.hashCode());
+        int result = id;
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (passportIdNumber != null ? passportIdNumber.hashCode() : 0);
+        result = 31 * result + (driverLicense != null ? driverLicense.hashCode() : 0);
+        result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
+        result = 31 * result + (eMail != null ? eMail.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        RegistrationUserDTO other = (RegistrationUserDTO) obj;
-        if (dateOfBirth == null) {
-            if (other.dateOfBirth != null)
-                return false;
-        } else if (!dateOfBirth.equals(other.dateOfBirth))
-            return false;
-        if (driverLicense == null) {
-            if (other.driverLicense != null)
-                return false;
-        } else if (!driverLicense.equals(other.driverLicense))
-            return false;
-        if (eMail == null) {
-            if (other.eMail != null)
-                return false;
-        } else if (!eMail.equals(other.eMail))
-            return false;
-        if (id != other.id)
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (passportIdNumber == null) {
-            if (other.passportIdNumber != null)
-                return false;
-        } else if (!passportIdNumber.equals(other.passportIdNumber))
-            return false;
-        if (phone == null) {
-            if (other.phone != null)
-                return false;
-        } else if (!phone.equals(other.phone))
-            return false;
-        if (role != other.role)
-            return false;
-        if (surname == null) {
-            if (other.surname != null)
-                return false;
-        } else if (!surname.equals(other.surname))
-            return false;
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "RegistrationUserDTO [id=" + id + ", surname=" + surname + ", name=" + name + ", passportIdNumber=" + passportIdNumber
-                + ", driverLicense=" + driverLicense + ", dateOfBirth=" + dateOfBirth + ", eMail=" + eMail + ", phone="
-                + phone + ", role=" + role + "]";
+        return "RegistrationUserDTO{" +
+                "id=" + id +
+                ", surname='" + surname + '\'' +
+                ", name='" + name + '\'' +
+                ", passportIdNumber='" + passportIdNumber + '\'' +
+                ", driverLicense='" + driverLicense + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", eMail='" + eMail + '\'' +
+                ", phone='" + phone + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

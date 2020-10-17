@@ -64,7 +64,7 @@ public class FindUserCommand implements Command {
             userSearchParameters.setPhone(searchingPhone);
         }
         if (!searchingRole.isEmpty()) {
-            userSearchParameters.setRole(Integer.parseInt(searchingRole));
+            userSearchParameters.setRole(searchingRole);
         }
 
         try {

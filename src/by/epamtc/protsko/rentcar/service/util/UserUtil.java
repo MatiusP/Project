@@ -2,6 +2,7 @@ package by.epamtc.protsko.rentcar.service.util;
 
 import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
+import by.epamtc.protsko.rentcar.bean.user.Role;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 import by.epamtc.protsko.rentcar.service.validator.UserCommandProvider;
 import by.epamtc.protsko.rentcar.service.validator.UserCredentialType;
@@ -137,7 +138,7 @@ public class UserUtil {
         final LocalDate dateOfBirth = userData.getDateOfBirth();
         final String eMail = userData.geteMail();
         final String phone = userData.getPhone();
-        final int role = userData.getRole();
+        final String role = userData.getRole();
 
         StringBuilder searchUserCriteria = new StringBuilder();
 
@@ -168,8 +169,8 @@ public class UserUtil {
         if (phone != null) {
             searchUserCriteria.append("phone=" + "'").append(phone).append("'").append(" ");
         }
-        if (role != 0) {
-            searchUserCriteria.append("role_id=").append(role).append(" ");
+        if (role != null) {
+            searchUserCriteria.append("role_id=").append(Role.valueOf(role).ordinal() + 1).append(" ");
         }
 
         return searchUserCriteria.toString().trim().replace(" ", " AND ");

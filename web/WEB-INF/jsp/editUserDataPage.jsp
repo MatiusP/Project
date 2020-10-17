@@ -40,7 +40,6 @@
     <input type="hidden" name="command" value="edit_user_data">
     <input type="hidden" name="currentUserID" value="${sessionScope.userRegData.id}"/>
     <input type="hidden" name="currentLogin" value="${sessionScope.currentUserLogin}">
-    <input type="hidden" name="role" value="${sessionScope.userRegData.role}"/>
 
     <h3>${page_message}</h3>
 
@@ -84,10 +83,22 @@
         <label>${phone}</label>
         <input type="text" name="phone" value="${userRegData.phone}" required/>
     </p>
-    <c:if test="${sessionScope.userRegData.role == 2}">
+
+
+    <c:if test="${sessionScope.userRegData.role eq 'ADMIN'}">
         <p class="clearfix">
             <label>${role}</label>
-            <input type="text" name="role" value="${userRegData.role}" required/>
+            <select name="user_role" required>
+                <option selected="${userRegData.role}">${userRegData.role}</option>
+                <c:choose>
+                    <c:when test="${userRegData.role eq 'ADMIN'}">
+                        <option value="CLIENT">CLIENT</option>
+                    </c:when>
+                    <c:otherwise>
+                        <option value="ADMIN">ADMIN</option>
+                    </c:otherwise>
+                </c:choose>
+            </select>
         </p>
     </c:if>
 
@@ -102,14 +113,8 @@
     </div>
 
     <p class="clearfix">
-        <input type="submit" value="${button}"><br/>
+        <input type="submit" value="${button}">
     </p>
-
-    <p class="clearfix">
-        <input type="submit" value="Back"><br/>
-    </p>
-
 </form>
-
 </body>
 </html>
