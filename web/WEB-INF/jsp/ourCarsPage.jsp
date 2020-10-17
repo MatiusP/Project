@@ -9,36 +9,39 @@
 
 <jsp:include page="headerPage.jsp"/>
 <jsp:include page="cars.jsp"/>
-
-
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/ourCars_style.css"/>
 <style>
     body {
         background: url("${pageContext.request.contextPath}/images/page_font.jpg");
     }
 </style>
 
-
 <body>
 
-
 <c:forEach items="${cars}" var="car">
-<a href="mainController?command=go_to_car_page&car_id=${car.id}">
-    <img width="250" src="${pageContext.request.contextPath}/images/car/page_font.jpg" alt="carImage">
+    <figure class="sign">
+        <p>
+        <div class="link">
+            <figcaption>${car.brand} ${car.model} (${car.manufactureDate} г.в.)</figcaption>
+        </div>
+        <p>
+            <img src="${pageContext.request.contextPath}/images/car/hyundai-solaris-01.jpg" width="175" alt="Photo">
+        </p>
 
+        <figcaption>
+            <div class="link">
+                <figcaption>PRICE</figcaption>
+            </div>
 
-    <table>
-        <tr>
-            <td>${car.brand}</td>
-            <td>${car.model}</td>
-            <td>${car.manufactureDate}</td>
-            <td>${car.transmissionType}</td>
-            <td>${car.classType}</td>
-        </tr>
-    </table>
-
-
-    </c:forEach>
-
+            <div class="car-characteristics">
+                <p>Тип КПП: ${car.transmissionType}</p>
+                <p>Двигатель: ${car.enginePower} (л.с.)</p>
+                <p>Класс: ${car.classType}"</p>
+            </div>
+        </figcaption>
+        </p>
+    </figure>
+</c:forEach>
 
 </body>
 </html>
