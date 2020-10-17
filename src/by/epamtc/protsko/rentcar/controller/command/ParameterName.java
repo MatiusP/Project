@@ -17,5 +17,5 @@ public enum ParameterName {
 	DELETE_USER,
 	GO_TO_CONTACT_PAGE,
 	GO_TO_OUR_CARS_PAGE,
-	GET_ALL_CARS
+	GET_CARS
 }

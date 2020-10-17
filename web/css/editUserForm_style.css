@@ -17,7 +17,6 @@
     width: 50%;
     float: left;
     padding-top: 9px;
-
     color: white;
     font-size: 13px;
     text-transform: uppercase;
@@ -38,21 +37,8 @@
 }
 
 .form-3 input[type=text],
-.form-3 input[type=email] {
-    width: 50%;
-    float: left;
-    padding: 7px 10px;
-    margin-bottom: 6px;
-    font-size: 12px;
-    border: 1px solid #000;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    font-family: 'Ubuntu', 'Lato', sans-serif;
-    color: black;
-    font-size: 17px;
-}
-
-.form-3 h4 {
+.form-3 input[type=email],
+.form-3 input[type=password]{
     width: 50%;
     float: left;
     padding: 7px 10px;

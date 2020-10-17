@@ -23,7 +23,7 @@ public class CommandProvider {
         commands.put(ParameterName.DELETE_USER, new DeleteUserCommand());
         commands.put(ParameterName.GO_TO_CONTACT_PAGE, new GoToContactPage());
         commands.put(ParameterName.GO_TO_OUR_CARS_PAGE, new GoToOurCarsPageCommand());
-        commands.put(ParameterName.GET_ALL_CARS, new GetAllCarsCommand());
+        commands.put(ParameterName.GET_CARS, new GetCarsCommand());
     }
 
     public Command getCommand(String commandName) {

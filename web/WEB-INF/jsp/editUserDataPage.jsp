@@ -50,11 +50,11 @@
     </p>
     <p class="clearfix">
         <label>${current_password}</label>
-    <h4><input type="password" name="currentPassword" placeholder="current_password"/></h4>
+        <input type="password" name="currentPassword" placeholder="current_password"/>
     </p>
     <p class="clearfix">
         <label>${new_password}</label>
-    <h4><input type="password" name="newPassword" placeholder="new_password"/></h4>
+        <input type="password" name="newPassword" placeholder="new_password"/>
     </p>
     <p class="clearfix">
         <label>${surname}</label>
@@ -92,20 +92,23 @@
     </c:if>
 
     <div class="message">
-        <br/>
-        <c:if test="${not empty requestScope.get('fillRegDataError')}">
+        <c:if test="${not empty sessionScope.get('fillRegDataError')}">
             <c:out value="${fill_reg_data_error}"/><br/>
         </c:if><br/>
 
-        <c:if test="${not empty requestScope.get('validationError')}">
+        <c:if test="${not empty sessionScope.get('validationError')}">
             <c:out value="${validationError}"/><br/>
-        </c:if><br/>
+        </c:if>
     </div>
-
 
     <p class="clearfix">
         <input type="submit" value="${button}"><br/>
     </p>
+
+    <p class="clearfix">
+        <input type="submit" value="Back"><br/>
+    </p>
+
 </form>
 
 </body>

@@ -33,8 +33,6 @@
 
 
 <body>
-
-
 <form action="mainController" method="post" class="form-3">
     <input type="hidden" name="command" value="go_to_main_page">
 
@@ -69,9 +67,7 @@
         <output>${userRegData.phone}</output>
     </p>
     <p class="clearfix">
-
         <input type="submit" value="Back"/>
-
     </p>
 </form>
 
