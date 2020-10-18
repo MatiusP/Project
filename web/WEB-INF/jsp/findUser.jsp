@@ -105,7 +105,8 @@
                     <c:forEach items="${usersFoundList}" var="user">
                         <tr>
                             <td>${user.id}</td>
-                            <td><a href="mainController?command=show_all_user_data&currentId=${user.id}"/>${user.login}</td>
+                            <td><a href="mainController?command=show_all_user_data&currentId=${user.id}"/>${user.login}
+                            </td>
                             <td>${user.surname}</td>
                             <td>${user.name}</td>
                             <td>${user.passportIdNumber}</td>

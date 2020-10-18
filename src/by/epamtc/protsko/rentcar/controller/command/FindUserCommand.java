@@ -64,9 +64,7 @@ public class FindUserCommand implements Command {
         if (!searchingPhone.isEmpty()) {
             userSearchParameters.setPhone(searchingPhone);
         }
-        if (searchingStatus.isEmpty()) {
-            userSearchParameters.setDeleted(false);
-        } else if (Integer.parseInt(searchingStatus) == 1) {
+        if (Integer.parseInt(searchingStatus) == 1) {
             userSearchParameters.setDeleted(true);
         } else {
             userSearchParameters.setDeleted(false);
