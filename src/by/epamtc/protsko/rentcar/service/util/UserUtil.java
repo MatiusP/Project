@@ -138,6 +138,7 @@ public class UserUtil {
         final LocalDate dateOfBirth = userData.getDateOfBirth();
         final String eMail = userData.geteMail();
         final String phone = userData.getPhone();
+        final boolean status = userData.isDeleted();
         final String role = userData.getRole();
 
         StringBuilder searchUserCriteria = new StringBuilder();
@@ -169,6 +170,7 @@ public class UserUtil {
         if (phone != null) {
             searchUserCriteria.append("phone=" + "'").append(phone).append("'").append(" ");
         }
+        searchUserCriteria.append("is_deleted=").append(status).append(" ");
         if (role != null) {
             searchUserCriteria.append("role_id=").append(Role.valueOf(role).ordinal() + 1).append(" ");
         }

@@ -77,7 +77,8 @@
                             <li><a href="" class="submenu-link">${sessionScope.currentUserLogin}</a>
                                 <c:if test="${sessionScope.userRegData.role eq 'CLIENT'}">
                                     <ul class="submenu">
-                                        <li><a href="mainController?command=go_to_show_user_profile_page">${show_user_button}</a>
+                                        <li>
+                                            <a href="mainController?command=go_to_show_user_profile_page">${show_user_button}</a>
                                         </li>
                                         <li>
                                             <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
@@ -87,7 +88,8 @@
                                 </c:if>
                                 <c:if test="${sessionScope.userRegData.role eq 'ADMIN'}">
                                     <ul class="submenu">
-                                        <li><a href="mainController?command=go_to_show_user_profile_page">${show_user_button}</a>
+                                        <li>
+                                            <a href="mainController?command=go_to_show_user_profile_page">${show_user_button}</a>
                                         </li>
                                         <li>
                                             <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
@@ -106,19 +108,10 @@
             </c:otherwise>
         </c:choose>
     </div>
+
     <c:if test="${sessionScope.userRegData.role eq 'ADMIN'}">
-        <div>
-            <nav>
-                <ul class="topmenu">
-                    <li><a href="" class="submenu-link">${user_managment_button}</a>
-                        <ul class="submenu">
-                            <li><a href="">Drop user</a></li>
-                            <li><a href="mainController?command=go_to_find_user_page">Find user</a></li>
-                            <li><a href="mainController?command=go_to_find_user_page">Edit User Data</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
+        <div class="header_item header_button">
+            <a href="mainController?command=go_to_find_user_page">${user_managment_button}</a>
         </div>
     </c:if>
 

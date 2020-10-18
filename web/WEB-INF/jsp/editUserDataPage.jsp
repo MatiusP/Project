@@ -83,8 +83,6 @@
         <label>${phone}</label>
         <input type="text" name="phone" value="${userRegData.phone}" required/>
     </p>
-
-
     <c:if test="${sessionScope.userRegData.role eq 'ADMIN'}">
         <p class="clearfix">
             <label>${role}</label>

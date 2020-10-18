@@ -6,9 +6,8 @@
 <jsp:include page="headerPage.jsp"/>
 <img src="${pageContext.request.contextPath}/images/StartPage.jpg"
      width="100%" height="auto">
-
 <jsp:include page="footerPage.jsp"/>
-<body>
 
+<body>
 </body>
 </html>

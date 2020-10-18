@@ -154,6 +154,7 @@ public class UserServiceImpl implements UserService {
         fullUserData.setDateOfBirth(user.getDateOfBirth());
         fullUserData.seteMail(user.geteMail());
         fullUserData.setPhone(user.getPhone());
+        fullUserData.setDeleted(user.isDeleted());
         fullUserData.setRole(user.getRole().toString());
 
         return fullUserData;

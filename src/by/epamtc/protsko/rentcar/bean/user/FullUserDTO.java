@@ -16,6 +16,7 @@ public class FullUserDTO implements Serializable {
     private LocalDate dateOfBirth;
     private String eMail;
     private String phone;
+    private boolean isDeleted;
     private String role;
 
     public FullUserDTO() {
@@ -101,6 +102,14 @@ public class FullUserDTO implements Serializable {
         this.phone = phone;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     public String getRole() {
         return role;
     }
@@ -117,6 +126,7 @@ public class FullUserDTO implements Serializable {
         FullUserDTO that = (FullUserDTO) o;
 
         if (id != that.id) return false;
+        if (isDeleted != that.isDeleted) return false;
         if (login != null ? !login.equals(that.login) : that.login != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (surname != null ? !surname.equals(that.surname) : that.surname != null) return false;
@@ -143,6 +153,7 @@ public class FullUserDTO implements Serializable {
         result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
         result = 31 * result + (eMail != null ? eMail.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (isDeleted ? 1 : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
@@ -160,6 +171,7 @@ public class FullUserDTO implements Serializable {
                 ", dateOfBirth=" + dateOfBirth +
                 ", eMail='" + eMail + '\'' +
                 ", phone='" + phone + '\'' +
+                ", isDeleted=" + isDeleted +
                 ", role='" + role + '\'' +
                 '}';
     }

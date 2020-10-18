@@ -30,6 +30,7 @@ public class FindUserCommand implements Command {
         final String searchingDateOfBirth = request.getParameter("dateOfBirth");
         final String searchingEMail = request.getParameter("eMail");
         final String searchingPhone = request.getParameter("phone");
+        final String searchingStatus = request.getParameter("isDeleted");
         final String searchingRole = request.getParameter("role");
 
         List<FullUserDTO> usersFoundList = null;
@@ -63,10 +64,16 @@ public class FindUserCommand implements Command {
         if (!searchingPhone.isEmpty()) {
             userSearchParameters.setPhone(searchingPhone);
         }
+        if (searchingStatus.isEmpty()) {
+            userSearchParameters.setDeleted(false);
+        } else if (Integer.parseInt(searchingStatus) == 1) {
+            userSearchParameters.setDeleted(true);
+        } else {
+            userSearchParameters.setDeleted(false);
+        }
         if (!searchingRole.isEmpty()) {
             userSearchParameters.setRole(searchingRole);
         }
-
         try {
             usersFoundList = userService.getUser(userSearchParameters);
 
@@ -74,7 +81,7 @@ public class FindUserCommand implements Command {
                 session.setAttribute("noUsersMessage", NO_USERS_EXC);
             } else {
                 session.removeAttribute("noUsersMessage");
-                request.setAttribute("usersFoundList", usersFoundList);
+                session.setAttribute("usersFoundList", usersFoundList);
             }
         } catch (UserServiceException e) {
             //logger

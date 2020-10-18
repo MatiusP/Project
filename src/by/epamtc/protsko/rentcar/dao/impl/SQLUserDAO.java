@@ -188,6 +188,7 @@ public class SQLUserDAO implements UserDAO {
                 user.setDateOfBirth(resultSet.getDate(++i).toLocalDate());
                 user.seteMail(resultSet.getString(++i));
                 user.setPhone(resultSet.getString(++i));
+                user.setDeleted(resultSet.getBoolean(++i));
                 user.setRole(Role.getByOrderCode(resultSet.getInt(++i)));
 
                 users.add(user);

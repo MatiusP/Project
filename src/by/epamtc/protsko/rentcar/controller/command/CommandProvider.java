@@ -24,6 +24,7 @@ public class CommandProvider {
         commands.put(ParameterName.GO_TO_CONTACT_PAGE, new GoToContactPage());
         commands.put(ParameterName.GO_TO_OUR_CARS_PAGE, new GoToOurCarsPageCommand());
         commands.put(ParameterName.GET_CARS, new GetCarsCommand());
+        commands.put(ParameterName.SHOW_ALL_USER_DATA, new GoToShowAllUserDataPage());
     }
 
     public Command getCommand(String commandName) {
