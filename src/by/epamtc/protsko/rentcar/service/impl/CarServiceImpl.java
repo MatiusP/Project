@@ -17,18 +17,24 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
     private CarDAO carDAO = daoFactory.getCarDAO();
+    private static final String IS_CAR_AVAILABLE = "Available";
+    private static final String IS_CAR_NOT_AVAILABLE = "Not_available";
+    private static final String IS_CAR_DELETED = "Deleted";
+    private static final String IS_CAR_NOT_DELETED = "Not_deleted";
 
     @Override
     public boolean addCar(CarDTO newCar) throws CarServiceException {
         Car car;
 
         try {
-            car = buildCarFromCarDTO(newCar);
-
-            return carDAO.addCar(car);
+            if (CarUtil.isEnteredDataValid(newCar)) {
+                car = buildCarFromCarDTO(newCar);
+                return carDAO.addCar(car);
+            }
         } catch (CarDAOException e) {
             throw new CarServiceException(e);
         }
+        return false;
     }
 
     @Override
@@ -36,12 +42,14 @@ public class CarServiceImpl implements CarService {
         Car car;
 
         try {
-            car = buildCarFromCarDTO(carForEdit);
-
-            return carDAO.editCarData(car);
+            if (CarUtil.isEnteredDataValid(carForEdit)) {
+                car = buildCarFromCarDTO(carForEdit);
+                return carDAO.editCarData(car);
+            }
         } catch (CarDAOException e) {
             throw new CarServiceException(e);
         }
+        return false;
     }
 
 
@@ -101,17 +109,25 @@ public class CarServiceImpl implements CarService {
         return allCars;
     }
 
-
     private CarDTO buildCarDTOFromCar(Car car) {
         CarDTO carDTO = new CarDTO();
 
         carDTO.setId(car.getId());
-        carDTO.setVIN(car.getVIN());
-        carDTO.setManufactureDate(car.getManufactureDate());
-        carDTO.setEnginePower(car.getEnginePower());
-        carDTO.setFuelConsumption(car.getFuelConsumption());
-        carDTO.setAvailableToRent(car.isAvailableToRent());
-        carDTO.setDeleted(car.isDeleted());
+        carDTO.setVin(car.getVin());
+        carDTO.setManufactureDate(String.valueOf(car.getManufactureDate()));
+        carDTO.setEnginePower(String.valueOf(car.getEnginePower()));
+        carDTO.setFuelConsumption(String.valueOf(car.getFuelConsumption()));
+        if (car.isAvailableToRent()) {
+            carDTO.setIsAvailableToRent(IS_CAR_AVAILABLE);
+        } else {
+            carDTO.setIsAvailableToRent(IS_CAR_NOT_AVAILABLE);
+        }
+        if (car.isDeleted()) {
+            carDTO.setIsDeleted(IS_CAR_DELETED);
+        } else {
+            carDTO.setIsDeleted(IS_CAR_NOT_DELETED);
+        }
+        carDTO.setPricePerDay(String.valueOf(car.getPricePerDay()));
         carDTO.setTransmissionType(car.getTransmissionType().toString());
         carDTO.setClassType(car.getClassType().toString());
         carDTO.setModel(car.getModel());
@@ -125,12 +141,21 @@ public class CarServiceImpl implements CarService {
         Car car = new Car();
 
         car.setId(carDTO.getId());
-        car.setVIN(carDTO.getVIN());
-        car.setManufactureDate(carDTO.getManufactureDate());
-        car.setEnginePower(carDTO.getEnginePower());
-        car.setFuelConsumption(carDTO.getFuelConsumption());
-        car.setAvailableToRent(carDTO.isAvailableToRent());
-        car.setDeleted(carDTO.isDeleted());
+        car.setVin(carDTO.getVin());
+        car.setManufactureDate(Integer.parseInt(carDTO.getManufactureDate()));
+        car.setEnginePower(Integer.parseInt(carDTO.getEnginePower()));
+        car.setFuelConsumption(Double.parseDouble(carDTO.getFuelConsumption()));
+        if (carDTO.getIsAvailableToRent().equalsIgnoreCase(IS_CAR_AVAILABLE)) {
+            car.setDeleted(true);
+        } else {
+            car.setDeleted(false);
+        }
+        if (carDTO.getIsDeleted().equalsIgnoreCase(IS_CAR_DELETED)) {
+            car.setDeleted(true);
+        } else {
+            car.setDeleted(false);
+        }
+        car.setPricePerDay(Double.parseDouble(carDTO.getPricePerDay()));
         car.setTransmissionType(Transmission.valueOf(carDTO.getTransmissionType()));
         car.setClassType(CarClass.valueOf(carDTO.getClassType()));
         car.setModel(carDTO.getModel());
@@ -139,17 +164,4 @@ public class CarServiceImpl implements CarService {
 
         return car;
     }
-}
-
-
-class Main {
-    public static void main(String[] args) throws CarServiceException {
-        CarServiceImpl o = new CarServiceImpl();
-        CarDTO car = new CarDTO();
-        car.setVIN("123");
-        car.setTransmissionType("automatic");
-
-        o.findCar(car);
-    }
-
 }

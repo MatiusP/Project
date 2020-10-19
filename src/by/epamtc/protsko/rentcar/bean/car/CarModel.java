@@ -9,6 +9,9 @@ public class CarModel implements Serializable {
     private String modelName;
     private CarBrand carBrand;
 
+    public CarModel() {
+    }
+
     public int getId() {
         return id;
     }

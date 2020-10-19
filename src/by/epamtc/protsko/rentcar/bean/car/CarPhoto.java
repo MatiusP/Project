@@ -9,6 +9,9 @@ public class CarPhoto implements Serializable {
     private String pictureName;
     private int carId;
 
+    public CarPhoto() {
+    }
+
     public int getId() {
         return id;
     }

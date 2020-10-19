@@ -8,6 +8,9 @@ public class CarBrand implements Serializable {
     private int id;
     private String brandName;
 
+    public CarBrand() {
+    }
+
     public int getId() {
         return id;
     }

@@ -15,26 +15,24 @@ public class SQLCarDAO implements CarDAO {
     private static final Logger logger = LogManager.getLogger(SQLCarDAO.class);
     private static ConnectionPool connectionPool = new ConnectionPool();
 
-    private static final String GET_ALL_UNDELETED_CARS_QUERY = "SELECT * FROM fullCarsData WHERE is_deleted=0";
+    private static final String GET_ALL_UN_DELETED_CARS_QUERY = "SELECT * FROM fullCarsData WHERE is_deleted=0";
     private static final String GET_ALL_CARS_QUERY = "SELECT * FROM fullCarsData";
-    private static final String FIND_CAR_QUERY = "SELECT * FROM fullCarsData WHERE is_deleted=0 ";
     private static final String GET_CAR_PHOTOS_QUERY = "SELECT picture_name FROM carPhotos WHERE cars_id=?";
     private static final String ADD_CAR_PHOTOS_QUERY = "INSERT INTO carphotos (picture_name, cars_id) VALUES (?,?)";
     private static final String DELETE_CAR_PHOTO_QUERY = "DELETE FROM carphotos WHERE cars_id=?";
     private static final String ADD_NEW_CAR_QUERY =
             "INSERT INTO cars" +
                     "(VIN, manufacture_date, engine_power, fuel_consumption, is_avaliable_to_rent," +
-                    "transmissionType_id, carType_id, carModels_id)" +
-                    " VALUES (?,?,?,?,?,?,?,?)";
+                    "is_deleted, price_per_day, transmissionType_id, carType_id, carModels_id)" +
+                    " VALUES (?,?,?,?,?,?,?,?,?,?)";
     private static final String EDIT_CAR_DATA_QUERY =
             "UPDATE cars SET" +
                     " VIN=?, manufacture_date=?, engine_power=?, fuel_consumption=?, is_avaliable_to_rent=?," +
-                    "transmissionType_id=?, carType_id=?, carModels_id=?" +
+                    "is_deleted=?, price_per_day=?, transmissionType_id=?, carType_id=?, carModels_id=?" +
                     " WHERE id=?";
     private static final String DELETE_CAR_FROM_DB_QUERY = "DELETE FROM cars WHERE cars.id=?";
     private static final String DELETE_CAR_FROM_SYSTEM_QUERY = "UPDATE cars SET is_deleted=1 WHERE id=?";
     private static final String IS_CAR_VIN_EXIST_QUERY = "SELECT vin FROM cars WHERE vin=?";
-    private static final String IS_CAR_BRAND_EXISTS_QUERY = "SELECT id FROM carbrands WHERE brand_name=?";
     private static final String ADD_NEW_CAR_BRAND_QUERY = "INSERT INTO carbrands (brand_name) VALUES (?)";
     private static final String GET_CAR_BRAND_ID_QUERY = "SELECT id FROM carbrands WHERE brand_name=?";
     private static final String IS_CAR_MODEL_EXISTS_QUERY = "SELECT * FROM carmodels WHERE (model_name=? AND carbrands_id=?)";
@@ -42,13 +40,12 @@ public class SQLCarDAO implements CarDAO {
     private static final String GET_CAR_MODEL_ID_QUERY = "SELECT id FROM carmodels WHERE (model_name=? AND carbrands_id=?)";
     private static final String GET_CAR_ID_QUERY = "SELECT id FROM cars WHERE vin=?";
 
-
     @Override
     public boolean addCar(Car car) throws CarDAOException {
         final String CAR_VIN_EXISTS = "Car VIN already exists in database";
         final String ADD_CAR_SQL_ERROR = "Add new car SQL exception";
 
-        if (isCarVINExist(car.getVIN())) {
+        if (isCarVINExist(car.getVin())) {
             throw new CarDAOException(CAR_VIN_EXISTS);
         }
         Connection connection = null;
@@ -61,20 +58,22 @@ public class SQLCarDAO implements CarDAO {
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(ADD_NEW_CAR_QUERY);
 
-            preparedStatement.setString(1, car.getVIN());
+            preparedStatement.setString(1, car.getVin());
             preparedStatement.setInt(2, car.getManufactureDate());
             preparedStatement.setInt(3, car.getEnginePower());
             preparedStatement.setDouble(4, car.getFuelConsumption());
             preparedStatement.setBoolean(5, car.isAvailableToRent());
-            preparedStatement.setInt(6, (car.getTransmissionType().ordinal() + 1));
-            preparedStatement.setInt(7, (car.getClassType().ordinal() + 1));
-            preparedStatement.setInt(8, carModelId);
+            preparedStatement.setBoolean(6, car.isDeleted());
+            preparedStatement.setDouble(7, car.getPricePerDay());
+            preparedStatement.setInt(8, (car.getTransmissionType().ordinal() + 1));
+            preparedStatement.setInt(9, (car.getClassType().ordinal() + 1));
+            preparedStatement.setInt(10, carModelId);
 
             int addedRowsCount = preparedStatement.executeUpdate();
 
             if (addedRowsCount > 0) {
                 if (car.getPhotos() != null && !car.getPhotos().isEmpty()) {
-                    int carId = getCarId(car.getVIN());
+                    int carId = getCarId(car.getVin());
                     addCarPhotos(car.getPhotos(), carId);
                 }
                 return true;
@@ -103,15 +102,17 @@ public class SQLCarDAO implements CarDAO {
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(EDIT_CAR_DATA_QUERY);
 
-            preparedStatement.setString(1, car.getVIN());
+            preparedStatement.setString(1, car.getVin());
             preparedStatement.setInt(2, car.getManufactureDate());
             preparedStatement.setInt(3, car.getEnginePower());
             preparedStatement.setDouble(4, car.getFuelConsumption());
             preparedStatement.setBoolean(5, car.isAvailableToRent());
-            preparedStatement.setInt(6, (car.getTransmissionType().ordinal() + 1));
-            preparedStatement.setInt(7, (car.getClassType().ordinal() + 1));
-            preparedStatement.setInt(8, carModelId);
-            preparedStatement.setInt(9, car.getId());
+            preparedStatement.setBoolean(6, car.isDeleted());
+            preparedStatement.setDouble(7, car.getPricePerDay());
+            preparedStatement.setInt(8, (car.getTransmissionType().ordinal() + 1));
+            preparedStatement.setInt(9, (car.getClassType().ordinal() + 1));
+            preparedStatement.setInt(10, carModelId);
+            preparedStatement.setInt(11, car.getId());
 
             int addedRowsCount = preparedStatement.executeUpdate();
 
@@ -197,7 +198,7 @@ public class SQLCarDAO implements CarDAO {
             statement = connection.createStatement();
 
             if (!searchCriteria.isEmpty()) {
-                resultSet = statement.executeQuery(FIND_CAR_QUERY + "AND " + searchCriteria);
+                resultSet = statement.executeQuery(GET_ALL_UN_DELETED_CARS_QUERY + " AND " + searchCriteria);
             } else {
                 resultSet = statement.executeQuery(GET_ALL_CARS_QUERY);
             }
@@ -216,21 +217,21 @@ public class SQLCarDAO implements CarDAO {
     @Override
     public List<Car> getAllCars() throws CarDAOException {
         Connection connection = null;
-        PreparedStatement preparedStatement = null;
+        Statement statement = null;
         ResultSet resultSet = null;
         List<Car> carsList = new ArrayList<>();
 
         try {
             connection = connectionPool.takeConnection();
-            preparedStatement = connection.prepareStatement(GET_ALL_UNDELETED_CARS_QUERY);
-            resultSet = preparedStatement.executeQuery();
+            statement = connection.createStatement();
+            statement.executeQuery(GET_ALL_UN_DELETED_CARS_QUERY);
 
             carsList = getCarsList(resultSet);
         } catch (SQLException e) {
             throw new CarDAOException(e);
         } finally {
             if (connection != null) {
-                connectionPool.closeConnection(connection, preparedStatement, resultSet);
+                connectionPool.closeConnection(connection, statement, resultSet);
             }
         }
         return carsList;
@@ -247,12 +248,13 @@ public class SQLCarDAO implements CarDAO {
                 car = new Car();
 
                 car.setId(resultSet.getInt(++i));
-                car.setVIN(resultSet.getString(++i));
+                car.setVin(resultSet.getString(++i));
                 car.setManufactureDate(resultSet.getInt(++i));
                 car.setEnginePower(resultSet.getInt(++i));
                 car.setFuelConsumption(resultSet.getInt(++i));
                 car.setAvailableToRent(resultSet.getBoolean(++i));
                 car.setDeleted(resultSet.getBoolean(++i));
+                car.setPricePerDay(resultSet.getInt(++i));
                 car.setTransmissionType(Transmission.valueOf(resultSet.getString(++i)));
                 car.setClassType(CarClass.valueOf(resultSet.getString(++i)));
                 car.setModel(resultSet.getString(++i));
@@ -267,7 +269,7 @@ public class SQLCarDAO implements CarDAO {
         return cars;
     }
 
-    public List<String> getCarPhotos(int carId) throws CarDAOException {
+    private List<String> getCarPhotos(int carId) throws CarDAOException {
         final String GET_CAR_PHOTO_SQL_ERROR = "Get cars photo SQL connection error";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -280,7 +282,6 @@ public class SQLCarDAO implements CarDAO {
             preparedStatement.setInt(1, carId);
 
             resultSet = preparedStatement.executeQuery();
-
 
             while (resultSet.next()) {
                 int i = 1;
@@ -332,7 +333,7 @@ public class SQLCarDAO implements CarDAO {
 
         try {
             connection = connectionPool.takeConnection();
-            preparedStatement = connection.prepareStatement(IS_CAR_BRAND_EXISTS_QUERY);
+            preparedStatement = connection.prepareStatement(GET_CAR_BRAND_ID_QUERY);
             preparedStatement.setString(1, carBrand);
             resultSet = preparedStatement.executeQuery();
 

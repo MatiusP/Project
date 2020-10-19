@@ -34,7 +34,7 @@
 
 <body>
 <form action="mainController" method="post" class="form-3">
-    <input type="hidden" name="command" value="go_to_main_page">
+<%--    <input type="hidden" name="command" value="go_to_main_page">--%>
 
     <h3>${page_message}</h3>
 
@@ -67,7 +67,9 @@
         <output>${userRegData.phone}</output>
     </p>
     <p class="clearfix">
-        <input type="submit" value="Back"/>
+        <a href="mainController?command=go_to_main_page">Back</a>
+
+<%--        <input type="submit" value="Back"/>--%>
     </p>
 </form>
 

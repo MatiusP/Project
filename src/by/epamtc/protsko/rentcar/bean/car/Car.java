@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Car implements Serializable {
-    private static final long serialVersionUID = -366766068992637127L;
+    private static final long serialVersionUID = -3511971198375333949L;
 
     private int id;
-    private String VIN;
+    private String vin;
     private int manufactureDate;
     private int enginePower;
     private double fuelConsumption;
@@ -17,7 +17,11 @@ public class Car implements Serializable {
     private CarClass classType;
     private String model;
     private String brand;
+    private double pricePerDay;
     private List<String> photos;
+
+    public Car() {
+    }
 
     public int getId() {
         return id;
@@ -27,12 +31,12 @@ public class Car implements Serializable {
         this.id = id;
     }
 
-    public String getVIN() {
-        return VIN;
+    public String getVin() {
+        return vin;
     }
 
-    public void setVIN(String VIN) {
-        this.VIN = VIN;
+    public void setVin(String vin) {
+        this.vin = vin;
     }
 
     public int getManufactureDate() {
@@ -107,6 +111,14 @@ public class Car implements Serializable {
         this.brand = brand;
     }
 
+    public double getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public void setPricePerDay(double pricePerDay) {
+        this.pricePerDay = pricePerDay;
+    }
+
     public List<String> getPhotos() {
         return photos;
     }
@@ -128,7 +140,8 @@ public class Car implements Serializable {
         if (Double.compare(car.fuelConsumption, fuelConsumption) != 0) return false;
         if (isAvailableToRent != car.isAvailableToRent) return false;
         if (isDeleted != car.isDeleted) return false;
-        if (VIN != null ? !VIN.equals(car.VIN) : car.VIN != null) return false;
+        if (Double.compare(car.pricePerDay, pricePerDay) != 0) return false;
+        if (vin != null ? !vin.equals(car.vin) : car.vin != null) return false;
         if (transmissionType != car.transmissionType) return false;
         if (classType != car.classType) return false;
         if (model != null ? !model.equals(car.model) : car.model != null) return false;
@@ -141,7 +154,7 @@ public class Car implements Serializable {
         int result;
         long temp;
         result = id;
-        result = 31 * result + (VIN != null ? VIN.hashCode() : 0);
+        result = 31 * result + (vin != null ? vin.hashCode() : 0);
         result = 31 * result + manufactureDate;
         result = 31 * result + enginePower;
         temp = Double.doubleToLongBits(fuelConsumption);
@@ -152,6 +165,8 @@ public class Car implements Serializable {
         result = 31 * result + (classType != null ? classType.hashCode() : 0);
         result = 31 * result + (model != null ? model.hashCode() : 0);
         result = 31 * result + (brand != null ? brand.hashCode() : 0);
+        temp = Double.doubleToLongBits(pricePerDay);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (photos != null ? photos.hashCode() : 0);
         return result;
     }
@@ -160,17 +175,18 @@ public class Car implements Serializable {
     public String toString() {
         return "Car{" +
                 "id=" + id +
-                ", carVIN='" + VIN + '\'' +
+                ", vin='" + vin + '\'' +
                 ", manufactureDate=" + manufactureDate +
                 ", enginePower=" + enginePower +
                 ", fuelConsumption=" + fuelConsumption +
                 ", isAvailableToRent=" + isAvailableToRent +
                 ", isDeleted=" + isDeleted +
                 ", transmissionType=" + transmissionType +
-                ", carClassType=" + classType +
-                ", carModel='" + model + '\'' +
-                ", carBrand='" + brand + '\'' +
-                ", carPhotos=" + photos +
+                ", classType=" + classType +
+                ", model='" + model + '\'' +
+                ", brand='" + brand + '\'' +
+                ", pricePerDay=" + pricePerDay +
+                ", photos=" + photos +
                 '}';
     }
 }
