@@ -60,15 +60,16 @@ nav ul {
 .submenu {
     background: #011b32;
     position: absolute;
-    left: 0;
-    top: 100%;
-    z-index: 5;
-    width: 180px;
-    opacity: 0;
+    width: 150px;
     transform: scaleY(0);
     transform-origin: 0 0;
-    transition: .5s ease-in-out;
+    transition: .4s ease-in-out;
+    line-height: 35px;
+    padding-right: 0px;
+    padding-left: 0px;
+
 }
+
 
 .submenu a {
     color: white;

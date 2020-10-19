@@ -224,7 +224,7 @@ public class SQLCarDAO implements CarDAO {
         try {
             connection = connectionPool.takeConnection();
             statement = connection.createStatement();
-            statement.executeQuery(GET_ALL_UN_DELETED_CARS_QUERY);
+            resultSet = statement.executeQuery(GET_ALL_UN_DELETED_CARS_QUERY);
 
             carsList = getCarsList(resultSet);
         } catch (SQLException e) {

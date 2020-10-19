@@ -1,6 +1,7 @@
 package by.epamtc.protsko.rentcar.controller.command;
 
 import by.epamtc.protsko.rentcar.bean.car.CarDTO;
+import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
 import by.epamtc.protsko.rentcar.service.CarService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.exception.CarServiceException;
@@ -24,6 +25,9 @@ public class GetCarsCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String currentRequestURL = RequestURL.getRequestURL(request);
+        request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
+
         List<CarDTO> carsTmpList;
         List<CarDTO> cars = new ArrayList<>();
 
