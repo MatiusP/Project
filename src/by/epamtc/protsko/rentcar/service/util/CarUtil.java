@@ -82,15 +82,15 @@ public class CarUtil {
         if (carFuelConsumption != null) {
             searchCarCriteria.append("car_fuel_consumption=").append("'").append(carFuelConsumption).append("'").append(" ");
         }
-        if (isAvailableToRent.equalsIgnoreCase("NOT_AVAILABLE")) {
-            searchCarCriteria.append("is_car_available=").append("true").append(" ");
+        if (isAvailableToRent!= null && isAvailableToRent.equalsIgnoreCase("NOT_AVAILABLE")) {
+            searchCarCriteria.append("is_car_available=false").append(" ");
         } else {
-            searchCarCriteria.append("is_car_available=").append("false").append(" ");
+            searchCarCriteria.append("is_car_available=true").append(" ");
         }
-        if (isDeleted.equalsIgnoreCase("DELETED")) {
-            searchCarCriteria.append("is_deleted=").append("true").append(" ");
+        if (isDeleted != null && isDeleted.equalsIgnoreCase("DELETED")) {
+            searchCarCriteria.append("is_deleted=true").append(" ");
         } else {
-            searchCarCriteria.append("is_deleted=").append("false").append(" ");
+            searchCarCriteria.append("is_deleted=false").append(" ");
         }
         if (pricePerDay != null) {
             searchCarCriteria.append("pricePerDay=").append("'").append(pricePerDay).append("'").append(" ");

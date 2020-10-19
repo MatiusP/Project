@@ -45,10 +45,11 @@
         <figure class="sign">
             <p>
             <div class="link">
+                <a href="mainController?command=go_to_car_page&carId=${car.id}"/>
                 <figcaption>${car.brand} ${car.model} (${car.manufactureDate} г.в.)</figcaption>
             </div>
             <p>
-                <img src="${pageContext.request.contextPath}/images/car/hyundai-solaris-01.jpg" width="175" alt="Photo">
+                <img src="${pageContext.request.contextPath}/images/car/audi-b7-01.jpg" width="175" alt="Photo">
             </p>
 
             <figcaption>
