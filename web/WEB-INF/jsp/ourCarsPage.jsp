@@ -49,13 +49,11 @@
             <div class="link">
                 <a href="mainController?command=go_to_car_page&carId=${car.id}"/>
                 <figcaption>${car.brand} ${car.model} (${car.manufactureDate} г.в.)</figcaption>
-            <img src="${pageContext.request.contextPath}${car.photos[0]}" width="180" height="auto" alt="Photo">
+                <img src="${pageContext.request.contextPath}${car.photos[0]}" width="180" height="auto" alt="Photo">
             </div>
 
             <figcaption>
-                <div class="link">
-                    <figcaption>${car.pricePerDay} BYN</figcaption>
-                </div>
+                <div class="link">${car.pricePerDay} BYN</div>
 
                 <div class="car-characteristics">
                     <p>${transmission} ${car.transmissionType}</p>
@@ -68,6 +66,5 @@
         </figure>
     </c:forEach>
 </c:if>
-
 </body>
 </html>

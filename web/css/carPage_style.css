@@ -19,18 +19,33 @@
 }
 
 .inst h2 {
-    margin-bottom: 30px;
+    margin: auto 500;
+    color: #020202;
+    font-size: 17px;
+    font-weight: 300;
+    width: 55%;
+    background-color: #fff688;
+    padding: 5px 20px;
+    border-radius: 0.4em;
+    box-shadow: inset 0 0 2px 1px rgba(255, 255, 255, 0.08),
+    0 16px 10px -8px rgba(0, 0, 0, 0.6);
 }
 
 .inst h3 {
     margin: 60px;
-    color: #fd0000;
+    color: #ffffff;
     font-family: 'Roboto', sans-serif;
-    font-weight: 600;
     font-size: 26px;
-    text-decoration: underline;
-}
 
+    width: 50%;
+    background-color: #0063f8;
+    border-left: 5px solid #011b32;
+    overflow: hidden;
+    padding: 8px 5px;
+    border-radius: 0.4em;
+    box-shadow: inset 0 0 2px 1px rgba(255, 255, 255, 0.08),
+    0 16px 10px -8px rgba(0, 0, 0, 0.6);
+}
 
 .inst p {
     width: 50%;
@@ -54,4 +69,22 @@
 .b2 {
     height: 0px;
     width: 50px;
+}
+
+.inst a{
+    color: #001324;
+    text-decoration: underline;
+    font-weight: 600;
+    font-size: 20;
+}
+
+.inst a:hover {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.inst a:active {
+    background: #287db5;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.6);
+    border-color: #000;
+    border-color: rgba(0, 0, 0, 0.9);
 }
