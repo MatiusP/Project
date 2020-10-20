@@ -25,6 +25,8 @@
 <style>
     body {
         background: url("${pageContext.request.contextPath}/images/page_font.jpg");
+        width: 100%;
+        height: 100%;
     }
 </style>
 
@@ -47,14 +49,12 @@
             <div class="link">
                 <a href="mainController?command=go_to_car_page&carId=${car.id}"/>
                 <figcaption>${car.brand} ${car.model} (${car.manufactureDate} г.в.)</figcaption>
+            <img src="${pageContext.request.contextPath}${car.photos[0]}" width="180" height="auto" alt="Photo">
             </div>
-            <p>
-                <img src="${pageContext.request.contextPath}${car.photos[0]}" width="175" alt="Photo">
-            </p>
 
             <figcaption>
                 <div class="link">
-                    <figcaption>PRICE</figcaption>
+                    <figcaption>${car.pricePerDay} BYN</figcaption>
                 </div>
 
                 <div class="car-characteristics">
