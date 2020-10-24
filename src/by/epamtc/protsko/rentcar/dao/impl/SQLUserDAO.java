@@ -13,40 +13,42 @@ import by.epamtc.protsko.rentcar.bean.user.Role;
 import by.epamtc.protsko.rentcar.bean.user.User;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
-import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPoolException;
 import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SQLUserDAO implements UserDAO {
     private static final ConnectionPool connectionPool = new ConnectionPool();
 
+    private static final String AUTH_USER_MESSAGE = "Incorrect login or password";
     private static final String USER_EXISTS_MESSAGE = "Sorry, but the login you entered exists. Try a different login.";
-    private static final String SAVE_USER_ERROR_MESSAGE = "Save new user error";
-    private static final String CONNECTION_ERROR_MESSAGE = "Connection pool exception";
-    private static final String DELETE_USER_ERROR_MESSAGE = "Delete user error";
-    private static final String FIND_USER_ERROR_MESSAGE = "Find user error";
-    private static final String AUTH_USER_ERROR_MESSAGE = "Incorrect login or password";
-    private static final String IS_USER_EXIST_QUERY = "SELECT * FROM users WHERE login=?";
-    private static final String IS_LOGIN_EXISTS_QUERY = "SELECT * FROM users WHERE login=?";
+    private static final String SAVE_USER_ERROR_MESSAGE = "Error while saving new user";
+    private static final String EDIT_USER_ERROR_MESSAGE = "Error while editing user";
+    private static final String DELETE_USER_ERROR_MESSAGE = "Error while deleting user";
+    private static final String FIND_USER_ERROR_MESSAGE = "Error while finding user";
+    private static final String GET_USER_ERROR_MESSAGE = "Error while getting user by id";
+    private static final String READ_RESULT_SET_ERROR_MESSAGE = "Error while reading result set";
+
+    private static final String IS_USER_EXISTS_QUERY = "SELECT * FROM users WHERE login=?";
     private static final String INSERT_USER_TO_DATABASE_QUERY = "INSERT INTO users" +
             "(login, password, surname, name, passport_id_number," +
             " driver_license, date_of_birth, e_mail, phone)" +
             " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String EDIT_USER_DATA_QUERY = "UPDATE users SET" +
             " login=?, password=coalesce(?, password), surname=?, name=?, passport_id_number=?, " +
-            " driver_license=?, date_of_birth=?, e_mail=?, phone=?, role_id=? WHERE id=?";
+            " driver_license=?, date_of_birth=?, e_mail=?, phone=?, is_deleted=?, role_id=? WHERE id=?";
     private static final String DELETE_USER_QUERY = "UPDATE users SET is_deleted=1 WHERE id=?";
+    private static final String GET_USER_BY_ID_QUERY = "SELECT * FROM users WHERE id=?";
     private static final String GET_ALL_USERS_QUERY = "SELECT * FROM users";
-    private static final String GET_USER_QUERY = "SELECT * FROM users WHERE ";
+    private static final String FIND_USER_QUERY = "SELECT * FROM users WHERE ";
 
     @Override
     public User authentication(String login, String password) throws UserDAOException {
-        User registrationUserData = getRegistrationUserData(login, password);
+        User userData = getRegistrationUserData(login, password);
 
-        if (registrationUserData == null || registrationUserData.isDeleted()) {
-            throw new UserDAOException(AUTH_USER_ERROR_MESSAGE);
+        if ((userData == null) || (userData.isDeleted())) {
+            throw new UserDAOException(AUTH_USER_MESSAGE);
         }
-        return registrationUserData;
+        return userData;
     }
 
     @Override
@@ -78,8 +80,6 @@ public class SQLUserDAO implements UserDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new UserDAOException(SAVE_USER_ERROR_MESSAGE, e);
-        } catch (ConnectionPoolException e) {
-            throw new UserDAOException(CONNECTION_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
@@ -97,7 +97,7 @@ public class SQLUserDAO implements UserDAO {
 
         try {
             connection = connectionPool.takeConnection();
-            if (!user.getPassword().isEmpty()) {
+            if ((user.getPassword() != null) || (!user.getPassword().isEmpty())) {
                 bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 hashPassword = bCryptPasswordEncoder.encode(user.getPassword());
             }
@@ -113,14 +113,13 @@ public class SQLUserDAO implements UserDAO {
             preparedStatement.setDate(7, Date.valueOf(user.getDateOfBirth()));
             preparedStatement.setString(8, user.geteMail());
             preparedStatement.setString(9, user.getPhone().replace(" ", ""));
-            preparedStatement.setInt(10, user.getRole().ordinal() + 1);
-            preparedStatement.setInt(11, user.getId());
+            preparedStatement.setBoolean(10, user.isDeleted());
+            preparedStatement.setInt(11, user.getRole().ordinal() + 1);
+            preparedStatement.setInt(12, user.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new UserDAOException(SAVE_USER_ERROR_MESSAGE, e);
-        } catch (ConnectionPoolException e) {
-            throw new UserDAOException(CONNECTION_ERROR_MESSAGE, e);
+            throw new UserDAOException(EDIT_USER_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
@@ -142,11 +141,7 @@ public class SQLUserDAO implements UserDAO {
             if (preparedStatement.executeUpdate() > 0) {
                 return true;
             }
-        } catch (ConnectionPoolException e) {
-            //logger
-            throw new UserDAOException(CONNECTION_ERROR_MESSAGE, e);
         } catch (SQLException e) {
-            //logger
             throw new UserDAOException(DELETE_USER_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
@@ -155,6 +150,33 @@ public class SQLUserDAO implements UserDAO {
         }
         return false;
     }
+
+    @Override
+    public User getUserById(int userId) throws UserDAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        User user = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(GET_USER_BY_ID_QUERY);
+            preparedStatement.setInt(1, userId);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                user = fillUserDataFromDB(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new UserDAOException(GET_USER_ERROR_MESSAGE, e);
+        } finally {
+            if (connection != null) {
+                connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            }
+        }
+        return user;
+    }
+
 
     @Override
     public List<User> findUser(String searchCriteria) throws UserDAOException {
@@ -169,35 +191,16 @@ public class SQLUserDAO implements UserDAO {
             statement = connection.createStatement();
 
             if (!searchCriteria.isEmpty()) {
-                resultSet = statement.executeQuery(GET_USER_QUERY + "(" + searchCriteria + ")");
+                resultSet = statement.executeQuery(FIND_USER_QUERY + "(" + searchCriteria + ")");
             } else {
                 resultSet = statement.executeQuery(GET_ALL_USERS_QUERY);
             }
 
             while (resultSet.next()) {
-                int i = 0;
-                user = new User();
-
-                user.setId(resultSet.getInt(++i));
-                user.setLogin(resultSet.getString(++i));
-                user.setPassword(resultSet.getString(++i));
-                user.setSurname(resultSet.getString(++i));
-                user.setName(resultSet.getString(++i));
-                user.setPassportIdNumber(resultSet.getString(++i));
-                user.setDriverLicense(resultSet.getString(++i));
-                user.setDateOfBirth(resultSet.getDate(++i).toLocalDate());
-                user.seteMail(resultSet.getString(++i));
-                user.setPhone(resultSet.getString(++i));
-                user.setDeleted(resultSet.getBoolean(++i));
-                user.setRole(Role.getByOrderCode(resultSet.getInt(++i)));
-
+                user = fillUserDataFromDB(resultSet);
                 users.add(user);
             }
-        } catch (ConnectionPoolException e) {
-            //logger
-            throw new UserDAOException(CONNECTION_ERROR_MESSAGE, e);
         } catch (SQLException e) {
-            //logger
             throw new UserDAOException(FIND_USER_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
@@ -206,6 +209,7 @@ public class SQLUserDAO implements UserDAO {
         }
         return users;
     }
+
 
     private User getRegistrationUserData(String login, String password) throws UserDAOException {
         Connection connection = null;
@@ -217,34 +221,18 @@ public class SQLUserDAO implements UserDAO {
         try {
             connection = connectionPool.takeConnection();
 
-            preparedStatement = connection.prepareStatement(IS_USER_EXIST_QUERY);
+            preparedStatement = connection.prepareStatement(IS_USER_EXISTS_QUERY);
             preparedStatement.setString(1, login);
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 String userHashPassword = resultSet.getString(3);
                 if (bCryptPasswordEncoder.matches(password, userHashPassword)) {
-                    user = new User();
-                    user.setId(resultSet.getInt(1));
-                    user.setLogin(resultSet.getString(2));
-                    user.setPassword(resultSet.getString(3));
-                    user.setSurname(resultSet.getString(4));
-                    user.setName(resultSet.getString(5));
-                    user.setPassportIdNumber(resultSet.getString(6));
-                    user.setDriverLicense(resultSet.getString(7));
-                    user.setDateOfBirth(resultSet.getDate(8).toLocalDate());
-                    user.seteMail(resultSet.getString(9));
-                    user.setPhone(resultSet.getString(10));
-                    user.setDeleted(resultSet.getBoolean(11));
-                    user.setRole(Role.getByOrderCode(resultSet.getInt(12)));
-
-                    return user;
+                    user = fillUserDataFromDB(resultSet);
                 }
-                throw new UserDAOException(AUTH_USER_ERROR_MESSAGE);
+                throw new UserDAOException(AUTH_USER_MESSAGE);
             }
         } catch (SQLException e) {
-            throw new UserDAOException(e);
-        } catch (ConnectionPoolException e) {
             throw new UserDAOException(e);
         } finally {
             if (connection != null) {
@@ -261,7 +249,7 @@ public class SQLUserDAO implements UserDAO {
 
         try {
             connection = connectionPool.takeConnection();
-            preparedStatement = connection.prepareStatement(IS_LOGIN_EXISTS_QUERY);
+            preparedStatement = connection.prepareStatement(IS_USER_EXISTS_QUERY);
             preparedStatement.setString(1, login);
 
             resultSet = preparedStatement.executeQuery();
@@ -270,13 +258,33 @@ public class SQLUserDAO implements UserDAO {
             }
         } catch (SQLException e) {
             throw new UserDAOException(e);
-        } catch (ConnectionPoolException e) {
-            throw new UserDAOException(e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement, resultSet);
             }
         }
         return false;
+    }
+
+    private User fillUserDataFromDB(ResultSet resultSet) throws UserDAOException {
+        User user = new User();
+
+        try {
+            user.setId(resultSet.getInt(1));
+            user.setLogin(resultSet.getString(2));
+            user.setPassword(resultSet.getString(3));
+            user.setSurname(resultSet.getString(4));
+            user.setName(resultSet.getString(5));
+            user.setPassportIdNumber(resultSet.getString(6));
+            user.setDriverLicense(resultSet.getString(7));
+            user.setDateOfBirth(resultSet.getDate(8).toLocalDate());
+            user.seteMail(resultSet.getString(9));
+            user.setPhone(resultSet.getString(10));
+            user.setDeleted(resultSet.getBoolean(11));
+            user.setRole(Role.getByOrderCode(resultSet.getInt(12)));
+        } catch (SQLException e) {
+            throw new UserDAOException(READ_RESULT_SET_ERROR_MESSAGE, e);
+        }
+        return user;
     }
 }

@@ -95,18 +95,17 @@
                         <label>${role_message}</label>
                         <output>${user.role}</output>
                     </p>
+                    <div class="button">
+                        <a href="mainController?command=go_to_edit_user_data_by_admin_page&user=${user.id}">${edit_button}</a>
+                    </div>
+                    <div class="button">
+                        <a href="mainController?command=delete_user&deleteUserId=${requestScope.currentId}&user_login=${user.login}">${delete_button}</a>
+                    </div>
+                    <div class="button">
+                        <a href="mainController?command=go_to_find_user_page">${back_button}</a>
+                    </div>
                 </c:if>
             </c:forEach>
-
-            <div class="button">
-                <a href="mainController?command=edit_user_data">${edit_button}</a>
-            </div>
-            <div class="button">
-                <a href="mainController?command=delete_user&deleteUserId=${requestScope.currentId}&user_login=${user.login}">${delete_button}</a>
-            </div>
-            <div class="button">
-                <a href="mainController?command=go_to_find_user_page">${back_button}</a>
-            </div>
         </form>
     </c:otherwise>
 </c:choose>

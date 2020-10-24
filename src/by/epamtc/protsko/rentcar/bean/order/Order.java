@@ -4,16 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Order implements Serializable {
-    private static final long serialVersionUID = 6162847055282723195L;
+    private static final long serialVersionUID = 3433642947211280168L;
 
     private int id;
     private Date startRent;
-    private Date end_rent;
+    private Date endRent;
     private double totalPrice;
-    boolean isOrderCanceled;
-    boolean isOrderAccepted;
-    boolean isOrderClosed;
-    private FinalRentAct finalAct;
+    private boolean isOrderCanceled;
+    private boolean isOrderAccepted;
+    private boolean isOrderClosed;
     private int userId;
     private int carId;
 
@@ -36,12 +35,12 @@ public class Order implements Serializable {
         this.startRent = startRent;
     }
 
-    public Date getEnd_rent() {
-        return end_rent;
+    public Date getEndRent() {
+        return endRent;
     }
 
-    public void setEnd_rent(Date end_rent) {
-        this.end_rent = end_rent;
+    public void setEndRent(Date endRent) {
+        this.endRent = endRent;
     }
 
     public double getTotalPrice() {
@@ -76,14 +75,6 @@ public class Order implements Serializable {
         isOrderClosed = orderClosed;
     }
 
-    public FinalRentAct getFinalAct() {
-        return finalAct;
-    }
-
-    public void setFinalAct(FinalRentAct finalAct) {
-        this.finalAct = finalAct;
-    }
-
     public int getUserId() {
         return userId;
     }
@@ -115,8 +106,7 @@ public class Order implements Serializable {
         if (userId != order.userId) return false;
         if (carId != order.carId) return false;
         if (startRent != null ? !startRent.equals(order.startRent) : order.startRent != null) return false;
-        if (end_rent != null ? !end_rent.equals(order.end_rent) : order.end_rent != null) return false;
-        return finalAct != null ? finalAct.equals(order.finalAct) : order.finalAct == null;
+        return endRent != null ? endRent.equals(order.endRent) : order.endRent == null;
     }
 
     @Override
@@ -125,13 +115,12 @@ public class Order implements Serializable {
         long temp;
         result = id;
         result = 31 * result + (startRent != null ? startRent.hashCode() : 0);
-        result = 31 * result + (end_rent != null ? end_rent.hashCode() : 0);
+        result = 31 * result + (endRent != null ? endRent.hashCode() : 0);
         temp = Double.doubleToLongBits(totalPrice);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (isOrderCanceled ? 1 : 0);
         result = 31 * result + (isOrderAccepted ? 1 : 0);
         result = 31 * result + (isOrderClosed ? 1 : 0);
-        result = 31 * result + (finalAct != null ? finalAct.hashCode() : 0);
         result = 31 * result + userId;
         result = 31 * result + carId;
         return result;
@@ -142,12 +131,11 @@ public class Order implements Serializable {
         return "Order{" +
                 "id=" + id +
                 ", startRent=" + startRent +
-                ", end_rent=" + end_rent +
+                ", endRent=" + endRent +
                 ", totalPrice=" + totalPrice +
                 ", isOrderCanceled=" + isOrderCanceled +
                 ", isOrderAccepted=" + isOrderAccepted +
                 ", isOrderClosed=" + isOrderClosed +
-                ", finalAct=" + finalAct +
                 ", userId=" + userId +
                 ", carId=" + carId +
                 '}';

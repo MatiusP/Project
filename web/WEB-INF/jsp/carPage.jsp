@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="headerPage.jsp"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/carPage_style.css"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/ourCars_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/rent_car_style.css"/>
 
 <style>
     body {
@@ -51,46 +51,21 @@
     </div>
 </c:forEach>
 
-<div class="tab">
-<button class="tablinks"  name="rent_car" value="rent">
-    <a href="mainController?command=go_to_our_cars_page"/>${another_car_button}
-</button>
+
+<div class="inst">
+
+    <h1>RENT A CAR</h1>
+    <form action="mainController" method="post">
+        <input type="hidden" name="command" value="create_order">
+        <input type="hidden" name="current_car" value="${car[0].id}"/>
+        <input type="hidden" name="current_user" value="${currentUserLogin}"/>
+        ${start_rent_message}
+        <input type="date" name="start_rent" value="" required><br/>
+        ${end_rent_message}
+        <input type="date" name="end_rent" value="" required><br/>
+        <input type="submit" value="Rent">
+    </form>
+
+
 </div>
-
-
-
-<div class="tab">
-<%--    <c:choose>--%>
-<%--        <c:when test="${not empty sessionScope.currentUserLogin}">--%>
-
-            <form id="create_order" action="mainController" method="post">
-                <input type="hidden" name="command" value="rent_car">
-
-                <p>${start_rent_message}
-                    <input type="date" name="start_rent" value="" required>
-                </p>
-
-                <p>${end_rent_message}
-                <input type="date" name="end_rent" value="" required>
-                </p>
-
-
-            </form>
-
-
-            <button class="tablinks" name="rent_car" value="rent">
-                <a href="mainController?command=create_order"/>${rent_button}
-            </button>
-
-<%--        </c:when>--%>
-<%--        <c:otherwise>--%>
-<%--            <div class="inst">--%>
-<%--                <h2>${auth_messasge}--%>
-<%--                    <a href="mainController?command=authentication">${sign_in}</a>--%>
-<%--                </h2>--%>
-<%--            </div>--%>
-<%--        </c:otherwise>--%>
-<%--    </c:choose>--%>
-</div>
-
 

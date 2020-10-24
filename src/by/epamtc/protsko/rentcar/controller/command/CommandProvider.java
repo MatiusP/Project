@@ -16,6 +16,7 @@ public class CommandProvider {
         commands.put(ParameterName.CHANGE_LOCALE, new ChangeLocaleCommand());
         commands.put(ParameterName.GO_TO_EDIT_USER_DATA_PAGE, new GoToEditUserDataCommand());
         commands.put(ParameterName.EDIT_USER_DATA, new EditUserDataCommand());
+        commands.put(ParameterName.GO_TO_EDIT_USER_DATA_BY_ADMIN_PAGE, new GoToEditUserDataByAdminCommand());
         commands.put(ParameterName.SIGN_OUT, new SignOutCommand());
         commands.put(ParameterName.GET_ALL_USERS, new GetAllUsersCommand());
         commands.put(ParameterName.GO_TO_FIND_USER_PAGE, new GoToFindUserCommand());
@@ -26,6 +27,7 @@ public class CommandProvider {
         commands.put(ParameterName.GET_CARS, new GetCarsCommand());
         commands.put(ParameterName.SHOW_ALL_USER_DATA, new GoToShowAllUserDataPage());
         commands.put(ParameterName.GO_TO_CAR_PAGE, new GoToCarPageCommand());
+        commands.put(ParameterName.CREATE_ORDER, new CreateOrderCommand());
     }
 
     public Command getCommand(String commandName) {

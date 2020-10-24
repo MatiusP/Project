@@ -15,5 +15,7 @@ public interface UserDAO {
 
     boolean deleteUser(int userId) throws UserDAOException;
 
+    User getUserById(int userId) throws UserDAOException;
+
     List<User> findUser(String searchCriteria) throws UserDAOException;
 }

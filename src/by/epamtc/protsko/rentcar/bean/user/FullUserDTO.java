@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class FullUserDTO implements Serializable {
-    private static final long serialVersionUID = 936143019147785056L;
 
     private int id;
     private String login;
@@ -16,7 +15,7 @@ public class FullUserDTO implements Serializable {
     private LocalDate dateOfBirth;
     private String eMail;
     private String phone;
-    private boolean isDeleted;
+    private String status;
     private String role;
 
     public FullUserDTO() {
