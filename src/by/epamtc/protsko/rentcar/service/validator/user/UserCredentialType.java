@@ -1,4 +1,4 @@
-package by.epamtc.protsko.rentcar.service.validator;
+package by.epamtc.protsko.rentcar.service.validator.user;
 
 public enum UserCredentialType {
     LOGIN,

@@ -14,9 +14,12 @@ import by.epamtc.protsko.rentcar.service.util.UserUtil;
 public class UserServiceImpl implements UserService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
     private UserDAO userDAO = daoFactory.getUserDAO();
-    private static final String LOGIN_OR_PASSWORD_ERROR = "Incorrect login or password";
-    private static final String PASSWORD_ERROR = "Incorrect current password";
+    private static final String LOGIN_OR_PASSWORD_ERROR = "Invalid login or password";
+    private static final String PASSWORD_ERROR = "Current password incorrect";
     private static final String REG_FORM_FILLING_ERROR = "Registration form filling error";
+    private static final String USER_NOT_FOUND_EXCEPTION = "User not found for the given id";
+    private static final String USER_ACTIVE_STATUS = "ACTIVE";
+    private static final String USER_DELETE_STATUS = "DELETE";
 
     @Override
     public RegistrationUserDTO authentication(String login, String password) throws UserServiceException {
@@ -28,12 +31,8 @@ public class UserServiceImpl implements UserService {
             }
 
             User authenticationData = userDAO.authentication(login, password);
-            if (authenticationData != null) {
-                regUserData = buildRegistrationUserDTOFromUser(authenticationData);
-                authenticationData = null;
-
-                return regUserData;
-            }
+            regUserData = buildRegistrationUserDTOFromUser(authenticationData);
+            authenticationData = null;
         } catch (UserDAOException e) {
             throw new UserServiceException(e);
         }
@@ -42,16 +41,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean registration(FullUserDTO userData) throws UserServiceException {
-        User user;
 
         try {
-            if (!isRegistrationFormFilled(userData)) {
+            if (!UserUtil.isRegistrationFormFilled(userData)) {
                 throw new UserServiceException(REG_FORM_FILLING_ERROR);
             }
-
             if (UserUtil.isRegistrationDataValid(userData)) {
-                user = buildUserFromRegistrationData(userData);
-
+                User user = buildUserFromRegistrationData(userData);
                 return userDAO.registration(user);
             }
         } catch (UserDAOException e) {
@@ -90,58 +86,51 @@ public class UserServiceImpl implements UserService {
     public boolean deleteUser(int userId) throws UserServiceException {
 
         try {
+
             return userDAO.deleteUser(userId);
         } catch (UserDAOException e) {
-            throw new UserServiceException("Delete user error", e);
+            throw new UserServiceException(e);
         }
+    }
+
+    @Override
+    public FullUserDTO getUserById(int userId) throws UserServiceException {
+        FullUserDTO user = new FullUserDTO();
+
+        try {
+            final User userById = userDAO.getUserById(userId);
+            if (userById == null) {
+                throw new UserServiceException(USER_NOT_FOUND_EXCEPTION);
+            }
+
+            user = buildFullUserDTOFromUser(userById);
+        } catch (UserDAOException e) {
+            throw new UserServiceException(e);
+        }
+        return user;
     }
 
     @Override
     public List<FullUserDTO> getUser(FullUserDTO userSearchCriteria) throws UserServiceException {
         List<FullUserDTO> usersFoundList = new ArrayList<>();
-        FullUserDTO foundUser;
         String searchCriteria = UserUtil.createSearchUserQuery(userSearchCriteria);
+        FullUserDTO foundUser;
 
         try {
             final List<User> foundUsers = userDAO.findUser(searchCriteria);
 
             for (User user : foundUsers) {
-                foundUser = buildFullUserData(user);
+                foundUser = buildFullUserDTOFromUser(user);
                 usersFoundList.add(foundUser);
             }
         } catch (UserDAOException e) {
-            //logger
             throw new UserServiceException(e);
         }
         return usersFoundList;
     }
 
-    private boolean isRegistrationFormFilled(FullUserDTO userData) {
-        String userLogin = userData.getLogin();
-        String userPassword = userData.getPassword();
-        String userSurname = userData.getSurname();
-        String userName = userData.getName();
-        String userPassportID = userData.getPassportIdNumber();
-        String userDriverLicense = userData.getDriverLicense();
-        String userDateOfBirth = String.valueOf(userData.getDateOfBirth());
-        String userEMail = userData.geteMail();
-        String userPhone = userData.getPhone();
-
-        boolean isLoginFilled = ((userLogin != null) && (!userLogin.isEmpty()));
-        boolean isPasswordFilled = ((userPassword != null) && (!userPassword.isEmpty()));
-        boolean isSurnameFilled = ((userSurname != null) && (!userSurname.isEmpty()));
-        boolean isNameFilled = ((userName != null) && (!userName.isEmpty()));
-        boolean isPassportIDFilled = ((userPassportID != null) && (!userPassportID.isEmpty()));
-        boolean isDriverLicenseFilled = ((userDriverLicense != null) && (!userDriverLicense.isEmpty()));
-        boolean isDateOfBirthFilled = ((userDateOfBirth != null) && (!userDateOfBirth.isEmpty()));
-        boolean isEMailFilled = ((userEMail != null) && (!userEMail.isEmpty()));
-        boolean isPhoneFilled = ((userPhone != null) && (!userPhone.isEmpty()));
-
-        return (isLoginFilled && isPasswordFilled && isSurnameFilled && isNameFilled && isPassportIDFilled
-                && isDriverLicenseFilled && isDateOfBirthFilled && isEMailFilled && isPhoneFilled);
-    }
-
-    private FullUserDTO buildFullUserData(User user) {
+    private FullUserDTO buildFullUserDTOFromUser(User user) {
+        final boolean isUserDeleted = user.isDeleted();
         FullUserDTO fullUserData = new FullUserDTO();
 
         fullUserData.setId(user.getId());
@@ -154,7 +143,11 @@ public class UserServiceImpl implements UserService {
         fullUserData.setDateOfBirth(user.getDateOfBirth());
         fullUserData.seteMail(user.geteMail());
         fullUserData.setPhone(user.getPhone());
-        fullUserData.setDeleted(user.isDeleted());
+        if (isUserDeleted) {
+            fullUserData.setStatus(USER_DELETE_STATUS);
+        } else {
+            fullUserData.setStatus(USER_ACTIVE_STATUS);
+        }
         fullUserData.setRole(user.getRole().toString());
 
         return fullUserData;
@@ -176,7 +169,6 @@ public class UserServiceImpl implements UserService {
         return registrationUserData;
     }
 
-
     private User buildUserFromRegistrationData(FullUserDTO fullUserDTO) {
         User user = new User();
 
@@ -194,6 +186,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private User buildUserFromEditData(EditUserDTO editUserData) {
+        final String editUserStatus = editUserData.getStatus();
         User user = new User();
 
         user.setId(editUserData.getId());
@@ -206,26 +199,13 @@ public class UserServiceImpl implements UserService {
         user.setDateOfBirth(editUserData.getDateOfBirth());
         user.seteMail(editUserData.geteMail());
         user.setPhone(editUserData.getPhone());
+        if (editUserStatus.equals(USER_ACTIVE_STATUS)) {
+            user.setDeleted(false);
+        } else {
+            user.setDeleted(true);
+        }
         user.setRole(Role.valueOf(editUserData.getRole()));
 
         return user;
     }
-
-//    private User buildUserFromFullUserData(FullUserDTO fullUserDTO) {
-//        User user = new User();
-//
-//        user.setId(fullUserDTO.getId());
-//        user.setLogin(fullUserDTO.getLogin());
-//        user.setPassword(fullUserDTO.getPassword());
-//        user.setSurname(fullUserDTO.getSurname());
-//        user.setName(fullUserDTO.getName());
-//        user.setPassportIdNumber(fullUserDTO.getPassportIdNumber());
-//        user.setDriverLicense(fullUserDTO.getDriverLicense());
-//        user.setDateOfBirth(fullUserDTO.getDateOfBirth());
-//        user.seteMail(fullUserDTO.geteMail());
-//        user.setPhone(fullUserDTO.getPhone());
-//        user.setRole(fullUserDTO.getRole());
-//
-//        return user;
-//    }
 }

@@ -4,13 +4,25 @@ import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.Role;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
-import by.epamtc.protsko.rentcar.service.validator.UserCommandProvider;
-import by.epamtc.protsko.rentcar.service.validator.UserCredentialType;
+import by.epamtc.protsko.rentcar.service.validator.user.UserCommandProvider;
+import by.epamtc.protsko.rentcar.service.validator.user.UserCredentialType;
 
 import java.time.LocalDate;
 
 public class UserUtil {
     private static final UserCommandProvider VALIDATOR_USER_COMMAND_PROVIDER = new UserCommandProvider();
+    private static final String LOGIN_OR_PASSWORD_INVALID_MESSAGE = "Invalid login or password";
+    private static final String LOGIN_INVALID_MESSAGE = "Login invalid";
+    private static final String PASSWORD_INVALID_MESSAGE = "Password invalid";
+    private static final String NEW_PASSWORD_INVALID_MESSAGE = "New password invalid";
+    private static final String SURNAME_INVALID_MESSAGE = "Surname invalid";
+    private static final String NAME_INVALID_MESSAGE = "Name invalid";
+    private static final String PASSPORT_INVALID_MESSAGE = "Passport ID number invalid";
+    private static final String DRIVER_LICENSE_INVALID_MESSAGE = "Driver license number invalid";
+    private static final String DATE_BIRTH_INVALID_MESSAGE = "Date of birth invalid";
+    private static final String EMAIL_INVALID_MESSAGE = "E-mail invalid";
+    private static final String PHONE_INVALID_MESSAGE = "Phone number invalid";
+    private static final String USER_DELETE_STATUS = "DELETE";
 
     private UserUtil() {
     }
@@ -23,7 +35,7 @@ public class UserUtil {
         if (isLoginValid && isPassportValid) {
             return true;
         } else {
-            throw new UserServiceException("Invalid login or password");
+            throw new UserServiceException(LOGIN_OR_PASSWORD_INVALID_MESSAGE);
         }
     }
 
@@ -54,23 +66,23 @@ public class UserUtil {
         boolean isPhoneValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.PHONE).execute(userPhone);
 
         if (!isLoginValid) {
-            throw new UserServiceException("Login invalid");
+            throw new UserServiceException(LOGIN_INVALID_MESSAGE);
         } else if (!isPasswordValid) {
-            throw new UserServiceException("Password invalid");
+            throw new UserServiceException(PASSWORD_INVALID_MESSAGE);
         } else if (!isSurnameValid) {
-            throw new UserServiceException("Surname invalid");
+            throw new UserServiceException(SURNAME_INVALID_MESSAGE);
         } else if (!isNameValid) {
-            throw new UserServiceException("Name invalid");
+            throw new UserServiceException(NAME_INVALID_MESSAGE);
         } else if (!isPassportIDValid) {
-            throw new UserServiceException("PassportID invalid");
+            throw new UserServiceException(PASSPORT_INVALID_MESSAGE);
         } else if (!isDriverLicenseValid) {
-            throw new UserServiceException("DriverLicense invalid");
+            throw new UserServiceException(DRIVER_LICENSE_INVALID_MESSAGE);
         } else if (!isDateOfBirthValid) {
-            throw new UserServiceException("Date of birth invalid");
+            throw new UserServiceException(DATE_BIRTH_INVALID_MESSAGE);
         } else if (!isEMailValid) {
-            throw new UserServiceException("E-mail invalid");
+            throw new UserServiceException(EMAIL_INVALID_MESSAGE);
         } else if (!isPhoneValid) {
-            throw new UserServiceException("Phone invalid");
+            throw new UserServiceException(PHONE_INVALID_MESSAGE);
         }
         return true;
     }
@@ -107,25 +119,50 @@ public class UserUtil {
         boolean isPhoneValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.PHONE).execute(userPhone);
 
         if (!isLoginValid) {
-            throw new UserServiceException("Login invalid");
+            throw new UserServiceException(LOGIN_INVALID_MESSAGE);
         } else if (!isNewUserPasswordValid) {
-            throw new UserServiceException("New password invalid");
+            throw new UserServiceException(NEW_PASSWORD_INVALID_MESSAGE);
         } else if (!isSurnameValid) {
-            throw new UserServiceException("Surname invalid");
+            throw new UserServiceException(SURNAME_INVALID_MESSAGE);
         } else if (!isNameValid) {
-            throw new UserServiceException("Name invalid");
+            throw new UserServiceException(NAME_INVALID_MESSAGE);
         } else if (!isPassportIDValid) {
-            throw new UserServiceException("PassportID invalid");
+            throw new UserServiceException(PASSPORT_INVALID_MESSAGE);
         } else if (!isDriverLicenseValid) {
-            throw new UserServiceException("DriverLicense invalid");
+            throw new UserServiceException(DRIVER_LICENSE_INVALID_MESSAGE);
         } else if (!isDateOfBirthValid) {
-            throw new UserServiceException("Date of birth invalid");
+            throw new UserServiceException(DATE_BIRTH_INVALID_MESSAGE);
         } else if (!isEMailValid) {
-            throw new UserServiceException("E-mail invalid");
+            throw new UserServiceException(EMAIL_INVALID_MESSAGE);
         } else if (!isPhoneValid) {
-            throw new UserServiceException("Phone invalid");
+            throw new UserServiceException(PHONE_INVALID_MESSAGE);
         }
         return true;
+    }
+
+    public static boolean isRegistrationFormFilled(FullUserDTO userData) {
+        String userLogin = userData.getLogin();
+        String userPassword = userData.getPassword();
+        String userSurname = userData.getSurname();
+        String userName = userData.getName();
+        String userPassportID = userData.getPassportIdNumber();
+        String userDriverLicense = userData.getDriverLicense();
+        String userDateOfBirth = String.valueOf(userData.getDateOfBirth());
+        String userEMail = userData.geteMail();
+        String userPhone = userData.getPhone();
+
+        boolean isLoginFilled = ((userLogin != null) && (!userLogin.isEmpty()));
+        boolean isPasswordFilled = ((userPassword != null) && (!userPassword.isEmpty()));
+        boolean isSurnameFilled = ((userSurname != null) && (!userSurname.isEmpty()));
+        boolean isNameFilled = ((userName != null) && (!userName.isEmpty()));
+        boolean isPassportIDFilled = ((userPassportID != null) && (!userPassportID.isEmpty()));
+        boolean isDriverLicenseFilled = ((userDriverLicense != null) && (!userDriverLicense.isEmpty()));
+        boolean isDateOfBirthFilled = ((userDateOfBirth != null) && (!userDateOfBirth.isEmpty()));
+        boolean isEMailFilled = ((userEMail != null) && (!userEMail.isEmpty()));
+        boolean isPhoneFilled = ((userPhone != null) && (!userPhone.isEmpty()));
+
+        return (isLoginFilled && isPasswordFilled && isSurnameFilled && isNameFilled && isPassportIDFilled
+                && isDriverLicenseFilled && isDateOfBirthFilled && isEMailFilled && isPhoneFilled);
     }
 
     public static String createSearchUserQuery(FullUserDTO userData) {
@@ -138,7 +175,7 @@ public class UserUtil {
         final LocalDate dateOfBirth = userData.getDateOfBirth();
         final String eMail = userData.geteMail();
         final String phone = userData.getPhone();
-        final boolean status = userData.isDeleted();
+        final String status = userData.getStatus();
         final String role = userData.getRole();
 
         StringBuilder searchUserCriteria = new StringBuilder();
@@ -170,7 +207,11 @@ public class UserUtil {
         if (phone != null) {
             searchUserCriteria.append("phone=" + "'").append(phone).append("'").append(" ");
         }
-        searchUserCriteria.append("is_deleted=").append(status).append(" ");
+        if (status != null && status.equals(USER_DELETE_STATUS)) {
+            searchUserCriteria.append("is_deleted=").append(true).append(" ");
+        } else {
+            searchUserCriteria.append("is_deleted=").append(false).append(" ");
+        }
         if (role != null) {
             searchUserCriteria.append("role_id=").append(Role.valueOf(role).ordinal() + 1).append(" ");
         }

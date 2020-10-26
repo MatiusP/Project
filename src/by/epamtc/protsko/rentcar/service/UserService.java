@@ -8,15 +8,17 @@ import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 
 public interface UserService {
-	
-	RegistrationUserDTO authentication(String login, String password) throws UserServiceException;
 
-	boolean registration(FullUserDTO fullUserDTO) throws UserServiceException;
-	
-	boolean editUserData(EditUserDTO user) throws UserServiceException;
-	
-	boolean deleteUser(int userId) throws UserServiceException;
-	
-	List<FullUserDTO> getUser(FullUserDTO userDTO) throws UserServiceException;
+    RegistrationUserDTO authentication(String login, String password) throws UserServiceException;
+
+    boolean registration(FullUserDTO fullUserDTO) throws UserServiceException;
+
+    boolean editUserData(EditUserDTO user) throws UserServiceException;
+
+    boolean deleteUser(int userId) throws UserServiceException;
+
+    FullUserDTO getUserById(int userId) throws UserServiceException;
+
+    List<FullUserDTO> getUser(FullUserDTO userDTO) throws UserServiceException;
 
 }
