@@ -39,7 +39,7 @@
 
 <c:choose>
     <c:when test="${not empty sessionScope.deleteUserResult}">
-        <form id="edit_user_data" action="mainController" method="post" class="form-3">
+        <form id="edit_user_data" action="mainController" method="post" class="registration">
             <h3>${deleteUserResult}</h3>
                 ${sessionScope.remove('usersFoundList')}
                 ${sessionScope.remove('deleteUserResult')}
@@ -49,7 +49,7 @@
         </form>
     </c:when>
     <c:otherwise>
-        <form id="edit_user_data" action="mainController" method="post" class="form-3">
+        <form id="edit_user_data" action="mainController" method="post" class="registration">
             <h3>${main_message}</h3>
 
             <c:forEach items="${usersFoundList}" var="user">

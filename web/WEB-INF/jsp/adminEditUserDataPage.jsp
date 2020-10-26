@@ -36,7 +36,7 @@
 
 <body>
 
-<form action="mainController" method="post" class="form-3">
+<form action="mainController" method="post" class="registration">
     <input type="hidden" name="command" value="edit_user_data">
     <input type="hidden" name="currentUserID" value="${sessionScope.userRegData.id}"/>
 

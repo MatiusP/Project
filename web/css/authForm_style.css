@@ -1,15 +1,11 @@
-* {
-    box-sizing: border-box;
-}
-
-.transparent {
+.authentication {
     position: relative;
     max-width: 400px;
     padding: 30px 50px;
     margin: 20px auto 0;
 }
 
-.transparent:before {
+.authentication:before {
     content: "";
     position: absolute;
     top: 0;
@@ -33,15 +29,6 @@
     text-transform: uppercase;
 }
 
-.form-inner h3:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -6px;
-    height: 2px;
-    width: 60px;
-    background: #1762EE;
-}
 
 .form-inner label {
     display: block;
@@ -65,11 +52,6 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.form-inner input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-}
-
 .form-inner input[type="submit"] {
     color: white;
     font-size: 15px;
@@ -81,6 +63,11 @@
 }
 
 .message {
-    font-size: 15px;
+    font-size: 17px;
     color: white;
+}
+
+.error-message{
+    font-size: 17px;
+    color: #fffe11;
 }

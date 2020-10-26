@@ -230,6 +230,7 @@ public class SQLUserDAO implements UserDAO {
                 if (bCryptPasswordEncoder.matches(password, userHashPassword)) {
                     user = fillUserDataFromDB(resultSet);
                 }
+            } else {
                 throw new UserDAOException(AUTH_USER_MESSAGE);
             }
         } catch (SQLException e) {

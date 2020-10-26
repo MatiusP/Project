@@ -1,5 +1,6 @@
-package by.epamtc.protsko.rentcar.controller.command;
+package by.epamtc.protsko.rentcar.controller.command.userlayer;
 
+import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
 
 import javax.servlet.ServletException;

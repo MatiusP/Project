@@ -1,6 +1,7 @@
-package by.epamtc.protsko.rentcar.controller.command;
+package by.epamtc.protsko.rentcar.controller.command.userlayer;
 
 import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
+import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
@@ -64,16 +65,16 @@ public class FindUserCommand implements Command {
         if (!searchingPhone.isEmpty()) {
             userSearchParameters.setPhone(searchingPhone);
         }
-        if (!searchingStatus.isEmpty() && Integer.parseInt(searchingStatus) == 1) {
-            userSearchParameters.setDeleted(true);
-        } else {
-            userSearchParameters.setDeleted(false);
-        }
+//        if (!searchingStatus.isEmpty() && Integer.parseInt(searchingStatus) == 1) {
+//            userSearchParameters.setDeleted(true);
+//        } else {
+//            userSearchParameters.setDeleted(false);
+//        }
         if (!searchingRole.isEmpty()) {
             userSearchParameters.setRole(searchingRole);
         }
         try {
-            usersFoundList = userService.getUser(userSearchParameters);
+            usersFoundList = userService.findUsers(userSearchParameters);
 
             if (usersFoundList.isEmpty()) {
                 session.setAttribute("noUsersMessage", NO_USERS_EXC);

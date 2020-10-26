@@ -70,12 +70,12 @@
     </div>
     <div>
         <c:choose>
-            <c:when test="${not empty sessionScope.currentUserLogin}">
+            <c:when test="${not empty sessionScope.userRegData}">
                 <div>
                     <nav>
                         <ul class="topmenu">
-                            <li><a href="" class="submenu-link">${sessionScope.currentUserLogin}</a>
-                                <c:if test="${sessionScope.userRegData.role eq 'CLIENT'}">
+                            <li><a href="" class="submenu-link">${userRegData.name}</a>
+                                <c:if test="${userRegData.role eq 'CLIENT'}">
                                     <ul class="submenu">
                                         <li>
                                             <a href="mainController?command=go_to_show_user_profile_page">${show_user_button}</a>
@@ -86,7 +86,7 @@
                                         <li><a href="">My orders</a></li>
                                     </ul>
                                 </c:if>
-                                <c:if test="${sessionScope.userRegData.role eq 'ADMIN'}">
+                                <c:if test="${userRegData.role eq 'ADMIN'}">
                                     <ul class="submenu">
                                         <li>
                                             <a href="mainController?command=go_to_show_user_profile_page">${show_user_button}</a>

@@ -1,5 +1,7 @@
 package by.epamtc.protsko.rentcar.controller.command;
 
+import by.epamtc.protsko.rentcar.controller.command.userlayer.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +12,7 @@ public class CommandProvider {
         commands.put(ParameterName.GO_TO_MAIN_PAGE, new GoToMainPageCommand());
         commands.put(ParameterName.SAVE_NEW_USER, new SaveNewUserCommand());
         commands.put(ParameterName.AUTHENTICATION, new GoToAuthPageCommand());
-        commands.put(ParameterName.CHECK_USER_AUTH_DATA, new CheckUserAuthData());
+        commands.put(ParameterName.CHECK_AUTH_DATA, new CheckAuthDataCommand());
         commands.put(ParameterName.REGISTRATION, new GoToRegistrationPageCommand());
         commands.put(ParameterName.GO_TO_SHOW_USER_PROFILE_PAGE, new GoToShowUserProfileCommand());
         commands.put(ParameterName.CHANGE_LOCALE, new ChangeLocaleCommand());

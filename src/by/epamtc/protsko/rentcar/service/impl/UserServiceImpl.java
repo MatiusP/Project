@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<FullUserDTO> getUser(FullUserDTO userSearchCriteria) throws UserServiceException {
+    public List<FullUserDTO> findUsers(FullUserDTO userSearchCriteria) throws UserServiceException {
         List<FullUserDTO> usersFoundList = new ArrayList<>();
         String searchCriteria = UserUtil.createSearchUserQuery(userSearchCriteria);
         FullUserDTO foundUser;

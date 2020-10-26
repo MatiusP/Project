@@ -19,6 +19,6 @@ public interface UserService {
 
     FullUserDTO getUserById(int userId) throws UserServiceException;
 
-    List<FullUserDTO> getUser(FullUserDTO userDTO) throws UserServiceException;
+    List<FullUserDTO> findUsers(FullUserDTO userDTO) throws UserServiceException;
 
 }

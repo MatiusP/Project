@@ -33,7 +33,7 @@
 
 
 <body>
-<form action="mainController" method="post" class="form-3">
+<form action="mainController" method="post" class="registration">
     <input type="hidden" name="command" value="go_to_main_page">
 
     <h3>${page_message}</h3>

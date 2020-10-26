@@ -1,4 +1,4 @@
-package by.epamtc.protsko.rentcar.controller.command;
+package by.epamtc.protsko.rentcar.controller.command.userlayer;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
+import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;

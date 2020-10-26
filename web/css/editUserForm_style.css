@@ -1,4 +1,4 @@
-.form-3 {
+.reg_form {
     font-family: 'Ubuntu', 'Lato', sans-serif;
     font-weight: 400;
     width: 700px;
@@ -13,7 +13,7 @@
     0 16px 10px -8px rgba(0, 0, 0, 0.6);
 }
 
-.form-3 label {
+.reg_form label {
     width: 50%;
     float: left;
     padding-top: 9px;
@@ -26,7 +26,7 @@
     font-weight: 400;
 }
 
-.form-3 h3 {
+.reg_form h3 {
     position: center;
     margin-top: 0;
     color: white;
@@ -36,9 +36,9 @@
     text-transform: uppercase;
 }
 
-.form-3 input[type=text],
-.form-3 input[type=email],
-.form-3 input[type=password]{
+.reg_form input[type=text],
+.reg_form input[type=email],
+.reg_form input[type=password]{
     width: 50%;
     float: left;
     padding: 7px 10px;
@@ -52,7 +52,7 @@
     font-size: 17px;
 }
 
-.form-3 input[type=submit] {
+.reg_form input[type=submit] {
     width: 100%;
     padding: 8px 5px;
     border: 1px solid #0273dd;
@@ -70,22 +70,22 @@
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
 }
 
-.form-3 input[type=submit]:hover {
+.reg_form input[type=submit]:hover {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-.form-3 input[type=submit]:active {
+.reg_form input[type=submit]:active {
     background: #287db5;
     box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.6);
     border-color: #000;
     border-color: rgba(0, 0, 0, 0.9);
 }
 
-.no-boxshadow .form-3 input[type=submit]:hover {
+.no-boxshadow .reg_form input[type=submit]:hover {
     background: #2a92d8;
 }
 
-.form-3:after {
+.reg_form:after {
     content: "";
     height: 1px;
     width: 33%;
@@ -95,7 +95,7 @@
     background: linear-gradient(left, transparent, #444, #b6b6b8, #444, transparent);
 }
 
-.form-3:before {
+.reg_form:before {
     content: "";
     width: 8px;
     height: 5px;
@@ -106,7 +106,7 @@
     box-shadow: 0 0 6px 4px #fff;
 }
 
-.form-3 p:nth-child(1):before {
+.reg_form p:nth-child(1):before {
     content: "";
     width: 250px;
     height: 100px;
@@ -118,7 +118,7 @@
     pointer-events: none;
 }
 
-.no-pointerevents .form-3 p:nth-child(1):before {
+.no-pointerevents .reg_form p:nth-child(1):before {
     display: none;
 }
 
@@ -128,7 +128,7 @@
     color: #efff00;
     font-weight: bold;
 }
-.form-3 select{
+.reg_form select{
     width: 50%;
     float: left;
     padding: 7px 10px;

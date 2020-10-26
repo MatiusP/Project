@@ -1,5 +1,6 @@
-package by.epamtc.protsko.rentcar.controller.command;
+package by.epamtc.protsko.rentcar.controller.command.userlayer;
 
+import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
 
 import javax.servlet.ServletException;
@@ -7,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GoToShowUserProfileCommand implements Command {
-    private static final String SHOW_USER_REG_DATA_PAGE_MAPPING = "WEB-INF/jsp/showUserProfilePage.jsp";
+public class GoToEditUserDataCommand implements Command {
+    private static final String EDIT_USER_DATA_PAGE_MAPPING = "WEB-INF/jsp/editUserDataPage.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -16,6 +17,6 @@ public class GoToShowUserProfileCommand implements Command {
 
         request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
 
-        request.getRequestDispatcher(SHOW_USER_REG_DATA_PAGE_MAPPING).forward(request, response);
+        request.getRequestDispatcher(EDIT_USER_DATA_PAGE_MAPPING).forward(request, response);
     }
 }

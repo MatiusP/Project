@@ -15,7 +15,7 @@
 <fmt:message bundle="${loc}" key="local.authError.message" var="auth_error"/>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/authentication_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/authForm_style.css"/>
 
 <head>
     <title>Authentication page</title>
@@ -29,18 +29,20 @@
 
 <body>
 
-<form class="transparent" action="mainController" method="post">
+<form class="authentication" action="mainController" method="post">
     <div class="form-inner">
-
         <h3>${message}</h3>
-        <input type="hidden" name="command" value="check_user_auth_data"/>
+        <input type="hidden" name="command" value="check_auth_data"/>
         <label>${login}</label>
         <input type="text" name="login" placeholder="${login}"/><br/>
         <label>${password}</label>
         <input type="password" name="password" placeholder="${password}"/>
         <div class="message">
             <c:if test="${not empty sessionScope.get('authError')}">
-                <c:out value="${auth_error}"/>
+                <div class="error-message">
+                    <c:out value="${auth_error}"/>
+                </div>
+                ${sessionScope.remove('authError')}
             </c:if>
         </div>
         <input type="submit" value="${sign_in}"/><br/>
