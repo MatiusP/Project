@@ -26,7 +26,7 @@
 </head>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/showUserProfile_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/userProfileForm_style.css"/>
 
 <style>
     body {

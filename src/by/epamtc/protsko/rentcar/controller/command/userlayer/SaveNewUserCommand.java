@@ -20,7 +20,25 @@ public class SaveNewUserCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
     private static final String REGISTRATION_MAPPING = "mainController?command=registration";
-    private static final String SHOW_USER_REG_DATA_MAPPING = "mainController?command=go_to_show_user_profile_page";
+    private static final String SHOW_USER_REG_DATA_MAPPING = "mainController?command=go_to_user_profile";
+    private static final String PARAMETER_PASSWORD = "password";
+    private static final String PARAMETER_REPEAT_PASSWORD = "password_repeat";
+    private static final String PARAMETER_LOGIN = "login";
+    private static final String PARAMETER_SURNAME = "surname";
+    private static final String PARAMETER_NAME = "name";
+    private static final String PARAMETER_PASSPORT_ID = "passport_Id_Number";
+    private static final String PARAMETER_DRIVER_LICENSE = "driver_license";
+    private static final String PARAMETER_DATE_BIRTH = "date_of_birth";
+    private static final String PARAMETER_EMAIL = "e_mail";
+    private static final String PARAMETER_PHONE = "phone";
+    private static final String PASSWORD_ERROR_ATTRIBUTE_NAME = "passwordsError";
+    private static final String PASSWORD_ERROR_MESSAGE = "Passwords do not match!";
+    private static final String VALIDATION_ERROR_ATTRIBUTE_NAME = "validationError";
+    private static final String DATE_VALIDATOR_ERROR_MESSAGE = "Incorrect date format";
+    private static final String FILL_FORM_ERROR_ATTRIBUTE_NAME = "fillRegDataError";
+    private static final String FILL_FORM_ERROR_TEXT = "filling error";
+    private static final String SUCCESSFUL_REGISTR_ATTRIBUTE_NAME = "registration_successfully";
+    private static final String USER_REG_DATA_ATTRIBUTE_NAME = "userRegData";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
@@ -32,46 +50,46 @@ public class SaveNewUserCommand implements Command {
         HttpSession session;
 
         try {
-            if (request.getParameter("password").equals(request.getParameter("password_repeat"))) {
+            if (request.getParameter(PARAMETER_PASSWORD).equals(request.getParameter(PARAMETER_REPEAT_PASSWORD))) {
                 fullUserDTO = new FullUserDTO();
 
-                fullUserDTO.setLogin(request.getParameter("login"));
-                fullUserDTO.setPassword(request.getParameter("password"));
-                fullUserDTO.setSurname(request.getParameter("surname"));
-                fullUserDTO.setName(request.getParameter("name"));
-                fullUserDTO.setPassportIdNumber(request.getParameter("passport_Id_Number"));
-                fullUserDTO.setDriverLicense(request.getParameter("driver_license"));
-                fullUserDTO.setDateOfBirth(LocalDate.parse(request.getParameter("date_of_birth")));
-                fullUserDTO.seteMail(request.getParameter("e_mail"));
-                fullUserDTO.setPhone(request.getParameter("phone"));
+                fullUserDTO.setLogin(request.getParameter(PARAMETER_LOGIN));
+                fullUserDTO.setPassword(request.getParameter(PARAMETER_PASSWORD));
+                fullUserDTO.setSurname(request.getParameter(PARAMETER_SURNAME));
+                fullUserDTO.setName(request.getParameter(PARAMETER_NAME));
+                fullUserDTO.setPassportIdNumber(request.getParameter(PARAMETER_PASSPORT_ID));
+                fullUserDTO.setDriverLicense(request.getParameter(PARAMETER_DRIVER_LICENSE));
+                fullUserDTO.setDateOfBirth(LocalDate.parse(request.getParameter(PARAMETER_DATE_BIRTH)));
+                fullUserDTO.seteMail(request.getParameter(PARAMETER_EMAIL));
+                fullUserDTO.setPhone(request.getParameter(PARAMETER_PHONE));
 
                 isRegistrationSuccessfully = userService.registration(fullUserDTO);
             } else {
-                registrationError = "Passwords do not match!";
-                request.setAttribute("passwordsError", registrationError);
+                registrationError = PASSWORD_ERROR_MESSAGE;
+                request.setAttribute(PASSWORD_ERROR_ATTRIBUTE_NAME, registrationError);
                 request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
             }
         } catch (UserServiceException e) {
             registrationError = e.getMessage();
-            if (registrationError.contains("filling error")) {
-                request.setAttribute("fillRegDataError", registrationError);
+            if (registrationError.contains(FILL_FORM_ERROR_TEXT)) {
+                request.setAttribute(FILL_FORM_ERROR_ATTRIBUTE_NAME, registrationError);
             } else {
-                request.setAttribute("validationError", registrationError);
+                request.setAttribute(VALIDATION_ERROR_ATTRIBUTE_NAME, registrationError);
             }
             request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
-        }
-        catch (DateTimeParseException e){
-            request.setAttribute("validationError", "Incorrect date format");
+        } catch (DateTimeParseException e) {
+            request.setAttribute(VALIDATION_ERROR_ATTRIBUTE_NAME, DATE_VALIDATOR_ERROR_MESSAGE);
             request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
         }
 
         if (isRegistrationSuccessfully) {
-            session = request.getSession();
+            session = request.getSession(false);
             RegistrationUserDTO registrationUserDTO = getUserRegistrationData(fullUserDTO);
 
-            session.setAttribute("userRegData", registrationUserDTO);
-            session.setAttribute("currentUserLogin", fullUserDTO.getLogin());
+            session.setAttribute(USER_REG_DATA_ATTRIBUTE_NAME, registrationUserDTO);
+            session.setAttribute(SUCCESSFUL_REGISTR_ATTRIBUTE_NAME, "");
             fullUserDTO = null;
+
             response.sendRedirect(SHOW_USER_REG_DATA_MAPPING);
         }
     }

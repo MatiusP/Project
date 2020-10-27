@@ -78,7 +78,7 @@
                                 <c:if test="${userRegData.role eq 'CLIENT'}">
                                     <ul class="submenu">
                                         <li>
-                                            <a href="mainController?command=go_to_show_user_profile_page">${show_user_button}</a>
+                                            <a href="mainController?command=go_to_user_profile">${show_user_button}</a>
                                         </li>
                                         <li>
                                             <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
@@ -89,7 +89,7 @@
                                 <c:if test="${userRegData.role eq 'ADMIN'}">
                                     <ul class="submenu">
                                         <li>
-                                            <a href="mainController?command=go_to_show_user_profile_page">${show_user_button}</a>
+                                            <a href="mainController?command=go_to_user_profile">${show_user_button}</a>
                                         </li>
                                         <li>
                                             <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>

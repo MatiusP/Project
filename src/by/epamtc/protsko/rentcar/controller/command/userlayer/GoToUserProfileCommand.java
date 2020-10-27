@@ -8,14 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GoToShowUserProfileCommand implements Command {
-    private static final String SHOW_USER_REG_DATA_PAGE_MAPPING = "WEB-INF/jsp/showUserProfilePage.jsp";
+public class GoToUserProfileCommand implements Command {
+    private static final String SHOW_USER_REG_DATA_PAGE_MAPPING = "WEB-INF/jsp/userProfile.jsp";
+    private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String currentRequestURL = RequestURL.getRequestURL(request);
-
-        request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
+        request.getSession(true).setAttribute(PREV_REQ_URL_ATTRIBUTE_NAME, currentRequestURL);
 
         request.getRequestDispatcher(SHOW_USER_REG_DATA_PAGE_MAPPING).forward(request, response);
     }

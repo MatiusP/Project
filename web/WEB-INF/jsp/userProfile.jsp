@@ -16,14 +16,14 @@
 <fmt:message bundle="${loc}" key="local.regDateBirth.message" var="reg_date_birth_mess"/>
 <fmt:message bundle="${loc}" key="local.regEMail.message" var="reg_email_mess"/>
 <fmt:message bundle="${loc}" key="local.regPhone.message" var="reg_phone_mess"/>
+<fmt:message bundle="${loc}" key="local.regBack.button" var="back_button"/>
 
 <head>
-    <title>Title</title>
+    <title>User profile</title>
 </head>
 
-<jsp:useBean id="userRegData" class="by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO" scope="session"/>
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/showUserProfile_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/userProfileForm_style.css"/>
 
 <style>
     body {
@@ -33,44 +33,56 @@
 
 
 <body>
-<form action="mainController" method="post" class="registration">
+
+<form action="mainController" method="post" class="profile_form">
     <input type="hidden" name="command" value="go_to_main_page">
+
+    <c:if test="${registration_successfully != null}">
+        <h2>${main_message}</h2>
+        ${sessionScope.remove('registration_successfully')}
+    </c:if>
 
     <h3>${page_message}</h3>
 
-    <p class="clearfix">
+    <div>
         <label>${reg_surname_mess}</label>
         <output>${userRegData.surname}</output>
-    </p>
-    <p class="clearfix">
+    </div>
+
+    <div>
         <label>${reg_name_mess}</label>
         <output>${userRegData.name}</output>
-    </p>
-    <p class="clearfix">
+    </div>
+
+    <div>
         <label> ${reg_passportID_mess}</label>
         <output>${userRegData.passportIdNumber}</output>
-    </p>
-    <p class="clearfix">
+    </div>
+
+    <div>
         <label>${reg_driver_license_mess}</label>
         <output>${userRegData.driverLicense}</output>
-    </p>
-    <p class="clearfix">
+    </div>
+
+    <div>
         <label>${reg_date_birth_mess}</label>
         <output>${userRegData.dateOfBirth}</output>
-    </p>
-    <p class="clearfix">
+    </div>
+
+    <div>
         <label>${reg_email_mess}</label>
         <output>${userRegData.eMail}</output>
-    </p>
-    <p class="clearfix">
+    </div>
+
+    <div>
         <label>${reg_phone_mess}</label>
         <output>${userRegData.phone}</output>
-    </p>
-    <p class="clearfix">
-<%--        <a href="mainController?command=go_to_main_page">Back</a>--%>
+    </div>
 
-        <input type="submit" value="Back"/>
-    </p>
+    <div>
+        <a href="mainController?command=go_to_main_page">${back_button}</a>
+    </div>
+
 </form>
 
 
