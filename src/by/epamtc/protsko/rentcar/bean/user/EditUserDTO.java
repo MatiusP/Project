@@ -4,14 +4,13 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class EditUserDTO implements Serializable {
-    private static final long serialVersionUID = 4499952341839613177L;
+    private static final long serialVersionUID = 6490631490139128130L;
 
     private int id;
     private String currentLogin;
     private String newLogin;
     private String currentPassword;
     private String newPassword;
-    private String repeatNewPassword;
     private String surname;
     private String name;
     private String passportIdNumber;
@@ -63,14 +62,6 @@ public class EditUserDTO implements Serializable {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
-    }
-
-    public String getRepeatNewPassword() {
-        return repeatNewPassword;
-    }
-
-    public void setRepeatNewPassword(String repeatNewPassword) {
-        this.repeatNewPassword = repeatNewPassword;
     }
 
     public String getSurname() {
@@ -158,8 +149,6 @@ public class EditUserDTO implements Serializable {
         if (currentPassword != null ? !currentPassword.equals(that.currentPassword) : that.currentPassword != null)
             return false;
         if (newPassword != null ? !newPassword.equals(that.newPassword) : that.newPassword != null) return false;
-        if (repeatNewPassword != null ? !repeatNewPassword.equals(that.repeatNewPassword) : that.repeatNewPassword != null)
-            return false;
         if (surname != null ? !surname.equals(that.surname) : that.surname != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (passportIdNumber != null ? !passportIdNumber.equals(that.passportIdNumber) : that.passportIdNumber != null)
@@ -180,7 +169,6 @@ public class EditUserDTO implements Serializable {
         result = 31 * result + (newLogin != null ? newLogin.hashCode() : 0);
         result = 31 * result + (currentPassword != null ? currentPassword.hashCode() : 0);
         result = 31 * result + (newPassword != null ? newPassword.hashCode() : 0);
-        result = 31 * result + (repeatNewPassword != null ? repeatNewPassword.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (passportIdNumber != null ? passportIdNumber.hashCode() : 0);
@@ -201,7 +189,6 @@ public class EditUserDTO implements Serializable {
                 ", newLogin='" + newLogin + '\'' +
                 ", currentPassword='" + currentPassword + '\'' +
                 ", newPassword='" + newPassword + '\'' +
-                ", repeatNewPassword='" + repeatNewPassword + '\'' +
                 ", surname='" + surname + '\'' +
                 ", name='" + name + '\'' +
                 ", passportIdNumber='" + passportIdNumber + '\'' +

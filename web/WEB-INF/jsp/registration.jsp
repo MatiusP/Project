@@ -71,20 +71,19 @@
 
     <div class="form__field">
         <label>${enter_pass}</label>
-        <input type="text" name="password" placeholder="${password}"
+        <input type="password" name="password" placeholder="${password}"
                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,45}$"
                required/>
         <span class="form__error">${password_valid_rules}</span>
     </div>
 
-
     <div class="form__field">
         <label>${repeat_pass}</label>
-        <input type="text" name="password_repeat" placeholder="${repeat_password}" required/>
+        <input type="password" name="password_repeat" placeholder="${repeat_password}" required/>
         <c:if test="${not empty requestScope.get('passwordsError')}">
-        <div class="registration-message">
-            <c:out value="${passwords_error}"/>
-        </div>
+            <div class="registration-pas-message">
+                <c:out value="${passwords_error}"/>
+            </div>
         </c:if>
         <span class="form__error">${password_valid_rules}</span>
     </div>

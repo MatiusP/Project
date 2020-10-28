@@ -31,8 +31,10 @@ public class UserServiceImpl implements UserService {
             }
 
             User authenticationData = userDAO.authentication(login, password);
-            regUserData = buildRegistrationUserDTOFromUser(authenticationData);
-            authenticationData = null;
+            if (authenticationData != null) {
+                regUserData = buildRegistrationUserDTOFromUser(authenticationData);
+                authenticationData = null;
+            }
         } catch (UserDAOException e) {
             throw new UserServiceException(e);
         }
@@ -84,7 +86,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUser(int userId) throws UserServiceException {
-
         try {
 
             return userDAO.deleteUser(userId);
@@ -186,11 +187,17 @@ public class UserServiceImpl implements UserService {
     }
 
     private User buildUserFromEditData(EditUserDTO editUserData) {
+        final String NEW_LOGIN_MARK = "#";
         final String editUserStatus = editUserData.getStatus();
+        String newUserLogin = editUserData.getNewLogin();
         User user = new User();
 
+        if (!editUserData.getCurrentLogin().equals(newUserLogin)) {
+            newUserLogin = NEW_LOGIN_MARK + newUserLogin;
+        }
+
         user.setId(editUserData.getId());
-        user.setLogin(editUserData.getNewLogin());
+        user.setLogin(newUserLogin);
         user.setPassword(editUserData.getNewPassword());
         user.setSurname(editUserData.getSurname());
         user.setName(editUserData.getName());
@@ -199,7 +206,7 @@ public class UserServiceImpl implements UserService {
         user.setDateOfBirth(editUserData.getDateOfBirth());
         user.seteMail(editUserData.geteMail());
         user.setPhone(editUserData.getPhone());
-        if (editUserStatus.equals(USER_ACTIVE_STATUS)) {
+        if (editUserStatus == null || editUserStatus.equals(USER_ACTIVE_STATUS)) {
             user.setDeleted(false);
         } else {
             user.setDeleted(true);

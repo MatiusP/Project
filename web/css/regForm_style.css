@@ -121,3 +121,12 @@ input:invalid:not(:placeholder-shown) + .form__error {
     font-weight: bold;
     text-align:center;
 }
+
+.registration-pas-message {
+    font-size: 15px;
+    color: #f4ff00;
+    margin: 10px 395px;
+    width: 50%;
+    padding-top: 0px;
+    letter-spacing: 0.5px;
+}

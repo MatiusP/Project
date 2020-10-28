@@ -39,6 +39,7 @@ public class SaveNewUserCommand implements Command {
     private static final String FILL_FORM_ERROR_TEXT = "filling error";
     private static final String SUCCESSFUL_REGISTR_ATTRIBUTE_NAME = "registration_successfully";
     private static final String USER_REG_DATA_ATTRIBUTE_NAME = "userRegData";
+    private static final String CURRENT_USER_LOGIN_ATTRIBUTE = "currentUserLogin";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response)
@@ -88,8 +89,9 @@ public class SaveNewUserCommand implements Command {
 
             session.setAttribute(USER_REG_DATA_ATTRIBUTE_NAME, registrationUserDTO);
             session.setAttribute(SUCCESSFUL_REGISTR_ATTRIBUTE_NAME, "");
-            fullUserDTO = null;
+            session.setAttribute(CURRENT_USER_LOGIN_ATTRIBUTE, fullUserDTO.getLogin());
 
+            fullUserDTO = null;
             response.sendRedirect(SHOW_USER_REG_DATA_MAPPING);
         }
     }

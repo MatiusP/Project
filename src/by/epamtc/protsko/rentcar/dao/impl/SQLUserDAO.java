@@ -20,7 +20,7 @@ public class SQLUserDAO implements UserDAO {
     private static final ConnectionPool connectionPool = new ConnectionPool();
 
     private static final String AUTH_USER_MESSAGE = "Incorrect login or password";
-    private static final String USER_EXISTS_MESSAGE = "Sorry, but the login you entered exists. Try a different login.";
+    private static final String USER_EXISTS_MESSAGE = "Login exists";
     private static final String SAVE_USER_ERROR_MESSAGE = "Error while saving new user";
     private static final String EDIT_USER_ERROR_MESSAGE = "Error while editing user";
     private static final String DELETE_USER_ERROR_MESSAGE = "Error while deleting user";
@@ -45,7 +45,7 @@ public class SQLUserDAO implements UserDAO {
     public User authentication(String login, String password) throws UserDAOException {
         User userData = getRegistrationUserData(login, password);
 
-        if ((userData == null) || (userData.isDeleted())) {
+        if ((userData != null) && (userData.isDeleted())) {
             throw new UserDAOException(AUTH_USER_MESSAGE);
         }
         return userData;
@@ -90,21 +90,30 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public boolean editUserData(User user) throws UserDAOException {
+        final String NEW_LOGIN_MARK = "#";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         BCryptPasswordEncoder bCryptPasswordEncoder;
+        String userLogin = user.getLogin();
         String hashPassword = null;
+
+        if (userLogin.startsWith(NEW_LOGIN_MARK)) {
+            userLogin = userLogin.substring(1);
+            if (isLoginExist(userLogin)) {
+                throw new UserDAOException(USER_EXISTS_MESSAGE);
+            }
+        }
 
         try {
             connection = connectionPool.takeConnection();
-            if ((user.getPassword() != null) || (!user.getPassword().isEmpty())) {
+            if ((user.getPassword() != null) && (!user.getPassword().isEmpty())) {
                 bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 hashPassword = bCryptPasswordEncoder.encode(user.getPassword());
             }
 
             preparedStatement = connection.prepareStatement(EDIT_USER_DATA_QUERY);
 
-            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(1, userLogin);
             preparedStatement.setString(2, hashPassword);
             preparedStatement.setString(3, user.getSurname());
             preparedStatement.setString(4, user.getName());

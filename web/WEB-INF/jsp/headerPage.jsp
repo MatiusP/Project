@@ -81,7 +81,7 @@
                                             <a href="mainController?command=go_to_user_profile">${show_user_button}</a>
                                         </li>
                                         <li>
-                                            <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
+                                            <a href="mainController?command=go_to_edit_profile_page">${edit_user_button}</a>
                                         </li>
                                         <li><a href="">My orders</a></li>
                                     </ul>
@@ -92,7 +92,7 @@
                                             <a href="mainController?command=go_to_user_profile">${show_user_button}</a>
                                         </li>
                                         <li>
-                                            <a href="mainController?command=go_to_edit_user_data_page">${edit_user_button}</a>
+                                            <a href="mainController?command=go_to_edit_profile_page">${edit_user_button}</a>
                                         </li>
                                     </ul>
                                 </c:if>

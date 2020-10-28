@@ -19,6 +19,7 @@ public class CheckAuthDataCommand implements Command {
     private static final String PARAMETER_PASSWORD = "password";
     private static final String AUTH_ERROR_PARAM = "authError";
     private static final String USER_REG_DATA_PARAM = "userRegData";
+    private static final String CURRENT_USER_LOGIN_ATTRIBUTE = "currentUserLogin";
 
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private UserService userService = serviceFactory.getUserService();
@@ -41,6 +42,7 @@ public class CheckAuthDataCommand implements Command {
         }
 
         if (user != null) {
+            session.setAttribute(CURRENT_USER_LOGIN_ATTRIBUTE, userLogin);
             session.setAttribute(USER_REG_DATA_PARAM, user);
             response.sendRedirect(MAIN_PAGE_MAPPING);
             return;

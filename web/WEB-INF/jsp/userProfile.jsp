@@ -7,8 +7,10 @@
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="property/localisation" var="loc"/>
 
-<fmt:message bundle="${loc}" key="local.showUserRegData.mainMessage" var="main_message"/>
+<fmt:message bundle="${loc}" key="local.showUserRegData.mainMessage" var="registration_message"/>
+<fmt:message bundle="${loc}" key="local.successfulEdit.message" var="edit_data_message"/>
 <fmt:message bundle="${loc}" key="local.showUserRegData.pageMessage" var="page_message"/>
+<fmt:message bundle="${loc}" key="local.regLogin.message" var="reg_login_mess"/>
 <fmt:message bundle="${loc}" key="local.regSurname.message" var="reg_surname_mess"/>
 <fmt:message bundle="${loc}" key="local.regName.message" var="reg_name_mess"/>
 <fmt:message bundle="${loc}" key="local.regPassportID.message" var="reg_passportID_mess"/>
@@ -38,11 +40,21 @@
     <input type="hidden" name="command" value="go_to_main_page">
 
     <c:if test="${registration_successfully != null}">
-        <h2>${main_message}</h2>
+        <h2>${registration_message}</h2>
         ${sessionScope.remove('registration_successfully')}
     </c:if>
 
+    <c:if test="${edit_data_successfully != null}">
+        <h2>${edit_data_message}</h2>
+        ${sessionScope.remove('edit_data_successfully')}
+    </c:if>
+
     <h3>${page_message}</h3>
+
+    <div>
+        <label>${reg_login_mess}</label>
+        <output>${currentUserLogin}</output>
+    </div>
 
     <div>
         <label>${reg_surname_mess}</label>

@@ -26,7 +26,7 @@
 
 <jsp:useBean id="userRegData" class="by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO" scope="session"/>
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/editUserForm_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/editProfileForm_style.css"/>
 
 <style>
     body {
