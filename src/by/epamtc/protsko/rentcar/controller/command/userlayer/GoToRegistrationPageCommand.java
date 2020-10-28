@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToRegistrationPageCommand implements Command {
-    private static final String REGISTRATION_PAGE_MAPPING = "WEB-INF/jsp/registration.jsp";
+    private static final String REGISTRATION_PAGE_MAPPING = "WEB-INF/jsp/registrationPage.jsp";
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
 
     @Override

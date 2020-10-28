@@ -17,26 +17,38 @@ import java.util.List;
 public class FindUserCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
-    private static final String FIND_USER_PAGE_MAPPING = "mainController?command=go_to_find_user_page";
-    private static final String NO_USERS_EXC = "No any users in database";
+    private static final String USER_MANAGEMENT_PAGE_MAPPING = "mainController?command=go_to_user_management_page";
+    private static final String PARAMETER_USER_ID = "id";
+    private static final String PARAMETER_LOGIN = "login";
+    private static final String PARAMETER_SURNAME = "surname";
+    private static final String PARAMETER_NAME = "name";
+    private static final String PARAMETER_PASSPORT_ID = "passportID";
+    private static final String PARAMETER_DRIVER_LICENSE = "driverLicense";
+    private static final String PARAMETER_DATE_BIRTH = "dateOfBirth";
+    private static final String PARAMETER_EMAIL = "eMail";
+    private static final String PARAMETER_PHONE = "phone";
+    private static final String PARAMETER_STATUS = "status";
+    private static final String PARAMETER_ROLE = "role";
+    private static final String NO_USERS_FOUND_ATTRIBUTE_NAME = "noUsersFound";
+    private static final String NO_USERS_FOUND_MESSAGE = "No any users in database";
+    private static final String USERS_LIST_ATTRIBUTE_NAME = "usersFoundList";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        final String searchingId = request.getParameter("id");
-        final String searchingLogin = request.getParameter("login");
-        final String searchingSurname = request.getParameter("surname");
-        final String searchingName = request.getParameter("name");
-        final String searchingPassportID = request.getParameter("passportID");
-        final String searchingDriverLicense = request.getParameter("driverLicense");
-        final String searchingDateOfBirth = request.getParameter("dateOfBirth");
-        final String searchingEMail = request.getParameter("eMail");
-        final String searchingPhone = request.getParameter("phone");
-        final String searchingStatus = request.getParameter("isDeleted");
-        final String searchingRole = request.getParameter("role");
+        final String searchingId = request.getParameter(PARAMETER_USER_ID);
+        final String searchingLogin = request.getParameter(PARAMETER_LOGIN);
+        final String searchingSurname = request.getParameter(PARAMETER_SURNAME);
+        final String searchingName = request.getParameter(PARAMETER_NAME);
+        final String searchingPassportID = request.getParameter(PARAMETER_PASSPORT_ID);
+        final String searchingDriverLicense = request.getParameter(PARAMETER_DRIVER_LICENSE);
+        final String searchingDateOfBirth = request.getParameter(PARAMETER_DATE_BIRTH);
+        final String searchingEMail = request.getParameter(PARAMETER_EMAIL);
+        final String searchingPhone = request.getParameter(PARAMETER_PHONE);
+        final String searchingStatus = request.getParameter(PARAMETER_STATUS);
+        final String searchingRole = request.getParameter(PARAMETER_ROLE);
 
         List<FullUserDTO> usersFoundList = null;
         FullUserDTO userSearchParameters = new FullUserDTO();
-        HttpSession session = request.getSession(false);
 
         if (!searchingId.isEmpty()) {
             userSearchParameters.setId(Integer.parseInt(searchingId));
@@ -65,11 +77,9 @@ public class FindUserCommand implements Command {
         if (!searchingPhone.isEmpty()) {
             userSearchParameters.setPhone(searchingPhone);
         }
-//        if (!searchingStatus.isEmpty() && Integer.parseInt(searchingStatus) == 1) {
-//            userSearchParameters.setDeleted(true);
-//        } else {
-//            userSearchParameters.setDeleted(false);
-//        }
+        if (!searchingStatus.isEmpty()) {
+            userSearchParameters.setStatus(searchingStatus);
+        }
         if (!searchingRole.isEmpty()) {
             userSearchParameters.setRole(searchingRole);
         }
@@ -77,14 +87,13 @@ public class FindUserCommand implements Command {
             usersFoundList = userService.findUsers(userSearchParameters);
 
             if (usersFoundList.isEmpty()) {
-                session.setAttribute("noUsersMessage", NO_USERS_EXC);
+                request.setAttribute(NO_USERS_FOUND_ATTRIBUTE_NAME, NO_USERS_FOUND_MESSAGE);
             } else {
-                session.removeAttribute("noUsersMessage");
-                session.setAttribute("usersFoundList", usersFoundList);
+                request.setAttribute(USERS_LIST_ATTRIBUTE_NAME, usersFoundList);
             }
         } catch (UserServiceException e) {
             //logger
         }
-        request.getRequestDispatcher(FIND_USER_PAGE_MAPPING).forward(request, response);
+        request.getRequestDispatcher(USER_MANAGEMENT_PAGE_MAPPING).forward(request, response);
     }
 }

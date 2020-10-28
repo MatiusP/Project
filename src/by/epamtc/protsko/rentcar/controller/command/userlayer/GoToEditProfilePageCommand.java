@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToEditProfilePageCommand implements Command {
-    private static final String EDIT_USER_DATA_PAGE_MAPPING = "WEB-INF/jsp/editUserData.jsp";
+    private static final String EDIT_USER_DATA_PAGE_MAPPING = "WEB-INF/jsp/editUserProfile.jsp";
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
 
     @Override

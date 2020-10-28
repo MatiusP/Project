@@ -22,7 +22,7 @@ public class UserUtil {
     private static final String DATE_BIRTH_INVALID_MESSAGE = "Date of birth invalid";
     private static final String EMAIL_INVALID_MESSAGE = "E-mail invalid";
     private static final String PHONE_INVALID_MESSAGE = "Phone number invalid";
-    private static final String USER_DELETE_STATUS = "DELETE";
+    private static final String USER_ACTIVE_STATUS = "ACTIVE";
 
     private UserUtil() {
     }
@@ -207,10 +207,10 @@ public class UserUtil {
         if (phone != null) {
             searchUserCriteria.append("phone=" + "'").append(phone).append("'").append(" ");
         }
-        if (status != null && status.equals(USER_DELETE_STATUS)) {
-            searchUserCriteria.append("is_deleted=").append(true).append(" ");
-        } else {
+        if (status.equals(USER_ACTIVE_STATUS)) {
             searchUserCriteria.append("is_deleted=").append(false).append(" ");
+        } else {
+            searchUserCriteria.append("is_deleted=").append(true).append(" ");
         }
         if (role != null) {
             searchUserCriteria.append("role_id=").append(Role.valueOf(role).ordinal() + 1).append(" ");

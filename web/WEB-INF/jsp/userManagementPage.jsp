@@ -7,6 +7,7 @@
 <jsp:include page="headerPage.jsp"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/table_style.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/buttons_style.css"/>
+<%--////TODO --%>
 <style>
     body {
         background: url("${pageContext.request.contextPath}/images/page_font.jpg");
@@ -17,28 +18,29 @@
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="property/localisation" var="loc"/>
 
-<fmt:message bundle="${loc}" key="local.findUser.mainMessage" var="main_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.login.message" var="login_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.surname.message" var="surname_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.name.message" var="name_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.passportNumber.message" var="passport_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.driverLicense.message" var="driv_lic_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.dateBirth.message" var="date_birth_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.e-mail.message" var="e_mail_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.phone.message" var="phone_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.status.message" var="status_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.role.message" var="role_message"/>
-<fmt:message bundle="${loc}" key="local.findUser.find.button" var="find_button"/>
-<fmt:message bundle="${loc}" key="local.findUser.exit.button" var="exit_button"/>
+<fmt:message bundle="${loc}" key="local.userManagement.mainMessage" var="main_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.noUsers.message" var="no_users_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.login.message" var="login_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.surname.message" var="surname_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.name.message" var="name_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.passportNumber.message" var="passport_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.driverLicense.message" var="driv_lic_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.dateBirth.message" var="date_birth_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.e-mail.message" var="e_mail_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.phone.message" var="phone_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.status.message" var="status_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.role.message" var="role_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.find.button" var="find_button"/>
+<fmt:message bundle="${loc}" key="local.userManagement.exit.button" var="exit_button"/>
 
 <head>
     <title>Title</title>
 </head>
 
 <body>
-
-<p>
-<h3>${main_message}</h3>
+<div class="h3">
+    <h3>${main_message}</h3>
+</div>
 
 <form id="find_user" action="mainController" method="post">
     <table class="table_dark">
@@ -65,7 +67,11 @@
             <td><input type="date" name="dateOfBirth" placeholder="${date_birth_message}"/></td>
             <td><input type="email" name="eMail" placeholder="${e_mail_message}"/></td>
             <td><input type="text" name="phone" placeholder="+xxx xx xxx xx xx"/></td>
-            <td><input type="number" name="isDeleted" min="0" max="1" placeholder="0"/></td>
+            <td>
+                <select name="status">
+                    <option selected="ACTIVE">ACTIVE</option>
+                    <option value="DELETED">DELETED</option>
+                </select>
             <td>
                 <select name="role">
                     <option selected=""></option>
@@ -83,11 +89,13 @@
     <input type="hidden" name="command" value="">
 
     <c:choose>
-        <c:when test="${not empty sessionScope.noUsersMessage}">
-            <h2><c:out value="${sessionScope.noUsersMessage}"/></h2>
+        <c:when test="${not empty requestScope.noUsersFound}">
+            <div class="h3">
+                <h3><c:out value="${no_users_message}"/></h3>
+            </div>
         </c:when>
         <c:otherwise>
-            <c:if test="${not empty sessionScope.usersFoundList}">
+            <c:if test="${not empty usersFoundList}">
                 <table class="table_dark">
                     <tr>
                         <th>id</th>
@@ -99,6 +107,7 @@
                         <th>${date_birth_message}</th>
                         <th>${e_mail_message}</th>
                         <th>${phone_message}</th>
+                        <th>${status_message}</th>
                         <th>${role_message}</th>
                     </tr>
 
@@ -114,6 +123,7 @@
                             <td>${user.dateOfBirth}</td>
                             <td>${user.eMail}</td>
                             <td>${user.phone}</td>
+                            <td>${user.status}</td>
                             <td>${user.role}</td>
                         </tr>
                     </c:forEach>

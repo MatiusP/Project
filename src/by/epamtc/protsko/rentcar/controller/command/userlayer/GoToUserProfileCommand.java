@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToUserProfileCommand implements Command {
-    private static final String SHOW_USER_REG_DATA_PAGE_MAPPING = "WEB-INF/jsp/userProfile.jsp";
+    private static final String SHOW_USER_REG_DATA_PAGE_MAPPING = "WEB-INF/jsp/userProfilePage.jsp";
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
 
     @Override

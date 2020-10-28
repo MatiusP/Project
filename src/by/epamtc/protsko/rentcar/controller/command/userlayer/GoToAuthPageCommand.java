@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToAuthPageCommand implements Command {
-    private static final String AUTHENTICATION_MAPPING = "WEB-INF/jsp/authentication.jsp";
+    private static final String AUTHENTICATION_MAPPING = "WEB-INF/jsp/authenticationPage.jsp";
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
 
     @Override

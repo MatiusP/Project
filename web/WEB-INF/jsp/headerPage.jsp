@@ -111,7 +111,7 @@
 
     <c:if test="${sessionScope.userRegData.role eq 'ADMIN'}">
         <div class="header_item header_button">
-            <a href="mainController?command=go_to_find_user_page">${user_managment_button}</a>
+            <a href="mainController?command=go_to_user_management_page">${user_managment_button}</a>
         </div>
     </c:if>
 
