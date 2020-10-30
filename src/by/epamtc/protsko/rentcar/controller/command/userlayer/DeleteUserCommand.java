@@ -16,17 +16,16 @@ public class DeleteUserCommand implements Command {
     private static final String DELETE_USER_RESULT = "deleteUserResult";
     private static final String DELETED_USER_SUCCESSFULLY = "Successfully deleted";
     private static final String DELETED_USER_ERROR = "Deleted error";
-    private static final String SHOW_ALL_USERS_MAPPING = "mainController?command=show_all_user_data";
+    private static final String SHOW_ALL_USERS_MAPPING = "mainController?command=go_to_user_management_page";
+    private static final String DELETE_USER_ID_PARAMETER_NAME = "deleteUserId";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
-        session.removeAttribute(DELETE_USER_RESULT);
         boolean isDeleteSuccessfully = false;
 
         try {
-            int userId = Integer.parseInt(request.getParameter("deleteUserId"));
-
+            int userId = Integer.parseInt(request.getParameter(DELETE_USER_ID_PARAMETER_NAME));
             isDeleteSuccessfully = userService.deleteUser(userId);
 
             if (isDeleteSuccessfully) {

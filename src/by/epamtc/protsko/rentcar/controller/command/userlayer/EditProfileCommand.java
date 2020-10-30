@@ -34,6 +34,7 @@ public class EditProfileCommand implements Command {
     private static final String PARAMETER_DATE_BIRTH = "dateOfBirth";
     private static final String PARAMETER_EMAIL = "eMail";
     private static final String PARAMETER_PHONE = "phone";
+    private static final String PARAMETER_STATUS = "status";
     private static final String PARAMETER_USER_ROLE = "currentRole";
     private static final String DATE_VALIDATOR_ERROR_MESSAGE = "Incorrect date format";
     private static final String USER_REG_DATA_ATTRIBUTE_NAME = "userRegData";
@@ -71,6 +72,7 @@ public class EditProfileCommand implements Command {
             editUserData.setDateOfBirth(LocalDate.parse(request.getParameter(PARAMETER_DATE_BIRTH)));
             editUserData.seteMail(request.getParameter(PARAMETER_EMAIL));
             editUserData.setPhone(request.getParameter(PARAMETER_PHONE));
+            editUserData.setStatus(request.getParameter(PARAMETER_STATUS));
             editUserData.setRole(request.getParameter(PARAMETER_USER_ROLE));
 
             isEditUserDataSuccessfully = userService.editUserData(editUserData);

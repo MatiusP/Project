@@ -34,9 +34,20 @@
 
 .h3 {
     margin-top: 15px;
-    color: #011b32;
+    color: #0a3b67;
     font-weight: 300;
     font-size: 26px;
+}
+
+.info-message h3{
+    background-color:#c9f6c3;
+    width: fit-content;
+    border-radius:5px;
+    margin-top: 15px;
+    margin: 15px;
+    color: #000000;
+    font-weight: 300;
+    font-size: 22px;
 }
 
 .bot5 {
@@ -72,6 +83,8 @@
 }
 
 .table_dark a {
-    color: #61daff;
-    text-decoration: underline;
+    color: #000000;
+    border-radius: 3px;
+    background-color:#baf8c2;
+    padding: 0px 4px;
 }

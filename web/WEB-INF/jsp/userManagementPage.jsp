@@ -7,7 +7,7 @@
 <jsp:include page="headerPage.jsp"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/table_style.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/buttons_style.css"/>
-<%--////TODO --%>
+
 <style>
     body {
         background: url("${pageContext.request.contextPath}/images/page_font.jpg");
@@ -20,6 +20,8 @@
 
 <fmt:message bundle="${loc}" key="local.userManagement.mainMessage" var="main_message"/>
 <fmt:message bundle="${loc}" key="local.userManagement.noUsers.message" var="no_users_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.deleteUserResult.message" var="delete_result_message"/>
+<fmt:message bundle="${loc}" key="local.userManagement.editUserResult.message" var="edit_result_message"/>
 <fmt:message bundle="${loc}" key="local.userManagement.login.message" var="login_message"/>
 <fmt:message bundle="${loc}" key="local.userManagement.surname.message" var="surname_message"/>
 <fmt:message bundle="${loc}" key="local.userManagement.name.message" var="name_message"/>
@@ -32,6 +34,9 @@
 <fmt:message bundle="${loc}" key="local.userManagement.role.message" var="role_message"/>
 <fmt:message bundle="${loc}" key="local.userManagement.find.button" var="find_button"/>
 <fmt:message bundle="${loc}" key="local.userManagement.exit.button" var="exit_button"/>
+<fmt:message bundle="${loc}" key="local.userManagement.edit.button" var="edit_button"/>
+<fmt:message bundle="${loc}" key="local.userManagement.delete.button" var="delete_button"/>
+
 
 <head>
     <title>Title</title>
@@ -88,6 +93,20 @@
 <form action="mainController" method="post">
     <input type="hidden" name="command" value="">
 
+    <c:if test="${not empty sessionScope.get('deleteUserResult')}">
+        <div class="info-message">
+            <h3><c:out value="${delete_result_message}"/></h3>
+        </div>
+        ${sessionScope.remove('deleteUserResult')}
+    </c:if>
+
+    <c:if test="${sessionScope.editUserResult != null}">
+        <div class="info-message">
+            <h3><c:out value="${edit_result_message}"/></h3>
+        </div>
+        ${sessionScope.remove('editUserResult')}
+    </c:if>
+
     <c:choose>
         <c:when test="${not empty requestScope.noUsersFound}">
             <div class="h3">
@@ -114,8 +133,7 @@
                     <c:forEach items="${usersFoundList}" var="user">
                         <tr>
                             <td>${user.id}</td>
-                            <td><a href="mainController?command=show_all_user_data&currentId=${user.id}"/>${user.login}
-                            </td>
+                            <td>${user.login}</td>
                             <td>${user.surname}</td>
                             <td>${user.name}</td>
                             <td>${user.passportIdNumber}</td>
@@ -125,6 +143,24 @@
                             <td>${user.phone}</td>
                             <td>${user.status}</td>
                             <td>${user.role}</td>
+
+                            <c:if test="${user.login  != currentUserLogin}">
+                                <c:choose>
+                                    <c:when test="${user.status eq 'ACTIVE'}">
+                                        <td>
+                                            <a href="mainController?command=go_to_edit_user_data_page&id=${user.id}"/>${edit_button}
+                                        </td>
+                                        <td>
+                                            <a href="mainController?command=delete_user&deleteUserId=${user.id}"/>${delete_button}
+                                        </td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>
+                                            <a href="mainController?command=go_to_edit_user_data_page&id=${user.id}"/>${edit_button}
+                                        </td>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:if>
                         </tr>
                     </c:forEach>
                 </table>
@@ -132,7 +168,6 @@
         </c:otherwise>
     </c:choose>
 </form>
-
 
 <form id="exit" action="mainController?command=go_to_main_page" method="post">
     <button class="bot5" form="exit" type="submit">${exit_button}</button>

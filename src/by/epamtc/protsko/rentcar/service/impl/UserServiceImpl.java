@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     private static final String REG_FORM_FILLING_ERROR = "Registration form filling error";
     private static final String USER_NOT_FOUND_EXCEPTION = "User not found for the given id";
     private static final String USER_ACTIVE_STATUS = "ACTIVE";
-    private static final String USER_DELETE_STATUS = "DELETE";
+    private static final String USER_DELETE_STATUS = "DELETED";
 
     @Override
     public RegistrationUserDTO authentication(String login, String password) throws UserServiceException {
