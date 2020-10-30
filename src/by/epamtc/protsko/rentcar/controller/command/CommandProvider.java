@@ -1,5 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command;
 
+import by.epamtc.protsko.rentcar.controller.command.carlayer.*;
 import by.epamtc.protsko.rentcar.controller.command.userlayer.*;
 
 import java.util.HashMap;
@@ -15,6 +16,7 @@ public class CommandProvider {
         commands.put(ParameterName.GO_TO_USER_PROFILE, new GoToUserProfileCommand());
         commands.put(ParameterName.GO_TO_USER_MANAGEMENT_PAGE, new GoToUserManagementPageCommand());
         commands.put(ParameterName.GO_TO_CONTACT_PAGE, new GoToContactPage());
+        commands.put(ParameterName.GO_TO_ADD_CAR_PAGE, new GoToAddCarPageCommand());
         commands.put(ParameterName.GO_TO_OUR_CARS_PAGE, new GoToOurCarsPageCommand());
         commands.put(ParameterName.GO_TO_CAR_PAGE, new GoToCarPageCommand());
         commands.put(ParameterName.CHANGE_LOCALE, new ChangeLocaleCommand());
@@ -26,6 +28,7 @@ public class CommandProvider {
         commands.put(ParameterName.EDIT_USER_DATA, new EditUserDataCommand());
         commands.put(ParameterName.FIND_USER, new FindUserCommand());
         commands.put(ParameterName.DELETE_USER, new DeleteUserCommand());
+        commands.put(ParameterName.ADD_CAR, new AddCarCommand());
         commands.put(ParameterName.GET_CARS, new GetCarsCommand());
         commands.put(ParameterName.CREATE_ORDER, new CreateOrderCommand());
         commands.put(ParameterName.SIGN_OUT, new SignOutCommand());

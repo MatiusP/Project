@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class VinValidator implements CarParameterValidator {
-    private static final String VIN_REGEX = "^[a-zA-Z0-9]{9}[a-zA-Z0-9-]{2}[0-9]{6}$";
+    private static final String VIN_REGEX = "^[a-zA-Z0-9]{11}[0-9]{6}$";
     private static Pattern pattern = Pattern.compile(VIN_REGEX);
 
     @Override

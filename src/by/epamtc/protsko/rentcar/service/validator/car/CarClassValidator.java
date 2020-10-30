@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CarClassValidator implements CarParameterValidator {
-    private static final String CAR_CLASS_REGEX = "^(economy|middle|premium)$";
+    private static final String CAR_CLASS_REGEX = "^(Economy|Middle|Premium)$";
     private static Pattern pattern = Pattern.compile(CAR_CLASS_REGEX);
 
     @Override

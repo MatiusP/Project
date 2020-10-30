@@ -19,7 +19,7 @@
 }
 
 .inst h2 {
-    margin: auto 500;
+    margin: auto 500px;
     color: #020202;
     font-size: 17px;
     font-weight: 300;
@@ -33,12 +33,11 @@
 
 .inst h3 {
     margin: 60px;
-    color: #ffffff;
+    color: #010101;
     font-family: 'Roboto', sans-serif;
     font-size: 26px;
-
     width: 50%;
-    background-color: #0063f8;
+    background-color: #9effc1;
     border-left: 5px solid #011b32;
     overflow: hidden;
     padding: 8px 5px;
@@ -67,7 +66,6 @@
 }
 
 .b2 {
-    height: 0px;
     width: 50px;
 }
 
@@ -75,7 +73,7 @@
     color: #001324;
     text-decoration: underline;
     font-weight: 600;
-    font-size: 20;
+    font-size: 20px;
 }
 
 .inst a:hover {

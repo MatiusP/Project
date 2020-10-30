@@ -17,10 +17,10 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
     private CarDAO carDAO = daoFactory.getCarDAO();
-    private static final String IS_CAR_AVAILABLE = "Available";
-    private static final String IS_CAR_NOT_AVAILABLE = "Not_available";
-    private static final String IS_CAR_DELETED = "Deleted";
-    private static final String IS_CAR_NOT_DELETED = "Not_deleted";
+    private static final String IS_CAR_AVAILABLE = "AVAILABLE";
+    private static final String IS_CAR_NOT_AVAILABLE = "NOT AVAILABLE";
+    private static final String IS_CAR_DELETED = "DELETED";
+    private static final String IS_CAR_NOT_DELETED = "ACTIVE";
 
     @Override
     public boolean addCar(CarDTO newCar) throws CarServiceException {
@@ -145,22 +145,24 @@ public class CarServiceImpl implements CarService {
         car.setManufactureDate(Integer.parseInt(carDTO.getManufactureDate()));
         car.setEnginePower(Integer.parseInt(carDTO.getEnginePower()));
         car.setFuelConsumption(Double.parseDouble(carDTO.getFuelConsumption()));
-        if (carDTO.getIsAvailableToRent().equalsIgnoreCase(IS_CAR_AVAILABLE)) {
-            car.setDeleted(true);
-        } else {
-            car.setDeleted(false);
-        }
-        if (carDTO.getIsDeleted().equalsIgnoreCase(IS_CAR_DELETED)) {
-            car.setDeleted(true);
-        } else {
-            car.setDeleted(false);
-        }
         car.setPricePerDay(Double.parseDouble(carDTO.getPricePerDay()));
-        car.setTransmissionType(Transmission.valueOf(carDTO.getTransmissionType()));
-        car.setClassType(CarClass.valueOf(carDTO.getClassType()));
+        car.setTransmissionType(Transmission.valueOf(carDTO.getTransmissionType().toUpperCase()));
+        car.setClassType(CarClass.valueOf(carDTO.getClassType().toUpperCase()));
         car.setModel(carDTO.getModel());
         car.setBrand(carDTO.getBrand());
         car.setPhotos(carDTO.getPhotos());
+        if (carDTO.getIsAvailableToRent().equalsIgnoreCase(IS_CAR_AVAILABLE)) {
+            car.setAvailableToRent(true);
+        } else {
+            car.setAvailableToRent(false);
+        }
+        if (carDTO.getIsDeleted() == null) {
+            car.setDeleted(false);
+        } else if (carDTO.getIsDeleted().equalsIgnoreCase(IS_CAR_DELETED)) {
+            car.setDeleted(true);
+        } else {
+            car.setDeleted(false);
+        }
 
         return car;
     }

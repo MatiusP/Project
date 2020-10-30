@@ -4,15 +4,12 @@ import by.epamtc.protsko.rentcar.bean.car.*;
 import by.epamtc.protsko.rentcar.dao.CarDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
 import by.epamtc.protsko.rentcar.dao.exception.CarDAOException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SQLCarDAO implements CarDAO {
-    private static final Logger logger = LogManager.getLogger(SQLCarDAO.class);
     private static ConnectionPool connectionPool = new ConnectionPool();
 
     private static final String GET_ALL_UN_DELETED_CARS_QUERY = "SELECT * FROM fullCarsData WHERE is_deleted=0";
@@ -39,14 +36,25 @@ public class SQLCarDAO implements CarDAO {
     private static final String ADD_NEW_CAR_MODEL_QUERY = "INSERT INTO carmodels (model_name, carbrands_id) VALUES (?, ?)";
     private static final String GET_CAR_MODEL_ID_QUERY = "SELECT id FROM carmodels WHERE (model_name=? AND carbrands_id=?)";
     private static final String GET_CAR_ID_QUERY = "SELECT id FROM cars WHERE vin=?";
+    private static final String CAR_EXISTS_MESSAGE = "Car VIN already exists in database";
+
+    private static final String ADD_CAR_ERROR_MESSAGE = "Error while saving new car";
+    private static final String EDIT_CAR_ERROR_MESSAGE = "Error while editing car";
+    private static final String DELETE_CAR_ERROR_MESSAGE = "Error while deleting car from database";
+    private static final String DELETE_CAR_FROM_SYSTEM_ERROR_MESSAGE = "Error while deleting car from system";
+    private static final String GET_CAR_LIST_ERROR_MESSAGE = "Error while getting cars list";
+    private static final String GET_CAR_PHOTO_ERROR_MESSAGE = "Error while getting cars photo";
+    private static final String ADD_CAR_PHOTO_ERROR_MESSAGE = "Error while adding cars photo";
+    private static final String GET_CAR_BRAND_ERROR_MESSAGE = "Error while getting car brand";
+    private static final String GET_CAR_MODEL_ERROR_MESSAGE = "Error while getting car model";
+    private static final String GET_CAR_ID_ERROR_MESSAGE = "Error while getting car id";
+    private static final String CAR_VIN_NOT_FOUND_MESSAGE = "Car VIN not found in system";
 
     @Override
     public boolean addCar(Car car) throws CarDAOException {
-        final String CAR_VIN_EXISTS = "Car VIN already exists in database";
-        final String ADD_CAR_SQL_ERROR = "Add new car SQL exception";
 
         if (isCarVINExist(car.getVin())) {
-            throw new CarDAOException(CAR_VIN_EXISTS);
+            throw new CarDAOException(CAR_EXISTS_MESSAGE);
         }
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -79,7 +87,7 @@ public class SQLCarDAO implements CarDAO {
                 return true;
             }
         } catch (SQLException e) {
-            throw new CarDAOException(ADD_CAR_SQL_ERROR, e);
+            throw new CarDAOException(ADD_CAR_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
@@ -90,7 +98,6 @@ public class SQLCarDAO implements CarDAO {
 
     @Override
     public boolean editCarData(Car car) throws CarDAOException {
-        final String EDIT_CAR_ERROR = "Edit car SQL error";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -120,7 +127,7 @@ public class SQLCarDAO implements CarDAO {
                 return true;
             }
         } catch (SQLException e) {
-            throw new CarDAOException(EDIT_CAR_ERROR, e);
+            throw new CarDAOException(EDIT_CAR_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
@@ -131,8 +138,6 @@ public class SQLCarDAO implements CarDAO {
 
     @Override
     public boolean deleteCarFromDatabase(int carId) throws CarDAOException {
-        final String DELETE_CAR_ERROR = "Delete car from database SQL error";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -150,7 +155,7 @@ public class SQLCarDAO implements CarDAO {
                 return true;
             }
         } catch (SQLException e) {
-            throw new CarDAOException(DELETE_CAR_ERROR);
+            throw new CarDAOException(DELETE_CAR_ERROR_MESSAGE);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
@@ -161,8 +166,6 @@ public class SQLCarDAO implements CarDAO {
 
     @Override
     public boolean deleteCarFromSystem(int carId) throws CarDAOException {
-        final String DELETE_CAR_ERROR = "Delete car from system SQL error";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -177,7 +180,7 @@ public class SQLCarDAO implements CarDAO {
                 return true;
             }
         } catch (SQLException e) {
-            throw new CarDAOException(DELETE_CAR_ERROR);
+            throw new CarDAOException(DELETE_CAR_FROM_SYSTEM_ERROR_MESSAGE);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
@@ -238,39 +241,36 @@ public class SQLCarDAO implements CarDAO {
     }
 
     private List<Car> getCarsList(ResultSet resultSet) throws CarDAOException {
-        final String CREATE_FULL_CAR_DATA_SQL_ERROR = "Get cars list SQL error";
         List<Car> cars = new ArrayList<>();
         Car car;
 
         try {
             while (resultSet.next()) {
-                int i = 0;
                 car = new Car();
 
-                car.setId(resultSet.getInt(++i));
-                car.setVin(resultSet.getString(++i));
-                car.setManufactureDate(resultSet.getInt(++i));
-                car.setEnginePower(resultSet.getInt(++i));
-                car.setFuelConsumption(resultSet.getInt(++i));
-                car.setAvailableToRent(resultSet.getBoolean(++i));
-                car.setDeleted(resultSet.getBoolean(++i));
-                car.setPricePerDay(resultSet.getInt(++i));
-                car.setTransmissionType(Transmission.valueOf(resultSet.getString(++i)));
-                car.setClassType(CarClass.valueOf(resultSet.getString(++i)));
-                car.setModel(resultSet.getString(++i));
-                car.setBrand(resultSet.getString(++i));
+                car.setId(resultSet.getInt(1));
+                car.setVin(resultSet.getString(2));
+                car.setManufactureDate(resultSet.getInt(3));
+                car.setEnginePower(resultSet.getInt(4));
+                car.setFuelConsumption(resultSet.getInt(5));
+                car.setAvailableToRent(resultSet.getBoolean(6));
+                car.setDeleted(resultSet.getBoolean(7));
+                car.setPricePerDay(resultSet.getInt(8));
+                car.setTransmissionType(Transmission.valueOf(resultSet.getString(9)));
+                car.setClassType(CarClass.valueOf(resultSet.getString(10)));
+                car.setModel(resultSet.getString(11));
+                car.setBrand(resultSet.getString(12));
                 car.setPhotos(getCarPhotos(car.getId()));
 
                 cars.add(car);
             }
         } catch (SQLException e) {
-            throw new CarDAOException(CREATE_FULL_CAR_DATA_SQL_ERROR, e);
+            throw new CarDAOException(GET_CAR_LIST_ERROR_MESSAGE, e);
         }
         return cars;
     }
 
     private List<String> getCarPhotos(int carId) throws CarDAOException {
-        final String GET_CAR_PHOTO_SQL_ERROR = "Get cars photo SQL connection error";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -288,7 +288,7 @@ public class SQLCarDAO implements CarDAO {
                 carPhotos.add(resultSet.getString(i));
             }
         } catch (SQLException e) {
-            throw new CarDAOException(GET_CAR_PHOTO_SQL_ERROR, e);
+            throw new CarDAOException(GET_CAR_PHOTO_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement, resultSet);
@@ -298,7 +298,6 @@ public class SQLCarDAO implements CarDAO {
     }
 
     private void addCarPhotos(List<String> photoList, int carId) throws CarDAOException {
-        final String ADD_PHOTOS_ERROR = "Edd new car photos error";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -315,7 +314,7 @@ public class SQLCarDAO implements CarDAO {
                 preparedStatement.executeBatch();
             }
         } catch (SQLException e) {
-            throw new CarDAOException(ADD_PHOTOS_ERROR, e);
+            throw new CarDAOException(ADD_CAR_PHOTO_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
@@ -324,8 +323,6 @@ public class SQLCarDAO implements CarDAO {
     }
 
     private int getCarBrandId(String carBrand) throws CarDAOException {
-        final String GET_CAR_BRAND_SQL_ERROR_MESSAGE = "Get car brand SQL error";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -352,7 +349,7 @@ public class SQLCarDAO implements CarDAO {
             }
             return resultSet.getInt(1);
         } catch (SQLException e) {
-            throw new CarDAOException(GET_CAR_BRAND_SQL_ERROR_MESSAGE, e);
+            throw new CarDAOException(GET_CAR_BRAND_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement, resultSet);
@@ -361,8 +358,6 @@ public class SQLCarDAO implements CarDAO {
     }
 
     private int getCarModelId(String carModel, int carBrandId) throws CarDAOException {
-        final String GET_CAR_MODEL_ID_ERROR_MESSAGE = "Get car model id SQL error";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -392,7 +387,7 @@ public class SQLCarDAO implements CarDAO {
             }
             return resultSet.getInt(1);
         } catch (SQLException e) {
-            throw new CarDAOException(GET_CAR_MODEL_ID_ERROR_MESSAGE, e);
+            throw new CarDAOException(GET_CAR_MODEL_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement, resultSet);
@@ -426,11 +421,9 @@ public class SQLCarDAO implements CarDAO {
     }
 
     private int getCarId(String carVIN) throws CarDAOException {
-        final String GET_CAR_ID_SQL_ERROR = "Get car id sql error";
-        final String CAR_VIN_NOT_FOUND = "Car VIN not found in system";
 
         if (!isCarVINExist(carVIN)) {
-            throw new CarDAOException(CAR_VIN_NOT_FOUND);
+            throw new CarDAOException(CAR_VIN_NOT_FOUND_MESSAGE);
         }
 
         Connection connection = null;
@@ -447,7 +440,7 @@ public class SQLCarDAO implements CarDAO {
 
             return resultSet.getInt(1);
         } catch (SQLException e) {
-            throw new CarDAOException(GET_CAR_ID_SQL_ERROR, e);
+            throw new CarDAOException(GET_CAR_ID_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement, resultSet);

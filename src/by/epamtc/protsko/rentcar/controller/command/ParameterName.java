@@ -7,6 +7,7 @@ public enum ParameterName {
     GO_TO_USER_PROFILE,
     GO_TO_USER_MANAGEMENT_PAGE,
     GO_TO_CONTACT_PAGE,
+    GO_TO_ADD_CAR_PAGE,
     GO_TO_OUR_CARS_PAGE,
     GO_TO_CAR_PAGE,
     CHANGE_LOCALE,
@@ -18,6 +19,7 @@ public enum ParameterName {
 	EDIT_USER_DATA,
     FIND_USER,
     DELETE_USER,
+    ADD_CAR,
     GET_CARS,
     CREATE_ORDER,
 	SIGN_OUT

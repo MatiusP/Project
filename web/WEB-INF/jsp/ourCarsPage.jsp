@@ -40,6 +40,8 @@
     </button>
     <button class="tablinks"><a href="mainController?command=get_cars&class=premium"/>${premium_car_class_button}
     </button>
+    <button class="tablinks"><a href="mainController?command=go_to_add_car_page"/>ADD CAR
+    </button>
 </div>
 
 <c:if test="${not empty cars}">
