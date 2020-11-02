@@ -18,7 +18,7 @@ public class CarServiceImpl implements CarService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
     private CarDAO carDAO = daoFactory.getCarDAO();
     private static final String IS_CAR_AVAILABLE = "AVAILABLE";
-    private static final String IS_CAR_NOT_AVAILABLE = "NOT AVAILABLE";
+    private static final String IS_CAR_NOT_AVAILABLE = "NOT_AVAILABLE";
     private static final String IS_CAR_DELETED = "DELETED";
     private static final String IS_CAR_NOT_DELETED = "ACTIVE";
 
@@ -163,7 +163,6 @@ public class CarServiceImpl implements CarService {
         } else {
             car.setDeleted(false);
         }
-
         return car;
     }
 }

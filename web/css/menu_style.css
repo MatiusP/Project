@@ -30,13 +30,13 @@ nav ul {
     padding: 0;
 }
 
-.topmenu>li {
+.topmenu > li {
     float: none;
     position: relative;
     font-family: 'Open Sans', sans-serif;
 }
 
-.topmenu>li>a {
+.topmenu > li > a {
     display: flex;
     justify-content: space-around;
     font-size: 15px;
@@ -52,7 +52,7 @@ nav ul {
 
 .submenu-link:after {
     content: "\f107";
-    <!--font-family: "FontAwesome";-->
+    font-family: "FontAwesome";
     color: inherit;
     margin-left: 10px;
 }
@@ -60,16 +60,12 @@ nav ul {
 .submenu {
     background: #011b32;
     position: absolute;
-    width: 150px;
+    width: 210px;
     transform: scaleY(0);
     transform-origin: 0 0;
     transition: .4s ease-in-out;
     line-height: 35px;
-    padding-right: 0px;
-    padding-left: 0px;
-
 }
-
 
 .submenu a {
     color: white;
@@ -83,7 +79,7 @@ nav ul {
     border-bottom: none;
 }
 
-.topmenu>li:hover .submenu {
+.topmenu > li:hover .submenu {
     opacity: 1;
     transform: scaleY(1);
 }

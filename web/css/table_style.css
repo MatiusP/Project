@@ -39,10 +39,10 @@
     font-size: 26px;
 }
 
-.info-message h3{
-    background-color:#c9f6c3;
+.info-message h3 {
+    background-color: #c9f6c3;
     width: fit-content;
-    border-radius:5px;
+    border-radius: 5px;
     margin-top: 15px;
     margin: 15px;
     color: #000000;
@@ -85,6 +85,6 @@
 .table_dark a {
     color: #000000;
     border-radius: 3px;
-    background-color:#baf8c2;
+    background-color: #baf8c2;
     padding: 0px 4px;
 }

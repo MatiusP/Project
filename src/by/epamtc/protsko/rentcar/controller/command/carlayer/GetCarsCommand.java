@@ -18,16 +18,19 @@ public class GetCarsCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final CarService carService = serviceFactory.getCarService();
     private static final String SHOW_ALL_CARS_PAGE = "WEB-INF/jsp/ourCarsPage.jsp";
+
+    private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
+    private static final String CAR_LIST_ATTRIBUTE_NAME = "cars";
     private static final String CAR_CLASS_PARAMETER = "class";
     private static final String ECONOMY_CLASS_NAME = "ECONOMY";
     private static final String MIDDLE_CLASS_NAME = "MIDDLE";
     private static final String PREMIUM_CLASS_NAME = "PREMIUM";
-    private static final String NO_CARS_FOUND_MESSAGE = "No_eny_cars_found";
+    private static final String NO_CARS_FOUND_MESSAGE = "No eny cars found";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String currentRequestURL = RequestURL.getRequestURL(request);
-        request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
+        request.getSession(true).setAttribute(PREV_REQ_URL_ATTRIBUTE_NAME, currentRequestURL);
 
         List<CarDTO> carsTmpList;
         List<CarDTO> cars = new ArrayList<>();
@@ -56,10 +59,10 @@ public class GetCarsCommand implements Command {
             } else {
                 cars = carsTmpList;
             }
-            request.setAttribute("cars", cars);
+            request.setAttribute(CAR_LIST_ATTRIBUTE_NAME, cars);
         } catch (CarServiceException e) {
             request.setAttribute(NO_CARS_FOUND_MESSAGE, e);
         }
         request.getRequestDispatcher(SHOW_ALL_CARS_PAGE).forward(request, response);
     }
-}
+    }

@@ -39,7 +39,7 @@
 
 
 <head>
-    <title>Title</title>
+    <title>User management</title>
 </head>
 
 <body>

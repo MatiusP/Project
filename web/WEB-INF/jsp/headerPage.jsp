@@ -17,7 +17,10 @@
     <fmt:message bundle="${loc}" key="local.signOut.href" var="sign_out"/>
     <fmt:message bundle="${loc}" key="local.showUserRegData.button" var="show_user_button"/>
     <fmt:message bundle="${loc}" key="local.editUserData.button" var="edit_user_button"/>
-    <fmt:message bundle="${loc}" key="local.users.href" var="user_managment_button"/>
+    <fmt:message bundle="${loc}" key="local.management.href" var="managment_button"/>
+    <fmt:message bundle="${loc}" key="local.userManagement.message" var="user_managment_button"/>
+    <fmt:message bundle="${loc}" key="local.carManagement.message" var="car_managment_button"/>
+
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/headerPage_style.css"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/menu_style.css"/>
@@ -110,8 +113,20 @@
     </div>
 
     <c:if test="${sessionScope.userRegData.role eq 'ADMIN'}">
-        <div class="header_item header_button">
-            <a href="mainController?command=go_to_user_management_page">${user_managment_button}</a>
+        <div>
+            <nav>
+                <ul class="topmenu">
+                    <li><a href="" class="submenu-link">${managment_button}</a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="mainController?command=go_to_user_management_page">${user_managment_button}</a>
+                            </li>
+                            <li>
+                                <a href="mainController?command=go_to_car_management_page">${car_managment_button}</a>
+                            </li>
+                        </ul>
+                </ul>
+            </nav>
         </div>
     </c:if>
 

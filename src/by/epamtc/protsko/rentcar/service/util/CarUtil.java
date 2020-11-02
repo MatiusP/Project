@@ -82,16 +82,6 @@ public class CarUtil {
         if (carFuelConsumption != null) {
             searchCarCriteria.append("car_fuel_consumption=").append("'").append(carFuelConsumption).append("'").append(" ");
         }
-        if (isAvailableToRent!= null && isAvailableToRent.equalsIgnoreCase("NOT_AVAILABLE")) {
-            searchCarCriteria.append("is_car_available=false").append(" ");
-        } else {
-            searchCarCriteria.append("is_car_available=true").append(" ");
-        }
-        if (isDeleted != null && isDeleted.equalsIgnoreCase("DELETED")) {
-            searchCarCriteria.append("is_deleted=true").append(" ");
-        } else {
-            searchCarCriteria.append("is_deleted=false").append(" ");
-        }
         if (pricePerDay != null) {
             searchCarCriteria.append("pricePerDay=").append("'").append(pricePerDay).append("'").append(" ");
         }
@@ -107,6 +97,22 @@ public class CarUtil {
         if (carBrand != null) {
             searchCarCriteria.append("car_brand=").append("'").append(carClass).append("'").append(" ");
         }
+
+        if (isAvailableToRent != null) {
+            if (isAvailableToRent.equalsIgnoreCase("NOT_AVAILABLE")) {
+                searchCarCriteria.append("is_car_available=false").append(" ");
+            } else {
+                searchCarCriteria.append("is_car_available=true").append(" ");
+            }
+        }
+        if (isDeleted != null) {
+            if (isDeleted.equalsIgnoreCase("DELETED")) {
+                searchCarCriteria.append("is_deleted=true").append(" ");
+            } else {
+                searchCarCriteria.append("is_deleted=false").append(" ");
+            }
+        }
+
         return searchCarCriteria.toString().trim().replace(" ", " AND ");
     }
 }

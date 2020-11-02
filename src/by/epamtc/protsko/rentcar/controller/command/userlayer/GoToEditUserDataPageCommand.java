@@ -17,8 +17,8 @@ public class GoToEditUserDataPageCommand implements Command {
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
     private static final String USER_ID_PARAMETER_NAME = "id";
     private static final String USER_ATTRIBUTE_NAME = "user";
-    ServiceFactory factory = ServiceFactory.getInstance();
-    UserService userService = factory.getUserService();
+    private final ServiceFactory factory = ServiceFactory.getInstance();
+    private final UserService userService = factory.getUserService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

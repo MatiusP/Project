@@ -14,6 +14,9 @@ public class SQLCarDAO implements CarDAO {
 
     private static final String GET_ALL_UN_DELETED_CARS_QUERY = "SELECT * FROM fullCarsData WHERE is_deleted=0";
     private static final String GET_ALL_CARS_QUERY = "SELECT * FROM fullCarsData";
+
+    private static final String FIND_CAR_QUERY = "SELECT * FROM fullCarsData WHERE";
+
     private static final String GET_CAR_PHOTOS_QUERY = "SELECT picture_URL FROM carPhotos WHERE cars_id=?";
     private static final String ADD_CAR_PHOTOS_QUERY = "INSERT INTO carphotos (picture_URL, cars_id) VALUES (?,?)";
     private static final String DELETE_CAR_PHOTO_QUERY = "DELETE FROM carphotos WHERE cars_id=?";
@@ -201,7 +204,7 @@ public class SQLCarDAO implements CarDAO {
             statement = connection.createStatement();
 
             if (!searchCriteria.isEmpty()) {
-                resultSet = statement.executeQuery(GET_ALL_UN_DELETED_CARS_QUERY + " AND " + searchCriteria);
+                resultSet = statement.executeQuery(FIND_CAR_QUERY + "(" + searchCriteria + ")");
             } else {
                 resultSet = statement.executeQuery(GET_ALL_CARS_QUERY);
             }

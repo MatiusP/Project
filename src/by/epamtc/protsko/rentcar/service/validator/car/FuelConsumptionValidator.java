@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FuelConsumptionValidator implements CarParameterValidator {
-    private static final String FUEL_CONSUMPTION_REGEX = "^[0-9]{0,2}$";
+    private static final String FUEL_CONSUMPTION_REGEX = "^(\\d{1,2}\\.\\d+)$";
     private static Pattern pattern = Pattern.compile(FUEL_CONSUMPTION_REGEX);
 
     @Override
