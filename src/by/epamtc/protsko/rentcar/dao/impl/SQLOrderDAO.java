@@ -2,114 +2,87 @@ package by.epamtc.protsko.rentcar.dao.impl;
 
 import by.epamtc.protsko.rentcar.bean.order.FinalRentAct;
 import by.epamtc.protsko.rentcar.bean.order.Order;
+import by.epamtc.protsko.rentcar.bean.order.OrderForShow;
 import by.epamtc.protsko.rentcar.dao.OrderDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
 import by.epamtc.protsko.rentcar.dao.exception.OrderDAOException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SQLOrderDAO implements OrderDAO {
-    private static final Logger logger = LogManager.getLogger(SQLCarDAO.class);
     private static ConnectionPool connectionPool = new ConnectionPool();
 
-    private static final String CREATE_ORDER_QUERY =
-            "INSERT INTO orders" +
-                    "(start_rent, end_rent, total_price, user_id, car_id)" +
-                    " VALUES (?,?,?,?,?)";
+    private static final String CREATE_ORDER_ERROR_MESSAGE = "Error while creating new order";
+    private static final String CREATE_FINAL_ACT_ERROR_MESSAGE = "Error while creating final act";
+    private static final String ACCEPT_ORDER_ERROR_MESSAGE = "Error while accepting order";
+    private static final String CLOSE_ORDER_ERROR_MESSAGE = "Error while closing order";
+    private static final String GET_FINAL_ACT_ERROR_MESSAGE = "Final act does not found";
+    private static final String GET_FINAL_ACT_SQL_ERROR_MESSAGE = "Error while getting final act";
+    private static final String UPDATE_FINAL_ACT_ERROR_MESSAGE = "Error while updating final rent act";
+    private static final String GET_ALL_ORDERS_ERROR_MESSAGE = "Error while getting all orders";
+    private static final String GET_ALL_USER_ORDERS_ERROR_MESSAGE = "Error while getting user's orders";
 
-    private static final String GET_ALL_ORDERS_QUERY = "SELECT * FROM orders";
-
-    private static final String GET_ALL_USER_ORDERS_QUERY = "SELECT * FROM orders WHERE user_id=?";
-
-    private static final String CANCEL_ORDER_QUERY = "UPDATE orders SET is_order_canceled=1 WHERE id=?";
-
-    private static final String ACCEPT_ORDER_QUERY = "UPDATE orders SET is_order_accepted=1 WHERE id=?";
-
-    private static final String CLOSE_ORDER_QUERY =
-            "UPDATE orders" +
-                    " SET is_order_closed=1" +
-                    " WHERE id=?";
-
-    private static final String CREATE_FINAL_ACT_QUERY =
-            "INSERT INTO additionalpayments (Orders_id)" +
-                    " VALUES (?)";
-
-    private static final String GET_FINAL_ACT_QUERY = "SELECT * FROM additionalpayments WHERE Orders_id=?";
-
+    private static final String CREATE_ORDER_QUERY = "INSERT INTO orders" +
+            "(order_date, start_rent, end_rent, total_price, user_id, car_id)" +
+            " VALUES (?,?,?,?,?,?)";
     private static final String UPDATE_FINAL_ACT_QUERY =
             "UPDATE additionalpayments SET" +
                     " cost_by_overdue_period=?, cost_by_fuel=?, cost_by_mileage=?, cost_by_parking_penalty=?," +
                     " cost_by_police_penalty=?, cost_by_damage=?, cost_by_other_penalty=?" +
                     " WHERE id=?";
+    private static final String GET_ALL_ORDERS_QUERY = "SELECT * FROM fullorderdata";
+    private static final String GET_ALL_USER_ORDERS_QUERY = "SELECT * FROM fullorderdata WHERE user_id=?";
 
+    private static final String GET_LAST_ORDER_INDEX_QUERY = "SELECT LAST_INSERT_ID()";
+    private static final String CREATE_FINAL_ACT_QUERY = "INSERT INTO additionalpayments (orders_id) VALUES (?)";
+    private static final String ACCEPT_ORDER_QUERY = "UPDATE orders SET is_order_accepted=1 WHERE id=?";
+    private static final String CLOSE_ORDER_QUERY = "UPDATE orders SET is_order_closed=1 WHERE id=?";
+    private static final String GET_FINAL_ACT_QUERY = "SELECT * FROM additionalpayments WHERE Orders_id=?";
 
     @Override
     public boolean createOrder(Order order) throws OrderDAOException {
-        final String CREATE_ORDER_ERROR = "Create order SQL error";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        int orderId = 0;
 
         try {
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(CREATE_ORDER_QUERY);
 
-            preparedStatement.setDate(1, (Date) order.getStartRent());
-            preparedStatement.setDate(2, (Date) order.getEndRent());
-            preparedStatement.setDouble(3, order.getTotalPrice());
-            preparedStatement.setInt(4, order.getUserId());
-            preparedStatement.setInt(5, order.getCarId());
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(order.getOrderDate()));
+            preparedStatement.setDate(2, (Date) order.getStartRent());
+            preparedStatement.setDate(3, (Date) order.getEndRent());
+            preparedStatement.setDouble(4, order.getTotalPrice());
+            preparedStatement.setInt(5, order.getUserId());
+            preparedStatement.setInt(6, order.getCarId());
+            final int countAddedRows = preparedStatement.executeUpdate();
 
-            int countAddedRows = preparedStatement.executeUpdate();
-
-            if (countAddedRows > 0) {
-                boolean isFinalRentActCreated = createFinalRentAct(order.getId());
-                if (isFinalRentActCreated) {
-                    return true;
-                }
+            if (countAddedRows == 0) {
+                throw new OrderDAOException(CREATE_ORDER_ERROR_MESSAGE);
             }
+
+            preparedStatement = connection.prepareStatement(GET_LAST_ORDER_INDEX_QUERY);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                orderId = resultSet.getInt(1);
+                createFinalRentAct(orderId);
+            }
+            return true;
         } catch (SQLException e) {
-            throw new OrderDAOException(CREATE_ORDER_ERROR, e);
+            throw new OrderDAOException(CREATE_ORDER_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
-                connectionPool.closeConnection(connection, preparedStatement);
+                connectionPool.closeConnection(connection, preparedStatement, resultSet);
             }
         }
-        return false;
-    }
-
-    @Override
-    public boolean cancelOrder(int orderId) throws OrderDAOException {
-        final String CANCEL_ORDER_ERROR = "Cancel order SQL error";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-
-        try {
-            connection = connectionPool.takeConnection();
-            preparedStatement = connection.prepareStatement(CANCEL_ORDER_QUERY);
-            preparedStatement.setInt(1, orderId);
-
-            int countUpdatedRows = preparedStatement.executeUpdate();
-
-            if (countUpdatedRows > 0) {
-                return true;
-            }
-        } catch (SQLException e) {
-            throw new OrderDAOException(CANCEL_ORDER_ERROR, e);
-        } finally {
-            if (connection != null) {
-                connectionPool.closeConnection(connection, preparedStatement);
-            }
-        }
-        return false;
     }
 
     @Override
     public boolean acceptOrder(int orderId) throws OrderDAOException {
-        final String ACCEPT_ORDER_ERROR = "Cancel order SQL error";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -120,22 +93,21 @@ public class SQLOrderDAO implements OrderDAO {
 
             int countUpdatedRows = preparedStatement.executeUpdate();
 
-            if (countUpdatedRows > 0) {
-                return true;
+            if (countUpdatedRows == 0) {
+                throw new OrderDAOException(ACCEPT_ORDER_ERROR_MESSAGE);
             }
+            return true;
         } catch (SQLException e) {
-            throw new OrderDAOException(ACCEPT_ORDER_ERROR, e);
+            throw new OrderDAOException(ACCEPT_ORDER_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
             }
         }
-        return false;
     }
 
     @Override
     public boolean closeOrder(int orderId) throws OrderDAOException {
-        final String CLOSE_ORDER_ERROR = "Close order SQL error";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -143,110 +115,79 @@ public class SQLOrderDAO implements OrderDAO {
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(CLOSE_ORDER_QUERY);
             preparedStatement.setInt(1, orderId);
-
             int countUpdatedRows = preparedStatement.executeUpdate();
 
-            if (countUpdatedRows > 0) {
-                return true;
+            if (countUpdatedRows == 0) {
+                throw new OrderDAOException(CLOSE_ORDER_ERROR_MESSAGE);
             }
+            return true;
         } catch (SQLException e) {
-            throw new OrderDAOException(CLOSE_ORDER_ERROR, e);
+            throw new OrderDAOException(CLOSE_ORDER_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
             }
         }
-        return false;
     }
 
     @Override
-    public List<Order> getAllOrders() throws OrderDAOException {
-        final String GET_ALL_ORDERS_SQL_ERROR = "Get all orders SQL error";
+    public List<OrderForShow> getAllOrders() throws OrderDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        List<Order> ordersList = new ArrayList<>();
-        Order order;
+        List<OrderForShow> orderList = new ArrayList<>();
+        OrderForShow order;
 
         try {
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(GET_ALL_ORDERS_QUERY);
-
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                int i = 0;
-                order = new Order();
+                order = buildOrderFromDatabase(resultSet);
 
-                order.setId(resultSet.getInt(++i));
-                order.setStartRent(resultSet.getDate(++i));
-                order.setEndRent(resultSet.getDate(++i));
-                order.setTotalPrice(resultSet.getDouble(++i));
-                order.setOrderAccepted(resultSet.getBoolean(++i));
-                order.setOrderAccepted(resultSet.getBoolean(++i));
-                order.setOrderClosed(resultSet.getBoolean(++i));
-                order.setUserId(resultSet.getInt(++i));
-                order.setCarId(resultSet.getInt(++i));
-
-                ordersList.add(order);
+                orderList.add(order);
             }
         } catch (SQLException e) {
-            throw new OrderDAOException(GET_ALL_ORDERS_SQL_ERROR, e);
+            throw new OrderDAOException(GET_ALL_ORDERS_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement, resultSet);
             }
         }
-        return ordersList;
+        return orderList;
     }
 
     @Override
-    public List<Order> getUserOrders(int userId) throws OrderDAOException {
-        final String GET_USER_ORDERS_SQL_ERROR = "Get user orders SQL error";
+    public List<OrderForShow> getUserOrders(int userId) throws OrderDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        List<Order> ordersList = new ArrayList<>();
-        Order order;
+        List<OrderForShow> userOrders = new ArrayList<>();
+        OrderForShow order;
 
         try {
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(GET_ALL_USER_ORDERS_QUERY);
             preparedStatement.setInt(1, userId);
-
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                int i = 0;
-                order = new Order();
-
-                order.setId(resultSet.getInt(++i));
-                order.setStartRent(resultSet.getDate(++i));
-                order.setEndRent(resultSet.getDate(++i));
-                order.setTotalPrice(resultSet.getDouble(++i));
-                order.setOrderAccepted(resultSet.getBoolean(++i));
-                order.setOrderAccepted(resultSet.getBoolean(++i));
-                order.setOrderClosed(resultSet.getBoolean(++i));
-                order.setUserId(resultSet.getInt(++i));
-                order.setCarId(resultSet.getInt(++i));
-
-                ordersList.add(order);
+                order = buildOrderFromDatabase(resultSet);
+                userOrders.add(order);
             }
         } catch (SQLException e) {
-            throw new OrderDAOException(GET_USER_ORDERS_SQL_ERROR, e);
+            throw new OrderDAOException(GET_ALL_USER_ORDERS_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement, resultSet);
             }
         }
-        return ordersList;
+        return userOrders;
     }
 
     @Override
     public FinalRentAct getFinalRentAct(int orderId) throws OrderDAOException {
-        final String GET_FINAL_ACT_ERROR = "Get final rent act error";
-        final String GET_FINAL_ACT_SQL_ERROR = "Get final rent act SQL error";
-
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -258,7 +199,6 @@ public class SQLOrderDAO implements OrderDAO {
             preparedStatement.setInt(1, orderId);
 
             resultSet = preparedStatement.executeQuery();
-
             while (resultSet.next()) {
                 rentAct.setId(resultSet.getInt(1));
                 rentAct.setCostOverduePeriod(resultSet.getDouble(2));
@@ -271,10 +211,10 @@ public class SQLOrderDAO implements OrderDAO {
                 rentAct.setOrderId(resultSet.getInt(9));
             }
             if (rentAct == null) {
-                throw new OrderDAOException(GET_FINAL_ACT_ERROR);
+                throw new OrderDAOException(GET_FINAL_ACT_ERROR_MESSAGE);
             }
         } catch (SQLException e) {
-            throw new OrderDAOException(GET_FINAL_ACT_SQL_ERROR, e);
+            throw new OrderDAOException(GET_FINAL_ACT_SQL_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement, resultSet);
@@ -285,7 +225,6 @@ public class SQLOrderDAO implements OrderDAO {
 
     @Override
     public boolean updateFinalRentAct(FinalRentAct rentAct) throws OrderDAOException {
-        final String UPDATE_FINAL_RENT_ACT_ERROR = "Update final rent act SQL error";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -304,21 +243,20 @@ public class SQLOrderDAO implements OrderDAO {
 
             int countUpdatedRows = preparedStatement.executeUpdate();
 
-            if (countUpdatedRows > 0) {
-                return true;
+            if (countUpdatedRows == 0) {
+                throw new OrderDAOException(UPDATE_FINAL_ACT_ERROR_MESSAGE);
             }
+            return true;
         } catch (SQLException e) {
-            throw new OrderDAOException(UPDATE_FINAL_RENT_ACT_ERROR, e);
+            throw new OrderDAOException(UPDATE_FINAL_ACT_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
             }
         }
-        return false;
     }
 
     private boolean createFinalRentAct(int orderId) throws OrderDAOException {
-        final String CREATE_FINAL_ACT_ERROR = "Create final act SQL error";
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -332,12 +270,30 @@ public class SQLOrderDAO implements OrderDAO {
                 return true;
             }
         } catch (SQLException e) {
-            throw new OrderDAOException(CREATE_FINAL_ACT_ERROR, e);
+            throw new OrderDAOException(CREATE_FINAL_ACT_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);
             }
         }
         return false;
+    }
+
+    private OrderForShow buildOrderFromDatabase(ResultSet resultSet) throws SQLException {
+        OrderForShow order = new OrderForShow();
+
+        order.setOrderId(resultSet.getInt(1));
+        order.setOrderDate(resultSet.getTimestamp(2).toLocalDateTime());
+        order.setOrderStartRent(resultSet.getDate(3));
+        order.setOrderEndRent(resultSet.getDate(4));
+        order.setOrderTotalPrice(resultSet.getDouble(5));
+        order.setOrderAccepted(resultSet.getBoolean(6));
+        order.setOrderClosed(resultSet.getBoolean(7));
+        order.setOrderCarBrand(resultSet.getString(8));
+        order.setOrderCarModel(resultSet.getString(9));
+        order.setOrderCarVin(resultSet.getString(10));
+        order.setOrderUserId(resultSet.getInt(11));
+
+        return order;
     }
 }

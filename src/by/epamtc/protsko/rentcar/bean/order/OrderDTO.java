@@ -1,15 +1,17 @@
 package by.epamtc.protsko.rentcar.bean.order;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class OrderDTO implements Serializable {
-    private static final long serialVersionUID = -5577647165678236921L;
+    private static final long serialVersionUID = -8743192320173556685L;
 
     private int id;
-    private String startRent;
-    private String endRent;
+    private LocalDateTime orderDate;
+    private Date startRent;
+    private Date endRent;
     private String totalPrice;
-    private String isOrderCanceled;
     private String isOrderAccepted;
     private String isOrderClosed;
     private String userId;
@@ -26,19 +28,27 @@ public class OrderDTO implements Serializable {
         this.id = id;
     }
 
-    public String getStartRent() {
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public Date getStartRent() {
         return startRent;
     }
 
-    public void setStartRent(String startRent) {
+    public void setStartRent(Date startRent) {
         this.startRent = startRent;
     }
 
-    public String getEndRent() {
+    public Date getEndRent() {
         return endRent;
     }
 
-    public void setEndRent(String endRent) {
+    public void setEndRent(Date endRent) {
         this.endRent = endRent;
     }
 
@@ -48,14 +58,6 @@ public class OrderDTO implements Serializable {
 
     public void setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public String getIsOrderCanceled() {
-        return isOrderCanceled;
-    }
-
-    public void setIsOrderCanceled(String isOrderCanceled) {
-        this.isOrderCanceled = isOrderCanceled;
     }
 
     public String getIsOrderAccepted() {
@@ -98,11 +100,10 @@ public class OrderDTO implements Serializable {
         OrderDTO orderDTO = (OrderDTO) o;
 
         if (id != orderDTO.id) return false;
+        if (orderDate != null ? !orderDate.equals(orderDTO.orderDate) : orderDTO.orderDate != null) return false;
         if (startRent != null ? !startRent.equals(orderDTO.startRent) : orderDTO.startRent != null) return false;
         if (endRent != null ? !endRent.equals(orderDTO.endRent) : orderDTO.endRent != null) return false;
         if (totalPrice != null ? !totalPrice.equals(orderDTO.totalPrice) : orderDTO.totalPrice != null) return false;
-        if (isOrderCanceled != null ? !isOrderCanceled.equals(orderDTO.isOrderCanceled) : orderDTO.isOrderCanceled != null)
-            return false;
         if (isOrderAccepted != null ? !isOrderAccepted.equals(orderDTO.isOrderAccepted) : orderDTO.isOrderAccepted != null)
             return false;
         if (isOrderClosed != null ? !isOrderClosed.equals(orderDTO.isOrderClosed) : orderDTO.isOrderClosed != null)
@@ -114,10 +115,10 @@ public class OrderDTO implements Serializable {
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + (orderDate != null ? orderDate.hashCode() : 0);
         result = 31 * result + (startRent != null ? startRent.hashCode() : 0);
         result = 31 * result + (endRent != null ? endRent.hashCode() : 0);
         result = 31 * result + (totalPrice != null ? totalPrice.hashCode() : 0);
-        result = 31 * result + (isOrderCanceled != null ? isOrderCanceled.hashCode() : 0);
         result = 31 * result + (isOrderAccepted != null ? isOrderAccepted.hashCode() : 0);
         result = 31 * result + (isOrderClosed != null ? isOrderClosed.hashCode() : 0);
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
@@ -129,10 +130,10 @@ public class OrderDTO implements Serializable {
     public String toString() {
         return "OrderDTO{" +
                 "id=" + id +
-                ", startRent='" + startRent + '\'' +
-                ", endRent='" + endRent + '\'' +
+                ", orderDate=" + orderDate +
+                ", startRent=" + startRent +
+                ", endRent=" + endRent +
                 ", totalPrice='" + totalPrice + '\'' +
-                ", isOrderCanceled='" + isOrderCanceled + '\'' +
                 ", isOrderAccepted='" + isOrderAccepted + '\'' +
                 ", isOrderClosed='" + isOrderClosed + '\'' +
                 ", userId='" + userId + '\'' +
