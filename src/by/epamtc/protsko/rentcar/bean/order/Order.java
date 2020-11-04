@@ -127,5 +127,18 @@ public class Order implements Serializable {
         return result;
     }
 
-
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderDate=" + orderDate +
+                ", startRent=" + startRent +
+                ", endRent=" + endRent +
+                ", totalPrice=" + totalPrice +
+                ", isOrderAccepted=" + isOrderAccepted +
+                ", isOrderClosed=" + isOrderClosed +
+                ", userId=" + userId +
+                ", carId=" + carId +
+                '}';
+    }
 }

@@ -19,6 +19,8 @@ public interface OrderDAO {
 
     List<OrderForShow> getUserOrders(int userId) throws OrderDAOException;
 
+    List<Order> getCarOrders(int carId) throws OrderDAOException;
+
     FinalRentAct getFinalRentAct(int orderId) throws OrderDAOException;
 
     boolean updateFinalRentAct(FinalRentAct rentAct) throws OrderDAOException;

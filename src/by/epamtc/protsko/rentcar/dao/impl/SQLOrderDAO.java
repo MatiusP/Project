@@ -23,6 +23,7 @@ public class SQLOrderDAO implements OrderDAO {
     private static final String UPDATE_FINAL_ACT_ERROR_MESSAGE = "Error while updating final rent act";
     private static final String GET_ALL_ORDERS_ERROR_MESSAGE = "Error while getting all orders";
     private static final String GET_ALL_USER_ORDERS_ERROR_MESSAGE = "Error while getting user's orders";
+    private static final String GET_CAR_ORDERS_ERROR_MESSAGE = "Error while getting car's orders";
 
     private static final String CREATE_ORDER_QUERY = "INSERT INTO orders" +
             "(order_date, start_rent, end_rent, total_price, user_id, car_id)" +
@@ -34,7 +35,7 @@ public class SQLOrderDAO implements OrderDAO {
                     " WHERE id=?";
     private static final String GET_ALL_ORDERS_QUERY = "SELECT * FROM fullorderdata";
     private static final String GET_ALL_USER_ORDERS_QUERY = "SELECT * FROM fullorderdata WHERE user_id=?";
-
+    private static final String GET_ALL_CAR_ORDERS_QUERY = "SELECT * FROM orders WHERE car_id=?";
     private static final String GET_LAST_ORDER_INDEX_QUERY = "SELECT LAST_INSERT_ID()";
     private static final String CREATE_FINAL_ACT_QUERY = "INSERT INTO additionalpayments (orders_id) VALUES (?)";
     private static final String ACCEPT_ORDER_QUERY = "UPDATE orders SET is_order_accepted=1 WHERE id=?";
@@ -184,6 +185,45 @@ public class SQLOrderDAO implements OrderDAO {
             }
         }
         return userOrders;
+    }
+
+    @Override
+    public List<Order> getCarOrders(int carId) throws OrderDAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Order> carOrderList = new ArrayList<>();
+        Order order;
+
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(GET_ALL_CAR_ORDERS_QUERY);
+            preparedStatement.setInt(1, carId);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                order = new Order();
+
+                order.setId(resultSet.getInt(1));
+                order.setOrderDate(resultSet.getTimestamp(2).toLocalDateTime());
+                order.setStartRent(resultSet.getDate(3));
+                order.setEndRent(resultSet.getDate(4));
+                order.setTotalPrice(resultSet.getDouble(5));
+                order.setOrderAccepted(resultSet.getBoolean(6));
+                order.setOrderClosed(resultSet.getBoolean(7));
+                order.setUserId(resultSet.getInt(8));
+                order.setCarId(resultSet.getInt(9));
+
+                carOrderList.add(order);
+            }
+        } catch (SQLException e) {
+            throw new OrderDAOException(GET_CAR_ORDERS_ERROR_MESSAGE, e);
+        } finally {
+            if (connection != null) {
+                connectionPool.closeConnection(connection, preparedStatement, resultSet);
+            }
+        }
+        return carOrderList;
     }
 
     @Override
