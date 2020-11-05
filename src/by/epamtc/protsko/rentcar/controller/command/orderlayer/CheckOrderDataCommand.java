@@ -58,6 +58,3 @@ public class CheckOrderDataCommand implements Command {
         }
     }
 }
-
-
-//the car is not available for these dates. Select another dates.

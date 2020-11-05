@@ -18,6 +18,7 @@ public class SQLOrderDAO implements OrderDAO {
     private static final String CREATE_FINAL_ACT_ERROR_MESSAGE = "Error while creating final act";
     private static final String ACCEPT_ORDER_ERROR_MESSAGE = "Error while accepting order";
     private static final String CLOSE_ORDER_ERROR_MESSAGE = "Error while closing order";
+    private static final String CANCEL_ORDER_ERROR_MESSAGE = "Error while canceling order";
     private static final String GET_FINAL_ACT_ERROR_MESSAGE = "Final act does not found";
     private static final String GET_FINAL_ACT_SQL_ERROR_MESSAGE = "Error while getting final act";
     private static final String UPDATE_FINAL_ACT_ERROR_MESSAGE = "Error while updating final rent act";
@@ -40,6 +41,7 @@ public class SQLOrderDAO implements OrderDAO {
     private static final String CREATE_FINAL_ACT_QUERY = "INSERT INTO additionalpayments (orders_id) VALUES (?)";
     private static final String ACCEPT_ORDER_QUERY = "UPDATE orders SET is_order_accepted=1 WHERE id=?";
     private static final String CLOSE_ORDER_QUERY = "UPDATE orders SET is_order_closed=1 WHERE id=?";
+    private static final String CANCEL_ORDER_QUERY = "UPDATE orders SET is_order_canceled=1 WHERE id=?";
     private static final String GET_FINAL_ACT_QUERY = "SELECT * FROM additionalpayments WHERE Orders_id=?";
 
     @Override
@@ -124,6 +126,30 @@ public class SQLOrderDAO implements OrderDAO {
             return true;
         } catch (SQLException e) {
             throw new OrderDAOException(CLOSE_ORDER_ERROR_MESSAGE, e);
+        } finally {
+            if (connection != null) {
+                connectionPool.closeConnection(connection, preparedStatement);
+            }
+        }
+    }
+
+    @Override
+    public boolean cancelOrder(int orderId) throws OrderDAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(CANCEL_ORDER_QUERY);
+            preparedStatement.setInt(1, orderId);
+            int countUpdatedRows = preparedStatement.executeUpdate();
+
+            if (countUpdatedRows == 0) {
+                throw new OrderDAOException(CANCEL_ORDER_ERROR_MESSAGE);
+            }
+            return true;
+        } catch (SQLException e) {
+            throw new OrderDAOException(CANCEL_ORDER_ERROR_MESSAGE, e);
         } finally {
             if (connection != null) {
                 connectionPool.closeConnection(connection, preparedStatement);

@@ -24,7 +24,7 @@ public class CreateOrderCommand implements Command {
     private static final String USER_ID_PARAMETER_NAME = "user_id";
     private static final String CAR_ID_PARAMETER_NAME = "car_id";
     private static final String ADDED_ERROR_ATTRIBUTE_NAME = "added error";
-    private static final String ADDED_RESULT_ATTRIBUTE_NAME = "added_result";
+    private static final String ADDED_RESULT_ATTRIBUTE_NAME = "added_result_ok";
     private static final String ADDED_RESULT_MESSAGE = "Create new order was successfully";
 
     @Override

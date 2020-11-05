@@ -15,6 +15,8 @@ public interface OrderDAO {
 
     boolean closeOrder(int orderId) throws OrderDAOException;
 
+    boolean cancelOrder(int orderId) throws OrderDAOException;
+
     List<OrderForShow> getAllOrders() throws OrderDAOException;
 
     List<OrderForShow> getUserOrders(int userId) throws OrderDAOException;

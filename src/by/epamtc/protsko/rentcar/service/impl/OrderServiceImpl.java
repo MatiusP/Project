@@ -26,6 +26,8 @@ public class OrderServiceImpl implements OrderService {
     private static final String ORDER_NOT_ACCEPTED_VALUE = "Not accepted";
     private static final String ORDER_CLOSED_VALUE = "Closed";
     private static final String ORDER_NOT_CLOSED_VALUE = "Open";
+    private static final String ORDER_CANCELED_VALUE = "Canceled";
+    private static final String ORDER_NOT_CANCELED_VALUE = "Actual";
 
     @Override
     public boolean createOrder(OrderDTO order) throws OrderServiceException {
@@ -106,6 +108,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public boolean cancelOrder(int orderId) throws OrderServiceException {
+        try {
+            return orderDAO.cancelOrder(orderId);
+        } catch (OrderDAOException e) {
+            throw new OrderServiceException(e);
+        }
+    }
+
+    @Override
     public List<OrderForShowDTO> getAllOrders() throws OrderServiceException {
         final String NO_ORDERS_IN_DB_MESSAGE = "No any orders in database";
         List<OrderForShowDTO> allOrderList = new ArrayList<>();
@@ -178,9 +189,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderForShowDTO buildOrderForShowDTO(OrderForShow orderForShow) {
-        final boolean isOrderAccept = orderForShow.isOrderAccepted();
+        final boolean isOrderAccepted = orderForShow.isOrderAccepted();
         final boolean isOrderClosed = orderForShow.isOrderClosed();
-
+        final boolean isOrderCanceled = orderForShow.isOrderCanceled();
         OrderForShowDTO order = new OrderForShowDTO();
 
         order.setOrderId(orderForShow.getOrderId());
@@ -190,9 +201,9 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderTotalPrice(orderForShow.getOrderTotalPrice());
         order.setOrderCarBrand(orderForShow.getOrderCarBrand());
         order.setOrderCarModel(orderForShow.getOrderCarModel());
-        order.setOrderCarVin(orderForShow.getOrderCarVin());
+        order.setOrderCarId(orderForShow.getOrderCarId());
         order.setOrderUserId(orderForShow.getOrderUserId());
-        if (isOrderAccept) {
+        if (isOrderAccepted) {
             order.setIsOrderAccepted(ORDER_ACCEPTED_VALUE);
         } else {
             order.setIsOrderAccepted(ORDER_NOT_ACCEPTED_VALUE);
@@ -202,13 +213,18 @@ public class OrderServiceImpl implements OrderService {
         } else {
             order.setIsOrderClosed(ORDER_NOT_CLOSED_VALUE);
         }
-
+        if (isOrderCanceled) {
+            order.setIsOrderCanceled(ORDER_CANCELED_VALUE);
+        } else {
+            order.setIsOrderCanceled(ORDER_NOT_CANCELED_VALUE);
+        }
         return order;
     }
 
     private Order buildOrderFromOrderDTO(OrderDTO orderDTO) {
-        final String isOrderAccept = orderDTO.getIsOrderAccepted();
+        final String isOrderAccepted = orderDTO.getIsOrderAccepted();
         final String isOrderClosed = orderDTO.getIsOrderClosed();
+        final String isOrderCanceled = orderDTO.getIsOrderCanceled();
 
         Order order = new Order();
 
@@ -219,7 +235,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalPrice(Double.parseDouble(orderDTO.getTotalPrice()));
         order.setUserId(Integer.parseInt(orderDTO.getUserId()));
         order.setCarId(Integer.parseInt(orderDTO.getCarId()));
-        if (isOrderAccept == null || isOrderAccept.equalsIgnoreCase(ORDER_NOT_ACCEPTED_VALUE)) {
+        if (isOrderAccepted == null || isOrderAccepted.equalsIgnoreCase(ORDER_NOT_ACCEPTED_VALUE)) {
             order.setOrderAccepted(false);
         } else {
             order.setOrderAccepted(true);
@@ -228,6 +244,11 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderClosed(false);
         } else {
             order.setOrderClosed(true);
+        }
+        if (isOrderCanceled == null || isOrderCanceled.equalsIgnoreCase(ORDER_NOT_CANCELED_VALUE)) {
+            order.setOrderCanceled(false);
+        } else {
+            order.setOrderCanceled(true);
         }
         return order;
     }

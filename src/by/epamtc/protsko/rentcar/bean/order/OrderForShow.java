@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class OrderForShow implements Serializable {
-    private static final long serialVersionUID = -2321083125327794744L;
+    private static final long serialVersionUID = -6538357744717138881L;
 
     private int orderId;
     private LocalDateTime orderDate;
@@ -14,9 +14,10 @@ public class OrderForShow implements Serializable {
     private double orderTotalPrice;
     private boolean isOrderAccepted;
     private boolean isOrderClosed;
+    private boolean isOrderCanceled;
     private String orderCarBrand;
     private String orderCarModel;
-    private String orderCarVin;
+    private int orderCarId;
     private int orderUserId;
 
     public OrderForShow() {
@@ -78,6 +79,14 @@ public class OrderForShow implements Serializable {
         isOrderClosed = orderClosed;
     }
 
+    public boolean isOrderCanceled() {
+        return isOrderCanceled;
+    }
+
+    public void setOrderCanceled(boolean orderCanceled) {
+        isOrderCanceled = orderCanceled;
+    }
+
     public String getOrderCarBrand() {
         return orderCarBrand;
     }
@@ -94,12 +103,12 @@ public class OrderForShow implements Serializable {
         this.orderCarModel = orderCarModel;
     }
 
-    public String getOrderCarVin() {
-        return orderCarVin;
+    public int getOrderCarId() {
+        return orderCarId;
     }
 
-    public void setOrderCarVin(String orderCarVin) {
-        this.orderCarVin = orderCarVin;
+    public void setOrderCarId(int orderCarId) {
+        this.orderCarId = orderCarId;
     }
 
     public int getOrderUserId() {
@@ -115,22 +124,22 @@ public class OrderForShow implements Serializable {
         if (this == o) return true;
         if (!(o instanceof OrderForShow)) return false;
 
-        OrderForShow that = (OrderForShow) o;
+        OrderForShow order = (OrderForShow) o;
 
-        if (orderId != that.orderId) return false;
-        if (Double.compare(that.orderTotalPrice, orderTotalPrice) != 0) return false;
-        if (isOrderAccepted != that.isOrderAccepted) return false;
-        if (isOrderClosed != that.isOrderClosed) return false;
-        if (orderUserId != that.orderUserId) return false;
-        if (orderDate != null ? !orderDate.equals(that.orderDate) : that.orderDate != null) return false;
-        if (orderStartRent != null ? !orderStartRent.equals(that.orderStartRent) : that.orderStartRent != null)
+        if (orderId != order.orderId) return false;
+        if (Double.compare(order.orderTotalPrice, orderTotalPrice) != 0) return false;
+        if (isOrderAccepted != order.isOrderAccepted) return false;
+        if (isOrderClosed != order.isOrderClosed) return false;
+        if (isOrderCanceled != order.isOrderCanceled) return false;
+        if (orderCarId != order.orderCarId) return false;
+        if (orderUserId != order.orderUserId) return false;
+        if (orderDate != null ? !orderDate.equals(order.orderDate) : order.orderDate != null) return false;
+        if (orderStartRent != null ? !orderStartRent.equals(order.orderStartRent) : order.orderStartRent != null)
             return false;
-        if (orderEndRent != null ? !orderEndRent.equals(that.orderEndRent) : that.orderEndRent != null) return false;
-        if (orderCarBrand != null ? !orderCarBrand.equals(that.orderCarBrand) : that.orderCarBrand != null)
+        if (orderEndRent != null ? !orderEndRent.equals(order.orderEndRent) : order.orderEndRent != null) return false;
+        if (orderCarBrand != null ? !orderCarBrand.equals(order.orderCarBrand) : order.orderCarBrand != null)
             return false;
-        if (orderCarModel != null ? !orderCarModel.equals(that.orderCarModel) : that.orderCarModel != null)
-            return false;
-        return orderCarVin != null ? orderCarVin.equals(that.orderCarVin) : that.orderCarVin == null;
+        return orderCarModel != null ? orderCarModel.equals(order.orderCarModel) : order.orderCarModel == null;
     }
 
     @Override
@@ -145,9 +154,10 @@ public class OrderForShow implements Serializable {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (isOrderAccepted ? 1 : 0);
         result = 31 * result + (isOrderClosed ? 1 : 0);
+        result = 31 * result + (isOrderCanceled ? 1 : 0);
         result = 31 * result + (orderCarBrand != null ? orderCarBrand.hashCode() : 0);
         result = 31 * result + (orderCarModel != null ? orderCarModel.hashCode() : 0);
-        result = 31 * result + (orderCarVin != null ? orderCarVin.hashCode() : 0);
+        result = 31 * result + orderCarId;
         result = 31 * result + orderUserId;
         return result;
     }
@@ -162,9 +172,10 @@ public class OrderForShow implements Serializable {
                 ", orderTotalPrice=" + orderTotalPrice +
                 ", isOrderAccepted=" + isOrderAccepted +
                 ", isOrderClosed=" + isOrderClosed +
+                ", isOrderCanceled=" + isOrderCanceled +
                 ", orderCarBrand='" + orderCarBrand + '\'' +
                 ", orderCarModel='" + orderCarModel + '\'' +
-                ", orderCarVin='" + orderCarVin + '\'' +
+                ", orderCarId=" + orderCarId +
                 ", orderUserId=" + orderUserId +
                 '}';
     }

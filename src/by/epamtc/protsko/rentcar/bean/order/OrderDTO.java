@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class OrderDTO implements Serializable {
-    private static final long serialVersionUID = -8743192320173556685L;
+    private static final long serialVersionUID = 6501865715471987776L;
 
     private int id;
     private LocalDateTime orderDate;
@@ -13,6 +13,7 @@ public class OrderDTO implements Serializable {
     private LocalDate endRent;
     private String totalPrice;
     private String isOrderAccepted;
+    private String isOrderCanceled;
     private String isOrderClosed;
     private String userId;
     private String carId;
@@ -68,6 +69,14 @@ public class OrderDTO implements Serializable {
         this.isOrderAccepted = isOrderAccepted;
     }
 
+    public String getIsOrderCanceled() {
+        return isOrderCanceled;
+    }
+
+    public void setIsOrderCanceled(String isOrderCanceled) {
+        this.isOrderCanceled = isOrderCanceled;
+    }
+
     public String getIsOrderClosed() {
         return isOrderClosed;
     }
@@ -106,6 +115,8 @@ public class OrderDTO implements Serializable {
         if (totalPrice != null ? !totalPrice.equals(orderDTO.totalPrice) : orderDTO.totalPrice != null) return false;
         if (isOrderAccepted != null ? !isOrderAccepted.equals(orderDTO.isOrderAccepted) : orderDTO.isOrderAccepted != null)
             return false;
+        if (isOrderCanceled != null ? !isOrderCanceled.equals(orderDTO.isOrderCanceled) : orderDTO.isOrderCanceled != null)
+            return false;
         if (isOrderClosed != null ? !isOrderClosed.equals(orderDTO.isOrderClosed) : orderDTO.isOrderClosed != null)
             return false;
         if (userId != null ? !userId.equals(orderDTO.userId) : orderDTO.userId != null) return false;
@@ -120,6 +131,7 @@ public class OrderDTO implements Serializable {
         result = 31 * result + (endRent != null ? endRent.hashCode() : 0);
         result = 31 * result + (totalPrice != null ? totalPrice.hashCode() : 0);
         result = 31 * result + (isOrderAccepted != null ? isOrderAccepted.hashCode() : 0);
+        result = 31 * result + (isOrderCanceled != null ? isOrderCanceled.hashCode() : 0);
         result = 31 * result + (isOrderClosed != null ? isOrderClosed.hashCode() : 0);
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
         result = 31 * result + (carId != null ? carId.hashCode() : 0);
@@ -135,6 +147,7 @@ public class OrderDTO implements Serializable {
                 ", endRent=" + endRent +
                 ", totalPrice='" + totalPrice + '\'' +
                 ", isOrderAccepted='" + isOrderAccepted + '\'' +
+                ", isOrderCanceled='" + isOrderCanceled + '\'' +
                 ", isOrderClosed='" + isOrderClosed + '\'' +
                 ", userId='" + userId + '\'' +
                 ", carId='" + carId + '\'' +
