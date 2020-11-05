@@ -12,6 +12,7 @@ import java.io.IOException;
 
 public class GoToCarManagementPageCommand implements Command {
     private static final String CAR_MANAGEMENT_PAGE_MAPPING = "WEB-INF/jsp/carManagementPage.jsp";
+    private static final String FIND_CAR_COMMAND_MAPPING = "mainController?command=find_car";
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
     private static final String REQUEST_PARAMETER_NAME = "param";
     private static final String ADD_CAR_PARAMETER_VALUE = "addCar";
@@ -35,7 +36,7 @@ public class GoToCarManagementPageCommand implements Command {
             }
             if (commandParam.equals(ALL_CARS_PARAMETER_VALUE)) {
                 session.setAttribute(ATTRIBUTE_NAME, ALL_CARS_PARAMETER_VALUE);
-                response.sendRedirect("mainController?command=find_car");
+                response.sendRedirect(FIND_CAR_COMMAND_MAPPING);
                 return;
             }
         }

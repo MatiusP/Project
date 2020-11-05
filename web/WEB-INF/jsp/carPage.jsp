@@ -28,7 +28,16 @@
 <fmt:message bundle="${loc}" key="local.message.signIn" var="sign_in"/>
 <fmt:message bundle="${loc}" key="local.carPage.startRent.message" var="start_rent_message"/>
 <fmt:message bundle="${loc}" key="local.carPage.endRent.message" var="end_rent_message"/>
-
+<fmt:message bundle="${loc}" key="local.carPage.endRent.rentCar.main.message" var="rent_main_message"/>
+<fmt:message bundle="${loc}" key="local.carPage.endRent.invalidPeriod.message" var="invalid_period_message"/>
+<fmt:message bundle="${loc}" key="local.carPage.endRent.selectCar.main.message" var="accept_order_message"/>
+<fmt:message bundle="${loc}" key="local.carPage.endRent.selectCar.model.message" var="car_model_message"/>
+<fmt:message bundle="${loc}" key="local.carPage.endRent.selectCar.renPeriod.message" var="rent_period_message"/>
+<fmt:message bundle="${loc}" key="local.carPage.endRent.selectCar.renPeriodLength.message" var="rent_length_message"/>
+<fmt:message bundle="${loc}" key="local.carPage.endRent.selectCar.price.message" var="total_price_message"/>
+<fmt:message bundle="${loc}" key="local.carPage.endRent.selectCar.acceptOrder.message" var="accept_button"/>
+<fmt:message bundle="${loc}" key="local.carPage.endRent.selectCar.back.button" var="back_button"/>
+<fmt:message bundle="${loc}" key="local.carPage.endRent.carNotAvailable.message" var="car_not_avail_message"/>
 
 <c:forEach items="${car}" var="current_car">
     <div class="inst">
@@ -52,20 +61,88 @@
 </c:forEach>
 
 
-<div class="inst">
+<form id="createOrderForm" action="mainController" method="post">
+    <input type="hidden" name="command" value="create_order"/>
+</form>
 
-    <h1>RENT A CAR</h1>
+
+<div class="rent">
     <form action="mainController" method="post">
-        <input type="hidden" name="command" value="create_order">
+        <input type="hidden" name="command" value="check_order_data">
         <input type="hidden" name="current_car" value="${car[0].id}"/>
         <input type="hidden" name="current_user" value="${currentUserLogin}"/>
-        ${start_rent_message}
-        <input type="date" name="start_rent" value="" required><br/>
-        ${end_rent_message}
-        <input type="date" name="end_rent" value="" required><br/>
-        <input type="submit" value="Rent">
+
+        <c:choose>
+            <c:when test="${requestScope.orderForAccept != null}">
+                <fmt:formatDate pattern="dd-MM-yyyy"
+                                value="${orderForAccept.startRent}"
+                                var="formattedStartRent"/>
+                <fmt:formatDate pattern="dd-MM-yyyy"
+                                value="${orderForAccept.endRent}"
+                                var="formattedEndRent"/>
+
+                <fmt:formatDate pattern="yyyy-MM-dd"
+                                value="${orderForAccept.startRent}"
+                                var="deformattedStartRent"/>
+                <fmt:formatDate pattern="yyyy-MM-dd"
+                                value="${orderForAccept.endRent}"
+                                var="deformattedEndRent"/>
+
+                <div class="rent">
+                    <h2>${accept_order_message}</h2>
+                    <p>${car_model_message} <b>${orderForAccept.carBrand} ${orderForAccept.carModel}</b></p>
+                    <p>${rent_period_message} <b>${formattedStartRent} - ${formattedEndRent}</b></p>
+                    <p>${rent_length_message} <b>${orderForAccept.rentPeriodLength}</b></p>
+                    <p>${total_price_message} <b>${orderForAccept.totalPrice}</b></p>
+                </div>
+                <button><a href="mainController?command=go_to_car_page&carId=${currentCarId}">${back_button}</a>
+                </button>
+
+                <input form="createOrderForm" type="hidden" name="startRentByOrder" value="${deformattedStartRent}">
+                <input form="createOrderForm" type="hidden" name="endRentByOrder" value="${deformattedEndRent}">
+                <input form="createOrderForm" type="hidden" name="totalPrice" value="${orderForAccept.totalPrice}">
+                <input form="createOrderForm" type="hidden" name="user_id" value="${userRegData.id}">
+                <input form="createOrderForm" type="hidden" name="car_id" value="${currentCarId}">
+                <input form="createOrderForm" type="submit" value="${accept_button}">
+            </c:when>
+
+            <c:otherwise>
+                <h1>${rent_main_message}</h1>
+                <div class="rent">
+                    <p>${start_rent_message}
+                        <input type="date" name="start_rent" value="" required><br/></p>
+                    <p>${end_rent_message}
+                        <input type="date" name="end_rent" value="" required><br/></p>
+                    <div class="rent_error_message">
+                        <c:if test="${sessionScope.invalidPeriod != null}">
+                            <h3>${invalid_period_message}</h3>
+                            ${sessionScope.remove('invalidPeriod')}
+                        </c:if>
+                    </div>
+
+                    <div class="rent_error_message">
+                        <c:if test="${sessionScope.notLogin != null}">
+                            <h3>${auth_messasge} <a href="mainController?command=authentication">${sign_in}</a></h3>
+                            ${sessionScope.remove('notLogin')}
+                        </c:if>
+                    </div>
+
+                    <div class="rent_error_message">
+                        <c:if test="${sessionScope.carNotAvailable != null}">
+                            <h3>${car_not_avail_message}</h3>
+                            ${sessionScope.remove('carNotAvailable')}
+                        </c:if>
+                    </div>
+
+                    <button><a href="mainController?command=go_to_our_cars_page">${another_car_button}</a>
+                    </button>
+                    <input type="submit" value="${rent_button}">
+                </div>
+            </c:otherwise>
+        </c:choose>
     </form>
-
-
 </div>
+
+
+
 

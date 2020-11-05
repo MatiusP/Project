@@ -17,22 +17,27 @@ import java.util.List;
 
 public class GoToCarPageCommand implements Command {
     private static final String CAR_PAGE_MAPPING = "WEB-INF/jsp/carPage.jsp";
+    private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
+    private static final String CAR_ID_PARAMETER_NAME = "carId";
+    private static final String CAR_ATTRIBUTE_NAME = "car";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
         String currentRequestURL = RequestURL.getRequestURL(request);
-        request.getSession(true).setAttribute("previousRequestURL", currentRequestURL);
+        request.getSession(true).setAttribute(PREV_REQ_URL_ATTRIBUTE_NAME, currentRequestURL);
+
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         CarService carService = serviceFactory.getCarService();
+
         List<CarDTO> car = new ArrayList<>();
         CarDTO carDTO;
 
         try {
             carDTO = new CarDTO();
-            carDTO.setId(Integer.parseInt(request.getParameter("carId")));
+            carDTO.setId(Integer.parseInt(request.getParameter(CAR_ID_PARAMETER_NAME)));
             car = carService.findCar(carDTO);
 
-            request.setAttribute("car", car);
+            request.setAttribute(CAR_ATTRIBUTE_NAME, car);
         } catch (CarServiceException e) {
             //logger
             e.printStackTrace();

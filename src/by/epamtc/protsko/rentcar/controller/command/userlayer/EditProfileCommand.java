@@ -94,7 +94,6 @@ public class EditProfileCommand implements Command {
             session.setAttribute(SUCCESSFUL_EDIT_DATA_ATTRIBUTE_NAME, "");
 
             editUserData = null;
-
             response.sendRedirect(SHOW_USER_REG_DATA_MAPPING);
         }
     }

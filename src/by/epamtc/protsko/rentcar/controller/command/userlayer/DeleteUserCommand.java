@@ -39,6 +39,5 @@ public class DeleteUserCommand implements Command {
             //logger
             e.printStackTrace();
         }
-
     }
 }

@@ -179,7 +179,6 @@
         </c:if>
     </div>
 
-
     <div>
         <input type="submit" value="${edit_button}">
     </div>

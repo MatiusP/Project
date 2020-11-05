@@ -25,6 +25,7 @@ public enum ParameterName {
     FIND_CAR,
     DELETE_CAR,
     GET_CARS,
+    CHECK_ORDER_DATA,
     CREATE_ORDER,
 	SIGN_OUT
 }

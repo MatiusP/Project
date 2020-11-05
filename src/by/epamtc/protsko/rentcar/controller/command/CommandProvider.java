@@ -1,6 +1,8 @@
 package by.epamtc.protsko.rentcar.controller.command;
 
 import by.epamtc.protsko.rentcar.controller.command.carlayer.*;
+import by.epamtc.protsko.rentcar.controller.command.orderlayer.CheckOrderDataCommand;
+import by.epamtc.protsko.rentcar.controller.command.orderlayer.CreateOrderCommand;
 import by.epamtc.protsko.rentcar.controller.command.userlayer.*;
 
 import java.util.HashMap;
@@ -34,6 +36,7 @@ public class CommandProvider {
         commands.put(ParameterName.FIND_CAR, new FindCarCommand());
         commands.put(ParameterName.DELETE_CAR, new DeleteCarCommand());
         commands.put(ParameterName.GET_CARS, new GetCarsCommand());
+        commands.put(ParameterName.CHECK_ORDER_DATA, new CheckOrderDataCommand());
         commands.put(ParameterName.CREATE_ORDER, new CreateOrderCommand());
         commands.put(ParameterName.SIGN_OUT, new SignOutCommand());
     }

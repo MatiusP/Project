@@ -54,8 +54,8 @@ public class SQLOrderDAO implements OrderDAO {
             preparedStatement = connection.prepareStatement(CREATE_ORDER_QUERY);
 
             preparedStatement.setTimestamp(1, Timestamp.valueOf(order.getOrderDate()));
-            preparedStatement.setDate(2, (Date) order.getStartRent());
-            preparedStatement.setDate(3, (Date) order.getEndRent());
+            preparedStatement.setDate(2, Date.valueOf(order.getStartRent()));
+            preparedStatement.setDate(3, Date.valueOf(order.getEndRent()));
             preparedStatement.setDouble(4, order.getTotalPrice());
             preparedStatement.setInt(5, order.getUserId());
             preparedStatement.setInt(6, order.getCarId());
@@ -206,8 +206,8 @@ public class SQLOrderDAO implements OrderDAO {
 
                 order.setId(resultSet.getInt(1));
                 order.setOrderDate(resultSet.getTimestamp(2).toLocalDateTime());
-                order.setStartRent(resultSet.getDate(3));
-                order.setEndRent(resultSet.getDate(4));
+                order.setStartRent(resultSet.getDate(3).toLocalDate());
+                order.setEndRent(resultSet.getDate(4).toLocalDate());
                 order.setTotalPrice(resultSet.getDouble(5));
                 order.setOrderAccepted(resultSet.getBoolean(6));
                 order.setOrderClosed(resultSet.getBoolean(7));

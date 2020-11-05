@@ -29,67 +29,60 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean createOrder(OrderDTO order) throws OrderServiceException {
-
-
-
-
-        return false;
+        Order newOrder;
+        try {
+            newOrder = buildOrderFromOrderDTO(order);
+            return orderDAO.createOrder(newOrder);
+        } catch (OrderDAOException e) {
+            throw new OrderServiceException(e);
+        }
     }
 
     @Override
-    public OrderForClientAccept createOrderForClientAccept(int carId, Date startRent, Date endRent) throws OrderDAOException {
-        final LocalDate orderStartRent = convertDateToLocalDate(startRent);
-        final LocalDate orderEndRent = convertDateToLocalDate(endRent);
-        final Period rentPeriod = orderStartRent.until(orderEndRent);
-        double totalPrice;
-        OrderForClientAccept orderForAccept = null;
-        Car currentCar = null;
-        Order order = null;
+    public OrderForClientAccept createOrderForClientAccept(int carId, final LocalDate startRent, final LocalDate endRent)
+            throws OrderServiceException {
+        final String CAR_ID_CRITERIA_NAME = "car_id=";
+        final String CAR_NOT_FOUND_ERROR_MESSAGE = "Car not found. Please, select another car";
+        final Period rentPeriod = startRent.until(endRent);
+        OrderForClientAccept orderForAccept;
+        Car currentCar;
 
-        OrderUtil.checkCorrectRentPeriod(orderStartRent, orderEndRent);
-        int lengthRentPeriod = OrderUtil.getLengthRentPeriod(rentPeriod.toString());
-
+        OrderUtil.checkCorrectRentPeriod(startRent, endRent);
+        int lengthRentPeriod = OrderUtil.getLengthRentPeriod(rentPeriod.toString()) + 1;
 
         try {
-            final List<Car> car = carDAO.findCar("id=" + carId);
+            final List<Car> car = carDAO.findCar(CAR_ID_CRITERIA_NAME + carId);
 
             if (car.isEmpty()) {
-                throw new OrderDAOException("Car not found. Please, select another car");
+                throw new OrderServiceException(CAR_NOT_FOUND_ERROR_MESSAGE);
             }
-
             currentCar = car.get(0);
+
             if (!currentCar.isAvailableToRent()) {
                 final List<Order> carOrders = orderDAO.getCarOrders(carId);
-
                 for (Order carOrder : carOrders) {
-                    order = carOrder;
-                    if (!order.isOrderClosed()) {
-                        if (!orderStartRent.isAfter(convertDateToLocalDate(order.getEndRent()))
-                                || !orderEndRent.isBefore(convertDateToLocalDate(order.getStartRent()))) {
-                            throw new OrderDAOException("Car is not available for the selected period");
+                    if (!carOrder.isOrderClosed()) {
+                        if (startRent.isBefore(carOrder.getEndRent())
+                                & endRent.isAfter(carOrder.getStartRent())) {
+                            throw new OrderServiceException("CAR IS BUSY");
                         }
                     }
                 }
             }
-
-            if (lengthRentPeriod < 4) {
-                totalPrice = currentCar.getPricePerDay() * 0.95;
-            }
-            if (lengthRentPeriod > 3 & lengthRentPeriod < 7) {
-                totalPrice = currentCar.getPricePerDay() * 0.90;
-            } else {
-                totalPrice = currentCar.getPricePerDay() * 0.85;
-            }
+            double totalPrice = getTotalPrice(lengthRentPeriod, currentCar.getPricePerDay());
 
             orderForAccept = new OrderForClientAccept();
             orderForAccept.setCarBrand(currentCar.getBrand());
             orderForAccept.setCarModel(currentCar.getModel());
             orderForAccept.setCarVin(currentCar.getVin());
-            orderForAccept.setStartRent(startRent);
-            orderForAccept.setEndRent(endRent);
+            orderForAccept.setStartRent(convertLocalDateToDate(startRent));
+            orderForAccept.setEndRent(convertLocalDateToDate(endRent));
+            orderForAccept.setRentPeriodLength(lengthRentPeriod);
             orderForAccept.setTotalPrice(totalPrice);
-        } catch (CarDAOException e) {
-            throw new OrderDAOException(e);
+        } catch (CarDAOException e) {                   /////////////////////TODO
+            throw new OrderServiceException(e);
+        } catch (OrderDAOException e) {
+            throw new OrderServiceException(e);
         }
         return orderForAccept;
     }
@@ -226,10 +219,14 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalPrice(Double.parseDouble(orderDTO.getTotalPrice()));
         order.setUserId(Integer.parseInt(orderDTO.getUserId()));
         order.setCarId(Integer.parseInt(orderDTO.getCarId()));
-        if (isOrderAccept.equalsIgnoreCase(ORDER_ACCEPTED_VALUE)) {
+        if (isOrderAccept == null || isOrderAccept.equalsIgnoreCase(ORDER_NOT_ACCEPTED_VALUE)) {
+            order.setOrderAccepted(false);
+        } else {
             order.setOrderAccepted(true);
         }
-        if (isOrderClosed.equalsIgnoreCase(ORDER_CLOSED_VALUE)) {
+        if (isOrderClosed == null || isOrderClosed.equalsIgnoreCase(ORDER_NOT_CLOSED_VALUE)) {
+            order.setOrderClosed(false);
+        } else {
             order.setOrderClosed(true);
         }
         return order;
@@ -268,7 +265,22 @@ public class OrderServiceImpl implements OrderService {
         return finalAct;
     }
 
-    private final LocalDate convertDateToLocalDate(Date date) {
-        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    private Date convertLocalDateToDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+    }
+
+    private double getTotalPrice(int lengthPeriod, double pricePerDay) {
+        final double firstDiscount = 0.95;
+        final double secondDiscount = 0.90;
+
+        if (lengthPeriod > 3 & lengthPeriod < 7) {
+            return pricePerDay * lengthPeriod * firstDiscount;
+        }
+        if (lengthPeriod > 7) {
+            return pricePerDay * lengthPeriod * secondDiscount;
+        }
+        return pricePerDay * lengthPeriod;
     }
 }

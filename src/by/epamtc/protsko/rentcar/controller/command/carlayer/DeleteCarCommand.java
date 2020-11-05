@@ -15,7 +15,6 @@ import java.io.IOException;
 public class DeleteCarCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final CarService carService = serviceFactory.getCarService();
-
     private static final String DELETE_CAR_RESULT = "deleteCarResult";
     private static final String DELETED_CAR_SUCCESSFULLY = "Successfully deleted";
     private static final String DELETED_CAR_ERROR = "Deleted error";

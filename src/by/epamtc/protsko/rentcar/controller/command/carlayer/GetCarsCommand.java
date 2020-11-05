@@ -18,7 +18,6 @@ public class GetCarsCommand implements Command {
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final CarService carService = serviceFactory.getCarService();
     private static final String SHOW_ALL_CARS_PAGE = "WEB-INF/jsp/ourCarsPage.jsp";
-
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
     private static final String CAR_LIST_ATTRIBUTE_NAME = "cars";
     private static final String CAR_CLASS_PARAMETER = "class";
@@ -65,4 +64,4 @@ public class GetCarsCommand implements Command {
         }
         request.getRequestDispatcher(SHOW_ALL_CARS_PAGE).forward(request, response);
     }
-    }
+}

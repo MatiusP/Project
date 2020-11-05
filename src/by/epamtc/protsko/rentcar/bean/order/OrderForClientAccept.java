@@ -4,13 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class OrderForClientAccept implements Serializable {
-    private static final long serialVersionUID = 7010771555285113393L;
+    private static final long serialVersionUID = 3114691290598231632L;
 
     private String carBrand;
     private String carModel;
     private String carVin;
     private Date startRent;
     private Date endRent;
+    private int rentPeriodLength;
     private double totalPrice;
 
     public OrderForClientAccept() {
@@ -56,6 +57,14 @@ public class OrderForClientAccept implements Serializable {
         this.endRent = endRent;
     }
 
+    public int getRentPeriodLength() {
+        return rentPeriodLength;
+    }
+
+    public void setRentPeriodLength(int rentPeriodLength) {
+        this.rentPeriodLength = rentPeriodLength;
+    }
+
     public double getTotalPrice() {
         return totalPrice;
     }
@@ -71,6 +80,7 @@ public class OrderForClientAccept implements Serializable {
 
         OrderForClientAccept that = (OrderForClientAccept) o;
 
+        if (rentPeriodLength != that.rentPeriodLength) return false;
         if (Double.compare(that.totalPrice, totalPrice) != 0) return false;
         if (carBrand != null ? !carBrand.equals(that.carBrand) : that.carBrand != null) return false;
         if (carModel != null ? !carModel.equals(that.carModel) : that.carModel != null) return false;
@@ -88,6 +98,7 @@ public class OrderForClientAccept implements Serializable {
         result = 31 * result + (carVin != null ? carVin.hashCode() : 0);
         result = 31 * result + (startRent != null ? startRent.hashCode() : 0);
         result = 31 * result + (endRent != null ? endRent.hashCode() : 0);
+        result = 31 * result + rentPeriodLength;
         temp = Double.doubleToLongBits(totalPrice);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
@@ -101,6 +112,7 @@ public class OrderForClientAccept implements Serializable {
                 ", carVin='" + carVin + '\'' +
                 ", startRent=" + startRent +
                 ", endRent=" + endRent +
+                ", rentPeriodLength=" + rentPeriodLength +
                 ", totalPrice=" + totalPrice +
                 '}';
     }

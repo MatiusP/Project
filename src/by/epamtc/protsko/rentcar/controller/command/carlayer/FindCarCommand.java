@@ -39,7 +39,6 @@ public class FindCarCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
-
         final String carId = request.getParameter(ID_PARAMETER_NAME);
         final String carVIN = request.getParameter(VIN_PARAMETER_NAME);
         final String carManufactureDate = request.getParameter(MANUFACTURE_DATE_PARAMETER_NAME);

@@ -34,7 +34,6 @@ public class EditCarCommand implements Command {
     private static final String SUCCESSFUL_EDIT_DATA_ATTRIBUTE_NAME = "editCarResult";
     private static final String SUCCESSFUL_EDIT_DATA_ATTRIBUTE_VALUE = "Editing car was successfully";
 
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
         CarDTO carForEdit = null;

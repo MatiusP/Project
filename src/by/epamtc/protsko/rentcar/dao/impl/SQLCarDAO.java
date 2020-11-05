@@ -424,7 +424,6 @@ public class SQLCarDAO implements CarDAO {
     }
 
     private int getCarId(String carVIN) throws CarDAOException {
-
         if (!isCarVINExist(carVIN)) {
             throw new CarDAOException(CAR_VIN_NOT_FOUND_MESSAGE);
         }

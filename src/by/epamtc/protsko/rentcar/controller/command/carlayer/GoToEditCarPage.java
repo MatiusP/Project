@@ -19,11 +19,11 @@ public class GoToEditCarPage implements Command {
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
     private static final String CAR_ID_PARAMETER_NAME = "id";
     private static final String CAR_ATTRIBUTE_NAME = "car";
-    private final ServiceFactory factory = ServiceFactory.getInstance();
-    private final CarService carService = factory.getCarService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        CarService carService = factory.getCarService();
         String currentRequestURL = RequestURL.getRequestURL(request);
         int carId = Integer.parseInt(request.getParameter(CAR_ID_PARAMETER_NAME));
         List<CarDTO> car = null;
@@ -32,9 +32,7 @@ public class GoToEditCarPage implements Command {
             CarDTO carSearchCriteria = new CarDTO();
             carSearchCriteria.setId(carId);
 
-
             car = carService.findCar(carSearchCriteria);
-
         } catch (CarServiceException e) {
             //logger
         }

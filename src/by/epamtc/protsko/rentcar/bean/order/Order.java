@@ -1,16 +1,16 @@
 package by.epamtc.protsko.rentcar.bean.order;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Order implements Serializable {
     private static final long serialVersionUID = 8525494677469239040L;
 
     private int id;
     private LocalDateTime orderDate;
-    private Date startRent;
-    private Date endRent;
+    private LocalDate startRent;
+    private LocalDate endRent;
     private double totalPrice;
     private boolean isOrderAccepted;
     private boolean isOrderClosed;
@@ -36,19 +36,19 @@ public class Order implements Serializable {
         this.orderDate = orderDate;
     }
 
-    public Date getStartRent() {
+    public LocalDate getStartRent() {
         return startRent;
     }
 
-    public void setStartRent(Date startRent) {
+    public void setStartRent(LocalDate startRent) {
         this.startRent = startRent;
     }
 
-    public Date getEndRent() {
+    public LocalDate getEndRent() {
         return endRent;
     }
 
-    public void setEndRent(Date endRent) {
+    public void setEndRent(LocalDate endRent) {
         this.endRent = endRent;
     }
 

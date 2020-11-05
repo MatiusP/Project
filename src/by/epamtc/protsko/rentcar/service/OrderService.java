@@ -7,6 +7,7 @@ import by.epamtc.protsko.rentcar.bean.order.OrderForShowDTO;
 import by.epamtc.protsko.rentcar.dao.exception.OrderDAOException;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface OrderService {
 
     boolean createOrder(OrderDTO order) throws OrderServiceException;
 
-    OrderForClientAccept createOrderForClientAccept(int carId, Date startRent, Date endRent) throws OrderDAOException;
+    OrderForClientAccept createOrderForClientAccept(int carId, LocalDate startRent, LocalDate endRent) throws OrderServiceException;
 
     boolean acceptOrder(int orderId) throws OrderServiceException;
 
