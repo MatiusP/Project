@@ -291,6 +291,4 @@ public class OrderServiceImpl implements OrderService {
         }
         return pricePerDay * lengthPeriod;
     }
-
-
 }

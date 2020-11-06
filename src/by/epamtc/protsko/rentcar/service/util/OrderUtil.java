@@ -65,13 +65,13 @@ public class OrderUtil {
 
             for (Order carOrder : carOrders) {
                 if ((carOrder.isOrderAccepted() & !carOrder.isOrderClosed() & !carOrder.isOrderCanceled()) &&
-                        (startRent.isBefore(carOrder.getEndRent()) & endRent.isAfter(carOrder.getStartRent()))) {
-                    return false;
+                        (startRent.isAfter(carOrder.getEndRent()) || endRent.isBefore(carOrder.getStartRent()))) {
+                    return true;
                 }
             }
         } catch (OrderDAOException e) {
             throw new OrderServiceException(e);
         }
-        return true;
+        return false;
     }
 }
