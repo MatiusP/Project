@@ -2,10 +2,8 @@ package by.epamtc.protsko.rentcar.service.impl;
 
 import by.epamtc.protsko.rentcar.bean.car.Car;
 import by.epamtc.protsko.rentcar.bean.order.*;
-import by.epamtc.protsko.rentcar.dao.CarDAO;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.OrderDAO;
-import by.epamtc.protsko.rentcar.dao.exception.CarDAOException;
 import by.epamtc.protsko.rentcar.dao.exception.OrderDAOException;
 import by.epamtc.protsko.rentcar.service.OrderService;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
@@ -21,7 +19,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     private final DAOFactory factory = DAOFactory.getInstance();
     private final OrderDAO orderDAO = factory.getOrderDAO();
-    private final CarDAO carDAO = factory.getCarDAO();
+    private static final String CAR_NOT_AVAILABLE_FOR_CREATE_ORDER = "The car is not available for the selected period";
     private static final String ORDER_ACCEPTED_VALUE = "Accepted";
     private static final String ORDER_NOT_ACCEPTED_VALUE = "Not accepted";
     private static final String ORDER_CLOSED_VALUE = "Closed";
@@ -31,8 +29,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean createOrder(OrderDTO order) throws OrderServiceException {
+        final int carId = Integer.parseInt(order.getCarId());
+        final LocalDate startRent = order.getStartRent();
+        final LocalDate endRent = order.getEndRent();
         Order newOrder;
+
         try {
+            Car selectedCar = OrderUtil.getSelectedCar(carId);
+
+            if (!selectedCar.isAvailableToRent() && !OrderUtil.isOrderAvailableForCreate(carId, startRent, endRent)) {
+                throw new OrderServiceException(CAR_NOT_AVAILABLE_FOR_CREATE_ORDER);
+            }
             newOrder = buildOrderFromOrderDTO(order);
             return orderDAO.createOrder(newOrder);
         } catch (OrderDAOException e) {
@@ -43,49 +50,28 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderForClientAccept createOrderForClientAccept(int carId, final LocalDate startRent, final LocalDate endRent)
             throws OrderServiceException {
-        final String CAR_ID_CRITERIA_NAME = "car_id=";
-        final String CAR_NOT_FOUND_ERROR_MESSAGE = "Car not found. Please, select another car";
         final Period rentPeriod = startRent.until(endRent);
         OrderForClientAccept orderForAccept;
-        Car currentCar;
 
         OrderUtil.checkCorrectRentPeriod(startRent, endRent);
         int lengthRentPeriod = OrderUtil.getLengthRentPeriod(rentPeriod.toString()) + 1;
+        Car selectedCar = OrderUtil.getSelectedCar(carId);
 
-        try {
-            final List<Car> car = carDAO.findCar(CAR_ID_CRITERIA_NAME + carId);
-
-            if (car.isEmpty()) {
-                throw new OrderServiceException(CAR_NOT_FOUND_ERROR_MESSAGE);
-            }
-            currentCar = car.get(0);
-
-            if (!currentCar.isAvailableToRent()) {
-                final List<Order> carOrders = orderDAO.getCarOrders(carId);
-                for (Order carOrder : carOrders) {
-                    if (!carOrder.isOrderClosed()) {
-                        if (startRent.isBefore(carOrder.getEndRent())
-                                & endRent.isAfter(carOrder.getStartRent())) {
-                            throw new OrderServiceException("CAR IS BUSY");
-                        }
-                    }
-                }
-            }
-            double totalPrice = getTotalPrice(lengthRentPeriod, currentCar.getPricePerDay());
-
-            orderForAccept = new OrderForClientAccept();
-            orderForAccept.setCarBrand(currentCar.getBrand());
-            orderForAccept.setCarModel(currentCar.getModel());
-            orderForAccept.setCarVin(currentCar.getVin());
-            orderForAccept.setStartRent(convertLocalDateToDate(startRent));
-            orderForAccept.setEndRent(convertLocalDateToDate(endRent));
-            orderForAccept.setRentPeriodLength(lengthRentPeriod);
-            orderForAccept.setTotalPrice(totalPrice);
-        } catch (CarDAOException e) {                   /////////////////////TODO
-            throw new OrderServiceException(e);
-        } catch (OrderDAOException e) {
-            throw new OrderServiceException(e);
+        if (!selectedCar.isAvailableToRent() && !OrderUtil.isOrderAvailableForCreate(carId, startRent, endRent)) {
+            throw new OrderServiceException(CAR_NOT_AVAILABLE_FOR_CREATE_ORDER);
         }
+
+        double totalPrice = getTotalPrice(lengthRentPeriod, selectedCar.getPricePerDay());
+
+        orderForAccept = new OrderForClientAccept();
+        orderForAccept.setCarBrand(selectedCar.getBrand());
+        orderForAccept.setCarModel(selectedCar.getModel());
+        orderForAccept.setCarVin(selectedCar.getVin());
+        orderForAccept.setStartRent(convertLocalDateToDate(startRent));
+        orderForAccept.setEndRent(convertLocalDateToDate(endRent));
+        orderForAccept.setRentPeriodLength(lengthRentPeriod);
+        orderForAccept.setTotalPrice(totalPrice);
+
         return orderForAccept;
     }
 
@@ -305,4 +291,6 @@ public class OrderServiceImpl implements OrderService {
         }
         return pricePerDay * lengthPeriod;
     }
+
+
 }
