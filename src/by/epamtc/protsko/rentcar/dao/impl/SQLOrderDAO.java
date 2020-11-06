@@ -354,11 +354,13 @@ public class SQLOrderDAO implements OrderDAO {
         order.setOrderEndRent(resultSet.getDate(4));
         order.setOrderTotalPrice(resultSet.getDouble(5));
         order.setOrderAccepted(resultSet.getBoolean(6));
-        order.setOrderClosed(resultSet.getBoolean(7));
-        order.setOrderCarBrand(resultSet.getString(8));
-        order.setOrderCarModel(resultSet.getString(9));
-        order.setOrderCarVin(resultSet.getString(10));
-        order.setOrderUserId(resultSet.getInt(11));
+        order.setOrderCanceled(resultSet.getBoolean(7));
+        order.setOrderClosed(resultSet.getBoolean(8));
+        order.setOrderUserId(resultSet.getInt(9));
+        order.setOrderUserPassport(resultSet.getString(10));
+        order.setOrderCarId(resultSet.getInt(11));
+        order.setOrderCarBrand(resultSet.getString(12));
+        order.setOrderCarModel(resultSet.getString(13));
 
         return order;
     }

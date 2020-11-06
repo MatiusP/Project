@@ -17,10 +17,11 @@
     <fmt:message bundle="${loc}" key="local.signOut.href" var="sign_out"/>
     <fmt:message bundle="${loc}" key="local.showUserRegData.button" var="show_user_button"/>
     <fmt:message bundle="${loc}" key="local.editUserData.button" var="edit_user_button"/>
+    <fmt:message bundle="${loc}" key="local.showUserOrders.button" var="user_orders_button"/>
     <fmt:message bundle="${loc}" key="local.management.href" var="managment_button"/>
     <fmt:message bundle="${loc}" key="local.userManagement.message" var="user_managment_button"/>
     <fmt:message bundle="${loc}" key="local.carManagement.message" var="car_managment_button"/>
-
+    <fmt:message bundle="${loc}" key="local.orderManagement.message" var="order_managment_button"/>
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/headerPage_style.css"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/menu_style.css"/>
@@ -86,7 +87,9 @@
                                         <li>
                                             <a href="mainController?command=go_to_edit_profile_page">${edit_user_button}</a>
                                         </li>
-                                        <li><a href="">My orders</a></li>
+                                        <li>
+                                            <a href="mainController?command=go_to_user_orders_page&userId=${userRegData.id}">${user_orders_button}</a>
+                                        </li>
                                     </ul>
                                 </c:if>
                                 <c:if test="${userRegData.role eq 'ADMIN'}">
@@ -123,6 +126,9 @@
                             </li>
                             <li>
                                 <a href="mainController?command=go_to_car_management_page">${car_managment_button}</a>
+                            </li>
+                            <li>
+                                <a href="mainController?command=go_to_order_management_page">${order_managment_button}</a>
                             </li>
                         </ul>
                 </ul>

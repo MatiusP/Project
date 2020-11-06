@@ -11,6 +11,8 @@ public enum ParameterName {
     GO_TO_OUR_CARS_PAGE,
     GO_TO_CAR_PAGE,
     GO_TO_EDIT_CAR_PAGE,
+    GO_TO_USER_ORDERS_PAGE,
+    GO_TO_ORDER_MANAGEMENT_PAGE,
     CHANGE_LOCALE,
     SAVE_NEW_USER,
     AUTHENTICATION,
@@ -27,5 +29,6 @@ public enum ParameterName {
     GET_CARS,
     CHECK_ORDER_DATA,
     CREATE_ORDER,
+    GET_ALL_ORDERS,
 	SIGN_OUT
 }

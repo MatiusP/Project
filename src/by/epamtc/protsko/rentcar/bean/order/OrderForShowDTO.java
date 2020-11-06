@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class OrderForShowDTO implements Serializable {
-    private static final long serialVersionUID = 2826448106382324660L;
+    private static final long serialVersionUID = -5596688343692802892L;
 
     private int orderId;
     private LocalDateTime orderDate;
@@ -13,10 +13,11 @@ public class OrderForShowDTO implements Serializable {
     private Date orderEndRent;
     private double orderTotalPrice;
     private String isOrderAccepted;
-    private String isOrderClosed;
     private String isOrderCanceled;
+    private String isOrderClosed;
     private String orderCarBrand;
     private String orderCarModel;
+    private String orderUserPassport;
     private int orderCarId;
     private int orderUserId;
 
@@ -71,20 +72,20 @@ public class OrderForShowDTO implements Serializable {
         this.isOrderAccepted = isOrderAccepted;
     }
 
-    public String getIsOrderClosed() {
-        return isOrderClosed;
-    }
-
-    public void setIsOrderClosed(String isOrderClosed) {
-        this.isOrderClosed = isOrderClosed;
-    }
-
     public String getIsOrderCanceled() {
         return isOrderCanceled;
     }
 
     public void setIsOrderCanceled(String isOrderCanceled) {
         this.isOrderCanceled = isOrderCanceled;
+    }
+
+    public String getIsOrderClosed() {
+        return isOrderClosed;
+    }
+
+    public void setIsOrderClosed(String isOrderClosed) {
+        this.isOrderClosed = isOrderClosed;
     }
 
     public String getOrderCarBrand() {
@@ -101,6 +102,14 @@ public class OrderForShowDTO implements Serializable {
 
     public void setOrderCarModel(String orderCarModel) {
         this.orderCarModel = orderCarModel;
+    }
+
+    public String getOrderUserPassport() {
+        return orderUserPassport;
+    }
+
+    public void setOrderUserPassport(String orderUserPassport) {
+        this.orderUserPassport = orderUserPassport;
     }
 
     public int getOrderCarId() {
@@ -136,13 +145,15 @@ public class OrderForShowDTO implements Serializable {
         if (orderEndRent != null ? !orderEndRent.equals(order.orderEndRent) : order.orderEndRent != null) return false;
         if (isOrderAccepted != null ? !isOrderAccepted.equals(order.isOrderAccepted) : order.isOrderAccepted != null)
             return false;
-        if (isOrderClosed != null ? !isOrderClosed.equals(order.isOrderClosed) : order.isOrderClosed != null)
-            return false;
         if (isOrderCanceled != null ? !isOrderCanceled.equals(order.isOrderCanceled) : order.isOrderCanceled != null)
+            return false;
+        if (isOrderClosed != null ? !isOrderClosed.equals(order.isOrderClosed) : order.isOrderClosed != null)
             return false;
         if (orderCarBrand != null ? !orderCarBrand.equals(order.orderCarBrand) : order.orderCarBrand != null)
             return false;
-        return orderCarModel != null ? orderCarModel.equals(order.orderCarModel) : order.orderCarModel == null;
+        if (orderCarModel != null ? !orderCarModel.equals(order.orderCarModel) : order.orderCarModel != null)
+            return false;
+        return orderUserPassport != null ? orderUserPassport.equals(order.orderUserPassport) : order.orderUserPassport == null;
     }
 
     @Override
@@ -156,10 +167,11 @@ public class OrderForShowDTO implements Serializable {
         temp = Double.doubleToLongBits(orderTotalPrice);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (isOrderAccepted != null ? isOrderAccepted.hashCode() : 0);
-        result = 31 * result + (isOrderClosed != null ? isOrderClosed.hashCode() : 0);
         result = 31 * result + (isOrderCanceled != null ? isOrderCanceled.hashCode() : 0);
+        result = 31 * result + (isOrderClosed != null ? isOrderClosed.hashCode() : 0);
         result = 31 * result + (orderCarBrand != null ? orderCarBrand.hashCode() : 0);
         result = 31 * result + (orderCarModel != null ? orderCarModel.hashCode() : 0);
+        result = 31 * result + (orderUserPassport != null ? orderUserPassport.hashCode() : 0);
         result = 31 * result + orderCarId;
         result = 31 * result + orderUserId;
         return result;
@@ -174,10 +186,11 @@ public class OrderForShowDTO implements Serializable {
                 ", orderEndRent=" + orderEndRent +
                 ", orderTotalPrice=" + orderTotalPrice +
                 ", isOrderAccepted='" + isOrderAccepted + '\'' +
-                ", isOrderClosed='" + isOrderClosed + '\'' +
                 ", isOrderCanceled='" + isOrderCanceled + '\'' +
+                ", isOrderClosed='" + isOrderClosed + '\'' +
                 ", orderCarBrand='" + orderCarBrand + '\'' +
                 ", orderCarModel='" + orderCarModel + '\'' +
+                ", orderUserPassport='" + orderUserPassport + '\'' +
                 ", orderCarId=" + orderCarId +
                 ", orderUserId=" + orderUserId +
                 '}';

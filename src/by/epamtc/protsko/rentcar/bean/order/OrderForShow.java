@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class OrderForShow implements Serializable {
-    private static final long serialVersionUID = -6538357744717138881L;
+    private static final long serialVersionUID = -8293105392631539758L;
 
     private int orderId;
     private LocalDateTime orderDate;
@@ -13,10 +13,11 @@ public class OrderForShow implements Serializable {
     private Date orderEndRent;
     private double orderTotalPrice;
     private boolean isOrderAccepted;
-    private boolean isOrderClosed;
     private boolean isOrderCanceled;
+    private boolean isOrderClosed;
     private String orderCarBrand;
     private String orderCarModel;
+    private String orderUserPassport;
     private int orderCarId;
     private int orderUserId;
 
@@ -71,20 +72,20 @@ public class OrderForShow implements Serializable {
         isOrderAccepted = orderAccepted;
     }
 
-    public boolean isOrderClosed() {
-        return isOrderClosed;
-    }
-
-    public void setOrderClosed(boolean orderClosed) {
-        isOrderClosed = orderClosed;
-    }
-
     public boolean isOrderCanceled() {
         return isOrderCanceled;
     }
 
     public void setOrderCanceled(boolean orderCanceled) {
         isOrderCanceled = orderCanceled;
+    }
+
+    public boolean isOrderClosed() {
+        return isOrderClosed;
+    }
+
+    public void setOrderClosed(boolean orderClosed) {
+        isOrderClosed = orderClosed;
     }
 
     public String getOrderCarBrand() {
@@ -101,6 +102,14 @@ public class OrderForShow implements Serializable {
 
     public void setOrderCarModel(String orderCarModel) {
         this.orderCarModel = orderCarModel;
+    }
+
+    public String getOrderUserPassport() {
+        return orderUserPassport;
+    }
+
+    public void setOrderUserPassport(String orderUserPassport) {
+        this.orderUserPassport = orderUserPassport;
     }
 
     public int getOrderCarId() {
@@ -129,8 +138,8 @@ public class OrderForShow implements Serializable {
         if (orderId != order.orderId) return false;
         if (Double.compare(order.orderTotalPrice, orderTotalPrice) != 0) return false;
         if (isOrderAccepted != order.isOrderAccepted) return false;
-        if (isOrderClosed != order.isOrderClosed) return false;
         if (isOrderCanceled != order.isOrderCanceled) return false;
+        if (isOrderClosed != order.isOrderClosed) return false;
         if (orderCarId != order.orderCarId) return false;
         if (orderUserId != order.orderUserId) return false;
         if (orderDate != null ? !orderDate.equals(order.orderDate) : order.orderDate != null) return false;
@@ -139,7 +148,9 @@ public class OrderForShow implements Serializable {
         if (orderEndRent != null ? !orderEndRent.equals(order.orderEndRent) : order.orderEndRent != null) return false;
         if (orderCarBrand != null ? !orderCarBrand.equals(order.orderCarBrand) : order.orderCarBrand != null)
             return false;
-        return orderCarModel != null ? orderCarModel.equals(order.orderCarModel) : order.orderCarModel == null;
+        if (orderCarModel != null ? !orderCarModel.equals(order.orderCarModel) : order.orderCarModel != null)
+            return false;
+        return orderUserPassport != null ? orderUserPassport.equals(order.orderUserPassport) : order.orderUserPassport == null;
     }
 
     @Override
@@ -153,10 +164,11 @@ public class OrderForShow implements Serializable {
         temp = Double.doubleToLongBits(orderTotalPrice);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (isOrderAccepted ? 1 : 0);
-        result = 31 * result + (isOrderClosed ? 1 : 0);
         result = 31 * result + (isOrderCanceled ? 1 : 0);
+        result = 31 * result + (isOrderClosed ? 1 : 0);
         result = 31 * result + (orderCarBrand != null ? orderCarBrand.hashCode() : 0);
         result = 31 * result + (orderCarModel != null ? orderCarModel.hashCode() : 0);
+        result = 31 * result + (orderUserPassport != null ? orderUserPassport.hashCode() : 0);
         result = 31 * result + orderCarId;
         result = 31 * result + orderUserId;
         return result;
@@ -171,10 +183,11 @@ public class OrderForShow implements Serializable {
                 ", orderEndRent=" + orderEndRent +
                 ", orderTotalPrice=" + orderTotalPrice +
                 ", isOrderAccepted=" + isOrderAccepted +
-                ", isOrderClosed=" + isOrderClosed +
                 ", isOrderCanceled=" + isOrderCanceled +
+                ", isOrderClosed=" + isOrderClosed +
                 ", orderCarBrand='" + orderCarBrand + '\'' +
                 ", orderCarModel='" + orderCarModel + '\'' +
+                ", orderUserPassport='" + orderUserPassport + '\'' +
                 ", orderCarId=" + orderCarId +
                 ", orderUserId=" + orderUserId +
                 '}';

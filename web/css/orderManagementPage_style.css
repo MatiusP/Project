@@ -1,0 +1,121 @@
+table {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 14px;
+    border-radius: 10px;
+    border-spacing: 0;
+    text-align: center;
+}
+th {
+    background: #BCEBDD;
+    color: #094173;
+    padding: 3px 5px;
+    cursor: pointer;
+}
+th, td {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: white;
+}
+th:first-child, td:first-child {
+    text-align: center;
+}
+th:first-child {
+    border-top-left-radius: 5px;
+}
+th:last-child {
+    border-top-right-radius: 5px;
+    border-right: none;
+}
+td {
+    padding: 5px 15px;
+    background: #f5e5a4;
+}
+tr:last-child td:first-child {
+    border-radius: 0 0 0 5px;
+}
+tr:last-child td:last-child {
+    border-radius: 0 0 5px 0;
+}
+tr td:last-child {
+    background:none;
+}
+
+td:nth-child(14) {
+    background:none;
+    border: none;
+    padding: 5px 5px;
+}
+
+td:nth-child(15) {
+    background:none;
+    border: none;
+    padding: 5px 5px;
+}
+td:nth-child(16) {
+    background:none;
+    border: none;
+    padding: 5px 5px;
+}
+
+th.sorted[data-order="1"],
+th.sorted[data-order="-1"] {
+    position: relative;
+}
+
+th.sorted[data-order="1"]::after,
+th.sorted[data-order="-1"]::after {
+    right: 5px;
+    position: absolute;
+}
+
+th.sorted[data-order="-1"]::after {
+    content: "\1F815"
+}
+
+th.sorted[data-order="1"]::after {
+    content: "\1F817"
+}
+
+.order_manager a {
+    color:#fcfcfc;
+    font-weight: 400;
+    font-size: 12px;
+    letter-spacing:1.2px;
+}
+
+button{
+    background:#0263b9;
+    border-radius:5px;
+    border-color:#0263b9;
+}
+
+.order_manager input[type=submit]{
+    width: 100%;
+    margin:10px 0px ;
+    padding: 8px;
+    background: #10395d;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
+}
+
+.management-button button{
+    width: 200px;
+    margin-top: 10px;
+    font-size: 15px;
+    padding: 7px 10px;
+    margin-left: 30px;
+    background-color: #084276;
+    color:white;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+}
+
+.management-button a{
+    color:#fdfdff;
+    text-transform:inherit
+}

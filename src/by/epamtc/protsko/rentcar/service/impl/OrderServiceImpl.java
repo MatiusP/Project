@@ -201,6 +201,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderTotalPrice(orderForShow.getOrderTotalPrice());
         order.setOrderCarBrand(orderForShow.getOrderCarBrand());
         order.setOrderCarModel(orderForShow.getOrderCarModel());
+        order.setOrderUserPassport(orderForShow.getOrderUserPassport());
         order.setOrderCarId(orderForShow.getOrderCarId());
         order.setOrderUserId(orderForShow.getOrderUserId());
         if (isOrderAccepted) {

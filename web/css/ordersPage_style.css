@@ -1,0 +1,73 @@
+.table_sort table {
+    border-collapse: collapse;
+}
+
+.table_sort th {
+    color: #050505;
+    background: #d4fad6;
+    cursor: pointer;
+    border: 1px solid #011b32;
+    border-radius: 0.2em;
+}
+
+.table_sort td {
+    width: 170px;
+    height: 25px;
+    text-align: center;
+    border: 1px solid #011b32;
+    border-radius: 0.2em;
+    background: #e7f2e7;
+}
+
+th.sorted[data-order="1"],
+th.sorted[data-order="-1"] {
+    position: relative;
+}
+
+th.sorted[data-order="1"]::after,
+th.sorted[data-order="-1"]::after {
+    right: 5px;
+    position: absolute;
+}
+
+th.sorted[data-order="-1"]::after {
+    content: "\1F815"
+}
+
+th.sorted[data-order="1"]::after {
+    content: "\1F817"
+}
+
+td:nth-child(9) {
+    background:none;
+    border: none;
+    padding: 2px 2px;
+}
+
+.table_sort button{
+    width: 150px;
+    font-size: 12px;
+    letter-spacing: 1.4px;
+    padding: 5px;
+    margin-left: 10px;
+    background-color: #c15757;
+    color:#020202;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+}
+
+button{
+    width: 150px;
+    font-size: 13px;
+    letter-spacing: 1.4px;
+    padding: 7px;
+    margin-left: 10px;
+    background-color: #084379;
+    color:white;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-weight: 400;
+}
