@@ -84,8 +84,55 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     @Override
     public boolean closeOrderTransaction(int orderId, int carId) {
-        return false;
+        final String orderSQLQuery = CLOSE_ORDER_QUERY + orderId;
+        final String carSQLQuery = SET_CAR_AVAILABLE_QUERY + carId;
+        int carOrdersCount = 0;
+        Connection connection = null;
+        Statement statement = null;
 
+        try {
+            connection = connectionPool.takeConnection();
+            connection.setAutoCommit(false);
+            statement = connection.createStatement();
+
+            statement.executeUpdate(orderSQLQuery);
+            statement.executeUpdate(carSQLQuery);
+
+            List<Order> carOrders = orderDAO.getCarOrders(carId);
+            for (Order order : carOrders) {
+                if (order.isOrderAccepted() & !order.isOrderClosed() & !order.isOrderCanceled())
+                    carOrdersCount++;
+            }
+            if (carOrdersCount > 1) {
+                throw new SQLException();
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                }
+            } catch (SQLException ex) {
+                throw new TransactionException(ex);
+            }
+            try {
+                if (statement != null) {
+                    statement.executeUpdate(orderSQLQuery);
+                    connection.commit();
+                    return true;
+                }
+                return false;
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } catch (OrderDAOException e) {
+            throw new TransactionException(e);
+        } finally {
+            if (connection != null) {
+                connectionPool.closeConnection(connection, statement);
+            }
+        }
+        return true;
     }
 
     @Override

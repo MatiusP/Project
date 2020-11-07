@@ -25,6 +25,7 @@ public class OrderServiceImpl implements OrderService {
     private static final String CAR_NOT_AVAILABLE_FOR_CREATE_ORDER_MESSAGE = "The car unavailable on specified dates.";
     private static final String ORDER_ALREADY_CANCELED_MESSAGE = "Order already canceled.";
     private static final String ORDER_ALREADY_ACCEPTED_MESSAGE = "Order already accepted";
+    private static final String ORDER_ALREADY_CLOSED_MESSAGE = "Order already closed";
     private static final String ORDER_NOT_FOUND_MESSAGE = "Order not found.";
     private static final String ORDER_ACCEPTED_VALUE = "Accepted";
     private static final String ORDER_NOT_ACCEPTED_VALUE = "Not accepted";
@@ -124,7 +125,27 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean closeOrder(int orderId) throws OrderServiceException {
-        return false;
+        int carId;
+
+        try {
+            Order order = orderDAO.getOrderByOrderId(orderId);
+            if (order == null) {
+                throw new OrderServiceException(ORDER_NOT_FOUND_MESSAGE);
+            }
+            if (order.isOrderClosed()) {
+                throw new OrderServiceException(ORDER_ALREADY_CLOSED_MESSAGE);
+            }
+
+            carId = order.getCarId();
+            int carOrdersCount = OrderUtil.getCarOrdersCount(carId);
+
+            if (carOrdersCount > 1) {
+                return orderDAO.closeOrder(orderId);
+            }
+            return transactionDAO.closeOrderTransaction(orderId, carId);
+        } catch (OrderDAOException e) {
+            throw new OrderServiceException(e);
+        }
     }
 
     @Override

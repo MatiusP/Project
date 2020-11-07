@@ -107,7 +107,6 @@
                                         value="${parsedDateTime}"
                                         var="formattedOrderDate"/>
 
-
                         <div class="management_error_message">
                             <c:if test="${requestScope.acceptedError != null}">
                                 <c:if test="${requestScope.id == order.orderId}">
@@ -120,6 +119,14 @@
                             <c:if test="${requestScope.cancelError != null}">
                                 <c:if test="${requestScope.id == order.orderId}">
                                     <h3>Order id=${id}: ${cancelError}</h3>
+                                </c:if>
+                            </c:if>
+                        </div>
+
+                        <div class="management_error_message">
+                            <c:if test="${requestScope.closeOrderError != null}">
+                                <c:if test="${requestScope.id == order.orderId}">
+                                    <h3>Order id=${orderId}: ${closeOrderError}</h3>
                                 </c:if>
                             </c:if>
                         </div>
@@ -178,7 +185,7 @@
                             </td>
                             <td>
                                 <button class="order_manager">
-                                    <a href="mainController?command=close_order&id=${order.orderId}"/>${close_button}
+                                    <a href="mainController?command=get_final_rent_act&id=${order.orderId}"/>${close_button}
                                 </button>
                             </td>
                         </tr>

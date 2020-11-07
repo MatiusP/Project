@@ -16,6 +16,7 @@ public class CancelOrderCommand implements Command {
     private final OrderService orderService = serviceFactory.getOrderService();
     private static final String BACK_TO_ALL_ORDERS_PAGE_MAPPING = "mainController?command=get_all_orders";
     private static final String BACK_TO_USER_ORDERS_PAGE_MAPPING = "mainController?command=go_to_user_orders_page&userId=";
+    private static final String USER_ROLE_PARAMETER_NAME = "userRole";
     private static final String ORDER_ID_PARAMETER_NAME = "id";
     private static final String USER_ID_PARAMETER_NAME = "userId";
     private static final String CANCEL_ERROR_ATTRIBUTE_NAME = "cancelError";
@@ -24,7 +25,7 @@ public class CancelOrderCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
         final int orderId = Integer.parseInt(request.getParameter(ORDER_ID_PARAMETER_NAME));
         final String userId = request.getParameter(USER_ID_PARAMETER_NAME);
-        final String userRole = request.getParameter("userRole");
+        final String userRole = request.getParameter(USER_ROLE_PARAMETER_NAME);
 
         boolean isOrderCanceled = false;
         String canceledError;

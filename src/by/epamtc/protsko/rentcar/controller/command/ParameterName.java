@@ -31,6 +31,8 @@ public enum ParameterName {
     CREATE_ORDER,
     ACCEPT_ORDER,
     CANCEL_ORDER,
+    GET_FINAL_RENT_ACT,
+    CLOSE_ORDER,
     GET_ALL_ORDERS,
 	SIGN_OUT
 }

@@ -42,6 +42,8 @@ public class CommandProvider {
         commands.put(ParameterName.ACCEPT_ORDER, new AcceptOrderCommand());
         commands.put(ParameterName.CANCEL_ORDER, new CancelOrderCommand());
         commands.put(ParameterName.GET_ALL_ORDERS, new GetAllOrdersCommand());
+        commands.put(ParameterName.GET_FINAL_RENT_ACT, new GetFinalRentActCommand());
+        commands.put(ParameterName.CLOSE_ORDER, new CloseOrderCommand());
         commands.put(ParameterName.SIGN_OUT, new SignOutCommand());
     }
 
