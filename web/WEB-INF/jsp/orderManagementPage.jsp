@@ -106,6 +106,25 @@
                         <fmt:formatDate pattern="dd.MM.yyyy HH:mm"
                                         value="${parsedDateTime}"
                                         var="formattedOrderDate"/>
+
+
+                        <div class="management_error_message">
+                            <c:if test="${requestScope.acceptedError != null}">
+                                <c:if test="${requestScope.id == order.orderId}">
+                                    <h3>Order id=${id}: ${acceptedError}</h3>
+                                </c:if>
+                            </c:if>
+                        </div>
+
+                        <div class="management_error_message">
+                            <c:if test="${requestScope.cancelError != null}">
+                                <c:if test="${requestScope.id == order.orderId}">
+                                    <h3>Order id=${id}: ${cancelError}</h3>
+                                </c:if>
+                            </c:if>
+                        </div>
+
+
                         <tr>
                             <td>${order.orderId}</td>
                             <td>${formattedOrderDate}</td>
@@ -115,7 +134,7 @@
                             <td>
                                 <c:choose>
                                     <c:when test="${order.isOrderAccepted eq 'Accepted'}">
-                                        ${acc_message}"
+                                        ${acc_message}
                                     </c:when>
                                     <c:otherwise>
                                         <font color="red">${not_acc_message}</font>
@@ -125,7 +144,7 @@
                             <td>
                                 <c:choose>
                                     <c:when test="${order.isOrderCanceled eq 'Canceled'}">
-                                        ${cancel_message}
+                                        <font color="red">${cancel_message}</font>
                                     </c:when>
                                     <c:otherwise>
                                         ${not_cancel_message}
@@ -149,17 +168,17 @@
                             <td>${order.orderCarModel}</td>
                             <td>
                                 <button class="order_manager">
-                                    <a href=" mainController?command=accept_order&id=${order.orderId}"/>${accept_button}
+                                    <a href="mainController?command=accept_order&id=${order.orderId}"/>${accept_button}
                                 </button>
                             </td>
                             <td>
                                 <button class="order_manager">
-                                    <a href=" mainController?command=cancel_order&id=${order.orderId}"/>${cancel_button}
+                                    <a href="mainController?command=cancel_order&id=${order.orderId}"/>${cancel_button}
                                 </button>
                             </td>
                             <td>
                                 <button class="order_manager">
-                                    <a href=" mainController?command=close_order&id=${order.orderId}"/>${close_button}
+                                    <a href="mainController?command=close_order&id=${order.orderId}"/>${close_button}
                                 </button>
                             </td>
                         </tr>

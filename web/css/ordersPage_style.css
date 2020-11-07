@@ -38,7 +38,7 @@ th.sorted[data-order="1"]::after {
     content: "\1F817"
 }
 
-td:nth-child(9) {
+td:nth-child(10) {
     background:none;
     border: none;
     padding: 2px 2px;

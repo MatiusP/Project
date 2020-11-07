@@ -30,9 +30,11 @@
 <fmt:message bundle="${loc}" key="local.userOrderPage.startRent.message" var="start_rent_message"/>
 <fmt:message bundle="${loc}" key="local.userOrderPage.endRent.message" var="end_rent_message"/>
 <fmt:message bundle="${loc}" key="local.userOrderPage.price.message" var="price_message"/>
+<fmt:message bundle="${loc}" key="local.userOrderPage.isOrderAccepted.message" var="acceptedOrder_message"/>
 <fmt:message bundle="${loc}" key="local.userOrderPage.status.message" var="status_message"/>
 <fmt:message bundle="${loc}" key="local.userOrderPage.notAccepted.message" var="not_acc_message"/>
 <fmt:message bundle="${loc}" key="local.userOrderPage.accepted.message" var="acc_message"/>
+<fmt:message bundle="${loc}" key="local.userOrderPage.canceled.message" var="order_canceled_message"/>
 <fmt:message bundle="${loc}" key="local.userOrderPage.cancelOrder.button" var="cancel_button"/>
 <fmt:message bundle="${loc}" key="local.userOrderPage.back.button" var="back_button"/>
 
@@ -60,6 +62,7 @@
                         <th>${start_rent_message}</th>
                         <th>${end_rent_message}</th>
                         <th>${price_message}</th>
+                        <th>${acceptedOrder_message}</th>
                         <th>${status_message}</th>
                     </tr>
                     </thead>
@@ -86,18 +89,27 @@
                             <td>${order.orderTotalPrice}</td>
                             <td>
                                 <c:choose>
-                                <c:when test="${order.isOrderAccepted eq 'Accepted'}">
-                                    ${acc_message}
-                                </c:when>
-                                <c:otherwise>
-                                    ${not_acc_message}
-                                </c:otherwise>
+                                    <c:when test="${order.isOrderAccepted eq 'Accepted'}">
+                                        ${acc_message}
+                                    </c:when>
+                                    <c:otherwise>
+                                        <font color="red">${not_acc_message}</font>
+                                    </c:otherwise>
                                 </c:choose>
-                            <td>
-                            <button class="table_sort">
-                                <a href=" mainController?command=go_to_edit_car_page&id=${car.id}"/>${cancel_button}
-                            </button>
                             </td>
+                            <td>
+                                <c:if test="${order.isOrderCanceled eq 'Canceled'}">
+                                    <font color="red">${order_canceled_message}</font>
+                                </c:if>
+                            </td>
+                            <c:if test="${(order.isOrderAccepted eq 'Not accepted') and (order.isOrderCanceled != 'Canceled')}">
+                                <td>
+                                    <button class="table_sort">
+                                        <a href="mainController?command=cancel_order&id=${order.orderId}&userRole=${userRegData.role}
+                                                                                    &userId=${userRegData.id}"/>${cancel_button}
+                                    </button>
+                                </td>
+                            </c:if>
                         </tr>
                     </c:forEach>
                 </table>

@@ -4,6 +4,7 @@ import by.epamtc.protsko.rentcar.bean.car.Car;
 import by.epamtc.protsko.rentcar.bean.order.*;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.OrderDAO;
+import by.epamtc.protsko.rentcar.dao.TransactionDAO;
 import by.epamtc.protsko.rentcar.dao.exception.OrderDAOException;
 import by.epamtc.protsko.rentcar.service.OrderService;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
@@ -19,7 +20,12 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     private final DAOFactory factory = DAOFactory.getInstance();
     private final OrderDAO orderDAO = factory.getOrderDAO();
-    private static final String CAR_NOT_AVAILABLE_FOR_CREATE_ORDER = "The car is not available for the selected period";
+    private final TransactionDAO transactionDAO = factory.getTransactionDAO();
+
+    private static final String CAR_NOT_AVAILABLE_FOR_CREATE_ORDER_MESSAGE = "The car unavailable on specified dates.";
+    private static final String ORDER_ALREADY_CANCELED_MESSAGE = "Order already canceled.";
+    private static final String ORDER_ALREADY_ACCEPTED_MESSAGE = "Order already accepted";
+    private static final String ORDER_NOT_FOUND_MESSAGE = "Order not found.";
     private static final String ORDER_ACCEPTED_VALUE = "Accepted";
     private static final String ORDER_NOT_ACCEPTED_VALUE = "Not accepted";
     private static final String ORDER_CLOSED_VALUE = "Closed";
@@ -38,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
             Car selectedCar = OrderUtil.getSelectedCar(carId);
 
             if (!selectedCar.isAvailableToRent() && !OrderUtil.isOrderAvailableForCreate(carId, startRent, endRent)) {
-                throw new OrderServiceException(CAR_NOT_AVAILABLE_FOR_CREATE_ORDER);
+                throw new OrderServiceException(CAR_NOT_AVAILABLE_FOR_CREATE_ORDER_MESSAGE);
             }
             newOrder = buildOrderFromOrderDTO(order);
             return orderDAO.createOrder(newOrder);
@@ -58,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
         Car selectedCar = OrderUtil.getSelectedCar(carId);
 
         if (!selectedCar.isAvailableToRent() && !OrderUtil.isOrderAvailableForCreate(carId, startRent, endRent)) {
-            throw new OrderServiceException(CAR_NOT_AVAILABLE_FOR_CREATE_ORDER);
+            throw new OrderServiceException(CAR_NOT_AVAILABLE_FOR_CREATE_ORDER_MESSAGE);
         }
 
         double totalPrice = getTotalPrice(lengthRentPeriod, selectedCar.getPricePerDay());
@@ -77,26 +83,73 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean acceptOrder(int orderId) throws OrderServiceException {
+        boolean isOrderAccepted = false;
+        int carId;
+        LocalDate startRent;
+        LocalDate endRent;
+
         try {
-            return orderDAO.acceptOrder(orderId);
+            Order order = orderDAO.getOrderByOrderId(orderId);
+            if (order == null) {
+                throw new OrderServiceException(ORDER_NOT_FOUND_MESSAGE);
+            }
+            carId = order.getCarId();
+            startRent = order.getStartRent();
+            endRent = order.getEndRent();
+
+            if (order.isOrderCanceled()) {
+                throw new OrderServiceException(ORDER_ALREADY_CANCELED_MESSAGE);
+            }
+            if (order.isOrderAccepted()) {
+                throw new OrderServiceException(ORDER_ALREADY_ACCEPTED_MESSAGE);
+            }
+            Car selectedCar = OrderUtil.getSelectedCar(order.getCarId());
+
+            if (!selectedCar.isAvailableToRent()) {
+                if (!OrderUtil.isOrderAvailableForCreate(carId, startRent, endRent)) {
+                    throw new OrderServiceException(CAR_NOT_AVAILABLE_FOR_CREATE_ORDER_MESSAGE);
+                }
+            }
+
+            if (!selectedCar.isAvailableToRent()) {
+                isOrderAccepted = orderDAO.acceptOrder(orderId);
+            } else {
+                isOrderAccepted = transactionDAO.acceptOrderTransaction(orderId, carId);
+            }
         } catch (OrderDAOException e) {
             throw new OrderServiceException(e);
         }
+        return isOrderAccepted;
     }
 
     @Override
     public boolean closeOrder(int orderId) throws OrderServiceException {
-        try {
-            return orderDAO.closeOrder(orderId);
-        } catch (OrderDAOException e) {
-            throw new OrderServiceException(e);
-        }
+        return false;
     }
 
     @Override
     public boolean cancelOrder(int orderId) throws OrderServiceException {
+        int carId;
+
         try {
-            return orderDAO.cancelOrder(orderId);
+            Order order = orderDAO.getOrderByOrderId(orderId);
+            if (order == null) {
+                throw new OrderServiceException(ORDER_NOT_FOUND_MESSAGE);
+            }
+            if (order.isOrderCanceled()) {
+                throw new OrderServiceException(ORDER_ALREADY_CANCELED_MESSAGE);
+            }
+            if (!order.isOrderAccepted()) {
+                return orderDAO.cancelOrder(orderId);
+            }
+
+            carId = order.getCarId();
+            int carOrdersCount = OrderUtil.getCarOrdersCount(carId);
+
+            if (carOrdersCount > 1) {
+                return orderDAO.cancelOrder(orderId);
+            }
+            return transactionDAO.cancelOrderTransaction(orderId, carId);
         } catch (OrderDAOException e) {
             throw new OrderServiceException(e);
         }

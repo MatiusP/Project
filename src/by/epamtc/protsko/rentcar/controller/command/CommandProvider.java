@@ -39,6 +39,8 @@ public class CommandProvider {
         commands.put(ParameterName.GET_CARS, new GetCarsCommand());
         commands.put(ParameterName.CHECK_ORDER_DATA, new CheckOrderDataCommand());
         commands.put(ParameterName.CREATE_ORDER, new CreateOrderCommand());
+        commands.put(ParameterName.ACCEPT_ORDER, new AcceptOrderCommand());
+        commands.put(ParameterName.CANCEL_ORDER, new CancelOrderCommand());
         commands.put(ParameterName.GET_ALL_ORDERS, new GetAllOrdersCommand());
         commands.put(ParameterName.SIGN_OUT, new SignOutCommand());
     }

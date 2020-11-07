@@ -119,3 +119,9 @@ button{
     color:#fdfdff;
     text-transform:inherit
 }
+
+.management_error_message h3{
+    margin-left: 100px;
+    font-size:23px;
+    color: #e41e1e;
+}

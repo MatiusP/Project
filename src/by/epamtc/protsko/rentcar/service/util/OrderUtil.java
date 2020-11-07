@@ -58,20 +58,40 @@ public class OrderUtil {
     public static boolean isOrderAvailableForCreate(int carId, final LocalDate startRent, final LocalDate endRent)
             throws OrderServiceException {
         final OrderDAO orderDAO = factory.getOrderDAO();
-        final List<Order> carOrders;
+        List<Order> carOrders;
+        boolean isOrderAvailableToCreate = true;
 
         try {
             carOrders = orderDAO.getCarOrders(carId);
 
             for (Order carOrder : carOrders) {
-                if ((carOrder.isOrderAccepted() & !carOrder.isOrderClosed() & !carOrder.isOrderCanceled()) &&
-                        (startRent.isAfter(carOrder.getEndRent()) || endRent.isBefore(carOrder.getStartRent()))) {
-                    return true;
+                if (carOrder.isOrderAccepted() & !carOrder.isOrderClosed() & !carOrder.isOrderCanceled()) {
+                    isOrderAvailableToCreate = (startRent.isAfter(carOrder.getEndRent()) || endRent.isBefore(carOrder.getStartRent()));
+                    if (!isOrderAvailableToCreate) {
+                        return isOrderAvailableToCreate;
+                    }
                 }
             }
         } catch (OrderDAOException e) {
             throw new OrderServiceException(e);
         }
-        return false;
+        return isOrderAvailableToCreate;
+    }
+
+    public static int getCarOrdersCount(int carId) throws OrderServiceException {
+        final OrderDAO orderDAO = factory.getOrderDAO();
+        int carOrdersCount = 0;
+        List<Order> carOrders;
+
+        try {
+            carOrders = orderDAO.getCarOrders(carId);
+            for (Order order : carOrders) {
+                if (order.isOrderAccepted() & !order.isOrderClosed() & !order.isOrderCanceled())
+                    carOrdersCount++;
+            }
+        } catch (OrderDAOException e) {
+            throw new OrderServiceException(e);
+        }
+        return carOrdersCount;
     }
 }

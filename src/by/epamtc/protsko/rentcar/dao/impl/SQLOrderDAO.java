@@ -25,6 +25,7 @@ public class SQLOrderDAO implements OrderDAO {
     private static final String GET_ALL_ORDERS_ERROR_MESSAGE = "Error while getting all orders";
     private static final String GET_ALL_USER_ORDERS_ERROR_MESSAGE = "Error while getting user's orders";
     private static final String GET_CAR_ORDERS_ERROR_MESSAGE = "Error while getting car's orders";
+    private static final String GET_ORDER_BY_ID_ERROR_MESSAGE = "Error while getting order by id";
 
     private static final String CREATE_ORDER_QUERY = "INSERT INTO orders" +
             "(order_date, start_rent, end_rent, total_price, user_id, car_id)" +
@@ -34,6 +35,7 @@ public class SQLOrderDAO implements OrderDAO {
                     " cost_by_overdue_period=?, cost_by_fuel=?, cost_by_mileage=?, cost_by_parking_penalty=?," +
                     " cost_by_police_penalty=?, cost_by_damage=?, cost_by_other_penalty=?" +
                     " WHERE id=?";
+    private static final String GET_ORDER_BY_ID_QUERY = "SELECT * FROM orders WHERE id=?";
     private static final String GET_ALL_ORDERS_QUERY = "SELECT * FROM fullorderdata";
     private static final String GET_ALL_USER_ORDERS_QUERY = "SELECT * FROM fullorderdata WHERE user_id=?";
     private static final String GET_ALL_CAR_ORDERS_QUERY = "SELECT * FROM orders WHERE car_id=?";
@@ -158,6 +160,32 @@ public class SQLOrderDAO implements OrderDAO {
     }
 
     @Override
+    public Order getOrderByOrderId(int orderId) throws OrderDAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Order order = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(GET_ORDER_BY_ID_QUERY);
+            preparedStatement.setInt(1, orderId);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                order = buildOrderFromDB(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new OrderDAOException(GET_ORDER_BY_ID_ERROR_MESSAGE, e);
+        } finally {
+            if (connection != null) {
+                connectionPool.closeConnection(connection, preparedStatement);
+            }
+        }
+        return order;
+    }
+
+    @Override
     public List<OrderForShow> getAllOrders() throws OrderDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -228,18 +256,7 @@ public class SQLOrderDAO implements OrderDAO {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                order = new Order();
-
-                order.setId(resultSet.getInt(1));
-                order.setOrderDate(resultSet.getTimestamp(2).toLocalDateTime());
-                order.setStartRent(resultSet.getDate(3).toLocalDate());
-                order.setEndRent(resultSet.getDate(4).toLocalDate());
-                order.setTotalPrice(resultSet.getDouble(5));
-                order.setOrderAccepted(resultSet.getBoolean(6));
-                order.setOrderClosed(resultSet.getBoolean(7));
-                order.setUserId(resultSet.getInt(8));
-                order.setCarId(resultSet.getInt(9));
-
+                order = buildOrderFromDB(resultSet);
                 carOrderList.add(order);
             }
         } catch (SQLException e) {
@@ -343,6 +360,23 @@ public class SQLOrderDAO implements OrderDAO {
             }
         }
         return false;
+    }
+
+    private Order buildOrderFromDB(ResultSet resultSet) throws SQLException {
+        Order order = new Order();
+
+        order.setId(resultSet.getInt(1));
+        order.setOrderDate(resultSet.getTimestamp(2).toLocalDateTime());
+        order.setStartRent(resultSet.getDate(3).toLocalDate());
+        order.setEndRent(resultSet.getDate(4).toLocalDate());
+        order.setTotalPrice(resultSet.getDouble(5));
+        order.setOrderAccepted(resultSet.getBoolean(6));
+        order.setOrderCanceled(resultSet.getBoolean(7));
+        order.setOrderClosed(resultSet.getBoolean(8));
+        order.setUserId(resultSet.getInt(9));
+        order.setCarId(resultSet.getInt(10));
+
+        return order;
     }
 
     private OrderForShow buildOrderFromDatabase(ResultSet resultSet) throws SQLException {

@@ -29,6 +29,8 @@ public enum ParameterName {
     GET_CARS,
     CHECK_ORDER_DATA,
     CREATE_ORDER,
+    ACCEPT_ORDER,
+    CANCEL_ORDER,
     GET_ALL_ORDERS,
 	SIGN_OUT
 }
