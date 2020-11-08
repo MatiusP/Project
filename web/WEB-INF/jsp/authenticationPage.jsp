@@ -15,7 +15,7 @@
 <fmt:message bundle="${loc}" key="local.authError.message" var="auth_error"/>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/authForm_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/authForm.css"/>
 
 <head>
     <title>Authentication page</title>

@@ -8,7 +8,7 @@
 </head>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/orderManagementPage_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/orderManagementPage.css"/>
 
 <style>
     body {

@@ -142,11 +142,11 @@
     font-size: 17px;
 }
 
-.form__field {
+.form_field {
     margin-bottom: 10px;
 }
 
-.form__error {
+.form_error {
     color: red;
     text-align: left;
     font-size: 12px;
@@ -163,7 +163,7 @@ input:invalid:not(:placeholder-shown) {
     border-color: red;
 }
 
-input:invalid:not(:placeholder-shown) + .form__error {
+input:invalid:not(:placeholder-shown) + .form_error {
     display: block;
     color: #f4ff00;
     margin: 10px 340px;

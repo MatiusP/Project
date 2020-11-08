@@ -4,7 +4,7 @@
     <title>Our contacts</title>
 </head>
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/goole_map.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/gooleMap.css"/>
 
 <body>
 

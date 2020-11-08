@@ -47,7 +47,7 @@
 </head>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/regForm_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/regForm.css"/>
 <style>
     body {
         background: url("${pageContext.request.contextPath}/images/page_font.jpg");
@@ -61,23 +61,23 @@
 
     <h3>${mainMessage}</h3>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${enter_login}</label>
         <input type="text" name="login" placeholder="${login}"
                pattern="^(?=[a-zA-ZА-ЯЁа-яё0-9._]{5,45}$)(?!.*[_.]{2})[^_.].*[^_.]$"
                required/>
-        <span class="form__error">${login_valid_rules}</span>
+        <span class="form_error">${login_valid_rules}</span>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${enter_pass}</label>
         <input type="password" name="password" placeholder="${password}"
                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,45}$"
                required/>
-        <span class="form__error">${password_valid_rules}</span>
+        <span class="form_error">${password_valid_rules}</span>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${repeat_pass}</label>
         <input type="password" name="password_repeat" placeholder="${repeat_password}" required/>
         <c:if test="${not empty requestScope.get('passwordsError')}">
@@ -85,63 +85,63 @@
                 <c:out value="${passwords_error}"/>
             </div>
         </c:if>
-        <span class="form__error">${password_valid_rules}</span>
+        <span class="form_error">${password_valid_rules}</span>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${enter_surname}</label>
         <input type="text" name="surname" placeholder="${surname}"
                pattern="^.{1,75}$"
                required/>
-        <span class="form__error">${surname_valid_rules}</span>
+        <span class="form_error">${surname_valid_rules}</span>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${enter_name}</label>
         <input type="text" name="name" placeholder="${name}"
                pattern="^.{1,75}$"
                required/>
-        <span class="form__error">${name_valid_rules}</span>
+        <span class="form_error">${name_valid_rules}</span>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${enter_passport_ID}</label>
         <input type="text" name="passport_Id_Number" placeholder="${passport}"
                pattern="^(?!^0+$)[a-zA-Z0-9]{5,14}$"
                required/>
-        <span class="form__error">${passport_valid_rules}</span>
+        <span class="form_error">${passport_valid_rules}</span>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${enter_driver_license}</label>
         <input type="text" name="driver_license" placeholder="${driver_license}"
                pattern="^(?!^0+$)[a-zA-Z0-9]{3,14}$"
                required/>
-        <span class="form__error">${driverLic_valid_rules}</span>
+        <span class="form_error">${driverLic_valid_rules}</span>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${enter_date_birth}</label>
         <input type="text" name="date_of_birth" placeholder="${date_birth}"
                pattern="^(([1][9][0-9]\d)|([2][0][0-1]\d))((\/)|(-))(((0)[0-9])|((1)[0-2]))((\/)|(-))([0-2][0-9]|(3)[0-1])$"
                required/>
-        <span class="form__error">${dateBirth_valid_rules}</span>
+        <span class="form_error">${dateBirth_valid_rules}</span>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${enter_email}</label>
         <input type="email" name="e_mail" placeholder="e-mail"
                pattern="^[a-zA-Z]{1}[a-zA-Z\d\u002E\u005F]+@([a-zA-Z]+\u002E){1,2}[a-z]{1,3}$"
                required/>
-        <span class="form__error">${email_valid_rules}</span>
+        <span class="form_error">${email_valid_rules}</span>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${enter_phone}</label>
         <input type="text" name="phone" placeholder="+xxx xx xxx xx xx"
                pattern="^(\+?\d{1,3})([- .]?\d{2,3})([- .]?\d{3})([- .]?\d{1,2})([- .]?\d{1,2})$"
                required/>
-        <span class="form__error">${phone_valid_rules}</span>
+        <span class="form_error">${phone_valid_rules}</span>
     </div>
 
     <div class="registration-message">

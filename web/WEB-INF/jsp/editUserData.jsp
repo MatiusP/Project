@@ -24,7 +24,7 @@
 <fmt:message bundle="${loc}" key="local.editUser.back.button" var="back_button"/>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/editProfileForm_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/editProfileForm.css"/>
 
 <style>
     body {
@@ -42,37 +42,37 @@
 
     <h3>${main_message}</h3>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${id_message}</label>
         <input type="text" name="id" value="${user.id}" readonly/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${login_message}</label>
         <input type="text" name="login" value="${user.login}" readonly/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${surname_message}</label>
         <input type="text" name="surname" value="${user.surname}" readonly/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${name_message}</label>
         <input type="text" name="name" value="${user.name}" readonly/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${email_message}</label>
         <input type="text" name="eMail" value="${user.eMail}" readonly/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${phone_message}</label>
         <input type="text" name="phone" value="${user.phone}" readonly/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${status_message}</label>
         <select name="status" required>
             <option selected="${user.status}">${user.status}</option>
@@ -87,7 +87,7 @@
         </select>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${role_message}</label>
         <select name="role" required>
             <option selected="${user.role}">${user.role}</option>

@@ -23,8 +23,8 @@
     <fmt:message bundle="${loc}" key="local.carManagement.message" var="car_managment_button"/>
     <fmt:message bundle="${loc}" key="local.orderManagement.message" var="order_managment_button"/>
 
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/headerPage_style.css"/>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/menu_style.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/headerPage.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/menu.css"/>
 
 </head>
 

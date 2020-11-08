@@ -23,7 +23,7 @@
 <fmt:message bundle="${loc}" key="local.finalAct.back.button" var="back_button"/>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/finalRentAct_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/finalRentAct.css"/>
 <style>
     body {
         background: url("${pageContext.request.contextPath}/images/page_font.jpg");
@@ -39,37 +39,37 @@
 
     <h3>${main_message}</h3>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${overdue_period_message}</label>
         <input type="number" step="0.01" name="overduePeriod" value="${finalRentAct.costOverduePeriod}" required/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${cost_fuel_message}</label>
         <input type="number" step="0.01" name="fuelCost" value="${finalRentAct.costByFuel}" required/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${cost_mileage_message}</label>
         <input type="number" step="0.01" name="mileage" value="${finalRentAct.costByMileage}" required/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${cost_parking_message}</label>
         <input type="number" step="0.01" name="parking" value="${finalRentAct.costByParkingPenalty}" required/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${cost_police_message}</label>
         <input type="number" step="0.01" name="police" value="${finalRentAct.costByPolicePenalty}" required/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${cost_damage_message}</label>
         <input type="number" step="0.01" name="damage" value="${finalRentAct.costByDamagePenalty}" required/>
     </div>
 
-    <div class="form__field">
+    <div class="form_field">
         <label>${cost_other_penalty_message}</label>
         <input type="number" step="0.01" name="other" value="${finalRentAct.costByOtherPenalty}" required/>
     </div>

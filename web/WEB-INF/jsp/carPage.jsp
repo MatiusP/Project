@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/carPage_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/carPage.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/rent_car_style.css"/>
 
 <style>

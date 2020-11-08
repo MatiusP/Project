@@ -37,7 +37,6 @@ public final class ConnectionPool {
     }
 
     private void initConnectionPool() {
-
         try {
             Class.forName(driverName);
             connectionQueue = new ArrayBlockingQueue<>(poolSize);

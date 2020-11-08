@@ -21,7 +21,7 @@
 
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/ourCars_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/ourCars.css"/>
 <style>
     body {
         background: url("${pageContext.request.contextPath}/images/page_font.jpg");

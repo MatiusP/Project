@@ -41,7 +41,7 @@
 <fmt:message bundle="${loc}" key="local.addCarPage.fuelConsValidRules.message" var="fu_cons_rules"/>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/addCarForm_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/addCarForm.css"/>
 
 <style>
     body {
@@ -58,20 +58,20 @@
     <c:forEach items="${car}" var="carForEdit">
         <input type="hidden" name="carId" value="${carForEdit.id}">
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${brand_message}</label>
             <input type="text" name="carBrand" value="${carForEdit.brand}"
                    pattern="^[A-Za-zА-ЯЁа-яё]*$"
                    required/>
-            <span class="form__error">${brand_valid_rules}</span>
+            <span class="form_error">${brand_valid_rules}</span>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${model_message}</label>
             <input type="text" name="carModel" value="${carForEdit.model}" required/>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${class_message}</label>
             <select name="carClass" required>
                 <c:if test="${carForEdit.classType eq 'ECONOMY'}">
@@ -93,7 +93,7 @@
         </div>
 
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${transm_message}</label>
             <select name="carTransmission" required>
                 <c:if test="${carForEdit.transmissionType eq 'MANUAL'}">
@@ -107,44 +107,44 @@
             </select>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${vin_message}</label>
             <input type="text" name="carVIN" value="${carForEdit.vin}"
                    pattern="^[a-zA-Z0-9]{14,18}$"
                    required/>
-            <span class="form__error">${vin_valid_rules}</span>
+            <span class="form_error">${vin_valid_rules}</span>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${manuf_message}</label>
             <input type="text" name="carManufactureDate" value="${carForEdit.manufactureDate}"
                    pattern="^(([1][9][4-9]\\d)|([2][0][0-2][0-9]))$"
                    required/>
-            <span class="form__error">${man_date_rules}</span>
+            <span class="form_error">${man_date_rules}</span>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${eng_power_message}</label>
             <input type="text" name="carEnginePower" value="${carForEdit.enginePower}"
                    pattern="^[0-9]{0,5}$"
                    required/>
-            <span class="form__error">${eng_pow_rules}</span>
+            <span class="form_error">${eng_pow_rules}</span>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${fuel_cons_message}</label>
             <input type="text" name="carFuelConsumption" value="${carForEdit.fuelConsumption}"
                    pattern="^(\d{1,2}\.\d+)$"
                    required/>
-            <span class="form__error">${fu_cons_rules}</span>
+            <span class="form_error">${fu_cons_rules}</span>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${price_message}</label>
             <input type="number" name="pricePerDay" value="${carForEdit.pricePerDay}" required/>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${is_available_message}</label>
             <select name="isAvailableToRent" required>
                 <c:if test="${carForEdit.isAvailableToRent eq 'AVAILABLE'}">
@@ -158,7 +158,7 @@
             </select>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${car_status_message}</label>
             <select name="isCarDeleted" required>
                 <c:if test="${carForEdit.isDeleted eq 'ACTIVE'}">

@@ -5,7 +5,7 @@
 <html>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/table_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/table.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/buttons_style.css"/>
 
 <style>

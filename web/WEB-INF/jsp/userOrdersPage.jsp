@@ -8,7 +8,7 @@
 </head>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/ordersPage_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/ordersPage.css"/>
 <style>
     body {
         background: url("${pageContext.request.contextPath}/images/page_font.jpg");

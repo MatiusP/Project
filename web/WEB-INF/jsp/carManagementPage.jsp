@@ -8,8 +8,8 @@
 </head>
 
 <jsp:include page="headerPage.jsp"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/addCarForm_style.css"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/table_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/addCarForm.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/table.css"/>
 
 <style>
     body {
@@ -99,20 +99,20 @@
 
         <h3>${page_message}</h3>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${brand_message}</label>
             <input type="text" name="carBrand" placeholder="${brand_message}"
                    pattern="^[A-Za-zА-ЯЁа-яё]*$"
                    required/>
-            <span class="form__error">${brand_valid_rules}</span>
+            <span class="form_error">${brand_valid_rules}</span>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${model_message}</label>
             <input type="text" name="carModel" placeholder="${model_message}" required/>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${class_message}</label>
             <select name="carClassType" required>
                 <option selected disabled>${select_message}</option>
@@ -122,7 +122,7 @@
             </select>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${transm_message}</label>
             <select name="transmissionType" required>
                 <option selected disabled>${select_message}</option>
@@ -131,44 +131,44 @@
             </select>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${vin_message}</label>
             <input type="text" name="carVIN" placeholder="${vin_message}"
                    pattern="^[a-zA-Z0-9]{11}[0-9]{6}$"
                    required/>
-            <span class="form__error">${vin_valid_rules}</span>
+            <span class="form_error">${vin_valid_rules}</span>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${manuf_message}</label>
             <input type="text" name="manufactureDate" placeholder="${manuf_message}"
                    pattern="^(([1][9][4-9]\\d)|([2][0][0-2][0-1]))$"
                    required/>
-            <span class="form__error">${man_date_rules}</span>
+            <span class="form_error">${man_date_rules}</span>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${eng_power_message}</label>
             <input type="text" name="enginePower" placeholder="${eng_power_message}"
                    pattern="^[0-9]{0,5}$"
                    required/>
-            <span class="form__error">${eng_pow_rules}</span>
+            <span class="form_error">${eng_pow_rules}</span>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${fuel_cons_message}</label>
             <input type="text" name="fuelConsumption" placeholder="${fuel_cons_message}"
                    pattern="^[0-9]{0,2}$"
                    required/>
-            <span class="form__error">${fu_cons_rules}</span>
+            <span class="form_error">${fu_cons_rules}</span>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${price_message}</label>
             <input type="number" name="pricePerDay" placeholder="${price_message}" required/>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${is_available_message}</label>
             <select name="availableToRent" required>
                 <option selected disabled>${select_message}</option>
@@ -177,7 +177,7 @@
             </select>
         </div>
 
-        <div class="form__field">
+        <div class="form_field">
             <label>${photos_message}</label>
             <input type="file" name="photo" multiple accept="image/jpeg,image/png"/>
         </div>
