@@ -2,7 +2,7 @@ package by.epamtc.protsko.rentcar.service.impl;
 
 import by.epamtc.protsko.rentcar.bean.car.Car;
 import by.epamtc.protsko.rentcar.bean.car.CarClass;
-import by.epamtc.protsko.rentcar.bean.car.CarDTO;
+import by.epamtc.protsko.rentcar.dto.CarDTO;
 import by.epamtc.protsko.rentcar.bean.car.Transmission;
 import by.epamtc.protsko.rentcar.dao.CarDAO;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
@@ -17,19 +17,24 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
     private CarDAO carDAO = daoFactory.getCarDAO();
+    private static final String CAR_EXISTS_MESSAGE = "Car VIN already exists in database";
     private static final String IS_CAR_AVAILABLE = "AVAILABLE";
     private static final String IS_CAR_NOT_AVAILABLE = "NOT_AVAILABLE";
     private static final String IS_CAR_DELETED = "DELETED";
     private static final String IS_CAR_NOT_DELETED = "ACTIVE";
 
     @Override
-    public boolean addCar(CarDTO newCar) throws CarServiceException {
+    public boolean add(CarDTO newCar) throws CarServiceException {
         Car car;
 
         try {
+            if (carDAO.isVinExists(newCar.getVin())) {
+                throw new CarServiceException(CAR_EXISTS_MESSAGE);
+            }
+
             if (CarUtil.isEnteredDataValid(newCar)) {
                 car = buildCarFromCarDTO(newCar);
-                return carDAO.addCar(car);
+                return carDAO.add(car);
             }
         } catch (CarDAOException e) {
             throw new CarServiceException(e);
@@ -38,13 +43,13 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public boolean editCarData(CarDTO carForEdit) throws CarServiceException {
+    public boolean edit(CarDTO carForEdit) throws CarServiceException {
         Car car;
 
         try {
             if (CarUtil.isEnteredDataValid(carForEdit)) {
                 car = buildCarFromCarDTO(carForEdit);
-                return carDAO.editCarData(car);
+                return carDAO.edit(car);
             }
         } catch (CarDAOException e) {
             throw new CarServiceException(e);
@@ -52,33 +57,23 @@ public class CarServiceImpl implements CarService {
         return false;
     }
 
-
     @Override
-    public boolean deleteCarFromDatabase(int carId) throws CarServiceException {
+    public boolean delete(int carId) throws CarServiceException {
         try {
-            return carDAO.deleteCarFromDatabase(carId);
+            return carDAO.delete(carId);
         } catch (CarDAOException e) {
             throw new CarServiceException(e);
         }
     }
 
     @Override
-    public boolean deleteCarFromSystem(int carId) throws CarServiceException {
-        try {
-            return carDAO.deleteCarFromSystem(carId);
-        } catch (CarDAOException e) {
-            throw new CarServiceException(e);
-        }
-    }
-
-    @Override
-    public List<CarDTO> findCar(CarDTO criteria) throws CarServiceException {
+    public List<CarDTO> findByCriteria(CarDTO criteria) throws CarServiceException {
         List<CarDTO> foundCarList = new ArrayList<>();
         CarDTO foundCar;
         String searchCriteria = CarUtil.createSearchCarQuery(criteria);
 
         try {
-            final List<Car> foundCars = carDAO.findCar(searchCriteria);
+            final List<Car> foundCars = carDAO.findBySearchCriteria(searchCriteria);
 
             for (Car car : foundCars) {
                 foundCar = buildCarDTOFromCar(car);
@@ -91,12 +86,12 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CarDTO> getAllCars() throws CarServiceException {
+    public List<CarDTO> findAll() throws CarServiceException {
         List<CarDTO> allCars = new ArrayList<>();
         CarDTO carDTO = null;
 
         try {
-            final List<Car> cars = carDAO.getAllCars();
+            final List<Car> cars = carDAO.findAll();
 
             for (Car car : cars) {
                 carDTO = buildCarDTOFromCar(car);

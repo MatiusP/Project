@@ -13,9 +13,4 @@ public class LoginValidatorUserCommand implements UserCommandValidator {
 
         return pattern.matcher(userLogin).matches();
     }
-
-    @Override
-    public String getDataEntryRules() {
-        return "The login can contain only latin or russian letters and numbers. Login length: 5 to 45 characters";
-    }
 }

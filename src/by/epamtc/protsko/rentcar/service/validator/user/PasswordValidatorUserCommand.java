@@ -13,10 +13,4 @@ public class PasswordValidatorUserCommand implements UserCommandValidator {
 
         return pattern.matcher(userPassword).matches();
     }
-
-    @Override
-    public String getDataEntryRules() {
-        return "Пароль должен содержать только латинские буквы (минимум одна строчная и одна прописная), минимум одну цифру"
-                + " и минимум один спецсимвол. Длина пароля: от 5 до 45 символов";
-    }
 }

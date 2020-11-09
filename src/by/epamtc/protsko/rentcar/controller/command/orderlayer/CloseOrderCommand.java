@@ -1,10 +1,12 @@
 package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
-import by.epamtc.protsko.rentcar.bean.order.FinalRentActDTO;
+import by.epamtc.protsko.rentcar.dto.FinalRentActDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
+import by.epamtc.protsko.rentcar.service.FinalRentActService;
 import by.epamtc.protsko.rentcar.service.OrderService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
+import by.epamtc.protsko.rentcar.service.exception.FinalRentActServiceException;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
 
 import javax.servlet.ServletException;
@@ -15,6 +17,7 @@ import java.io.IOException;
 public class CloseOrderCommand implements Command {
     private final ServiceFactory factory = ServiceFactory.getInstance();
     private final OrderService orderService = factory.getOrderService();
+    private final FinalRentActService finalRentActService = factory.getFinalRentActService();
     private static final String BACK_TO_ALL_ORDERS_PAGE_MAPPING = "mainController?command=get_all_orders";
     private static final String FINAL_ACT_ID_PARAMETER_NAME = "finalActId";
     private static final String ORDER_ID_PARAMETER_NAME = "orderId";
@@ -27,6 +30,7 @@ public class CloseOrderCommand implements Command {
     private static final String COST_BY_OTHER_PENALTY_PARAMETER_NAME = "other";
     private static final String CLOSE_ORDER_ERROR_ATTRIBUTE_NAME = "closeOrderError";
     private static final String CLOSE_ORDER_ERROR_ATTRIBUTE_VALUE = "You can't close the order while order has penalties";
+    private static final String UPDATE_FINAL_ACT_ERROR_ATTRIBUTE_VALUE = "The final act is not updated";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
@@ -45,7 +49,7 @@ public class CloseOrderCommand implements Command {
                 + costByPolicePenalty + costByDamage + costByOtherPenalty;
 
         try {
-            orderService.updateFinalRentAct(finalAct(request));
+            finalRentActService.update(finalAct(request));
 
             if (penaltySum > 0) {
                 request.setAttribute(CLOSE_ORDER_ERROR_ATTRIBUTE_NAME, CLOSE_ORDER_ERROR_ATTRIBUTE_VALUE);
@@ -54,10 +58,14 @@ public class CloseOrderCommand implements Command {
                 return;
             }
 
-            isOrderClosed = orderService.closeOrder(orderId);
+            isOrderClosed = orderService.close(orderId);
         } catch (OrderServiceException e) {
             closedError = e.getMessage();
             request.setAttribute(CLOSE_ORDER_ERROR_ATTRIBUTE_NAME, closedError);
+            request.getRequestDispatcher(BACK_TO_ALL_ORDERS_PAGE_MAPPING).forward(request, response);
+        }catch (FinalRentActServiceException e) {
+            closedError = e.getMessage();
+            request.setAttribute(UPDATE_FINAL_ACT_ERROR_ATTRIBUTE_VALUE, closedError);
             request.getRequestDispatcher(BACK_TO_ALL_ORDERS_PAGE_MAPPING).forward(request, response);
         }
         if (isOrderClosed) {

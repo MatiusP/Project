@@ -28,7 +28,7 @@ public class DeleteCarCommand implements Command {
 
         try {
             int carId = Integer.parseInt(request.getParameter(DELETE_CAR_ID_PARAMETER_NAME));
-            isDeleteCarSuccessfully = carService.deleteCarFromSystem(carId);
+            isDeleteCarSuccessfully = carService.delete(carId);
 
             if (isDeleteCarSuccessfully) {
                 session.setAttribute(DELETE_CAR_RESULT, DELETED_CAR_SUCCESSFULLY);

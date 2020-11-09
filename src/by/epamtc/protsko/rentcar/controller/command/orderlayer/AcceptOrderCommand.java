@@ -26,7 +26,7 @@ public class AcceptOrderCommand implements Command {
         boolean isOrderAccepted = false;
 
         try {
-            isOrderAccepted = orderService.acceptOrder(orderId);
+            isOrderAccepted = orderService.accept(orderId);
         } catch (OrderServiceException e) {
             acceptedError = e.getMessage();
             request.setAttribute(ACCEPT_ERROR_ATTRIBUTE_NAME, acceptedError);

@@ -1,14 +1,16 @@
-package by.epamtc.protsko.rentcar.bean.user;
+package by.epamtc.protsko.rentcar.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class FullUserDTO implements Serializable {
-    private static final long serialVersionUID = -730577270846599955L;
+public class EditUserDTO implements Serializable {
+    private static final long serialVersionUID = 6490631490139128130L;
 
     private int id;
-    private String login;
-    private String password;
+    private String currentLogin;
+    private String newLogin;
+    private String currentPassword;
+    private String newPassword;
     private String surname;
     private String name;
     private String passportIdNumber;
@@ -19,7 +21,7 @@ public class FullUserDTO implements Serializable {
     private String status;
     private String role;
 
-    public FullUserDTO() {
+    public EditUserDTO() {
     }
 
     public int getId() {
@@ -30,20 +32,36 @@ public class FullUserDTO implements Serializable {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getCurrentLogin() {
+        return currentLogin;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setCurrentLogin(String currentLogin) {
+        this.currentLogin = currentLogin;
     }
 
-    public String getPassword() {
-        return password;
+    public String getNewLogin() {
+        return newLogin;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNewLogin(String newLogin) {
+        this.newLogin = newLogin;
+    }
+
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
+
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     public String getSurname() {
@@ -121,31 +139,36 @@ public class FullUserDTO implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof FullUserDTO)) return false;
+        if (!(o instanceof EditUserDTO)) return false;
 
-        FullUserDTO userDTO = (FullUserDTO) o;
+        EditUserDTO that = (EditUserDTO) o;
 
-        if (id != userDTO.id) return false;
-        if (login != null ? !login.equals(userDTO.login) : userDTO.login != null) return false;
-        if (password != null ? !password.equals(userDTO.password) : userDTO.password != null) return false;
-        if (surname != null ? !surname.equals(userDTO.surname) : userDTO.surname != null) return false;
-        if (name != null ? !name.equals(userDTO.name) : userDTO.name != null) return false;
-        if (passportIdNumber != null ? !passportIdNumber.equals(userDTO.passportIdNumber) : userDTO.passportIdNumber != null)
+        if (id != that.id) return false;
+        if (currentLogin != null ? !currentLogin.equals(that.currentLogin) : that.currentLogin != null) return false;
+        if (newLogin != null ? !newLogin.equals(that.newLogin) : that.newLogin != null) return false;
+        if (currentPassword != null ? !currentPassword.equals(that.currentPassword) : that.currentPassword != null)
             return false;
-        if (driverLicense != null ? !driverLicense.equals(userDTO.driverLicense) : userDTO.driverLicense != null)
+        if (newPassword != null ? !newPassword.equals(that.newPassword) : that.newPassword != null) return false;
+        if (surname != null ? !surname.equals(that.surname) : that.surname != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (passportIdNumber != null ? !passportIdNumber.equals(that.passportIdNumber) : that.passportIdNumber != null)
             return false;
-        if (dateOfBirth != null ? !dateOfBirth.equals(userDTO.dateOfBirth) : userDTO.dateOfBirth != null) return false;
-        if (eMail != null ? !eMail.equals(userDTO.eMail) : userDTO.eMail != null) return false;
-        if (phone != null ? !phone.equals(userDTO.phone) : userDTO.phone != null) return false;
-        if (status != null ? !status.equals(userDTO.status) : userDTO.status != null) return false;
-        return role != null ? role.equals(userDTO.role) : userDTO.role == null;
+        if (driverLicense != null ? !driverLicense.equals(that.driverLicense) : that.driverLicense != null)
+            return false;
+        if (dateOfBirth != null ? !dateOfBirth.equals(that.dateOfBirth) : that.dateOfBirth != null) return false;
+        if (eMail != null ? !eMail.equals(that.eMail) : that.eMail != null) return false;
+        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        return role != null ? role.equals(that.role) : that.role == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (login != null ? login.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (currentLogin != null ? currentLogin.hashCode() : 0);
+        result = 31 * result + (newLogin != null ? newLogin.hashCode() : 0);
+        result = 31 * result + (currentPassword != null ? currentPassword.hashCode() : 0);
+        result = 31 * result + (newPassword != null ? newPassword.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (passportIdNumber != null ? passportIdNumber.hashCode() : 0);
@@ -160,10 +183,12 @@ public class FullUserDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "FullUserDTO{" +
+        return "EditUserDTO{" +
                 "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
+                ", currentLogin='" + currentLogin + '\'' +
+                ", newLogin='" + newLogin + '\'' +
+                ", currentPassword='" + currentPassword + '\'' +
+                ", newPassword='" + newPassword + '\'' +
                 ", surname='" + surname + '\'' +
                 ", name='" + name + '\'' +
                 ", passportIdNumber='" + passportIdNumber + '\'' +

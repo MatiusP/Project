@@ -13,9 +13,4 @@ public class SurnameValidatorUserCommand implements UserCommandValidator {
 
         return pattern.matcher(userSurname).matches();
     }
-
-    @Override
-    public String getDataEntryRules() {
-        return "";
-    }
 }

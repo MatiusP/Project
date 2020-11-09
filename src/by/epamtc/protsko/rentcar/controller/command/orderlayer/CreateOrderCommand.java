@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
-import by.epamtc.protsko.rentcar.bean.order.OrderDTO;
+import by.epamtc.protsko.rentcar.dto.OrderDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.OrderService;
@@ -43,7 +43,7 @@ public class CreateOrderCommand implements Command {
             newOrder.setUserId(request.getParameter(USER_ID_PARAMETER_NAME));
             newOrder.setCarId(request.getParameter(CAR_ID_PARAMETER_NAME));
 
-            isAddedOrderSuccessfully = orderService.createOrder(newOrder);
+            isAddedOrderSuccessfully = orderService.add(newOrder);
         } catch (OrderServiceException e) {
             //logger
             addedError = e.getMessage();

@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.carlayer;
 
-import by.epamtc.protsko.rentcar.bean.car.CarDTO;
+import by.epamtc.protsko.rentcar.dto.CarDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.CarService;
@@ -92,7 +92,7 @@ public class FindCarCommand implements Command {
             searchCarCriteria.setBrand(carBrand);
         }
         try {
-            carFoundList = carService.findCar(searchCarCriteria);
+            carFoundList = carService.findByCriteria(searchCarCriteria);
 
             if (carFoundList.isEmpty()) {
                 request.setAttribute(CAR_NOT_FOUND_ATTRIBUTE_NAME, CAR_NOT_FOUND_ATTRIBUTE_MESSAGE);

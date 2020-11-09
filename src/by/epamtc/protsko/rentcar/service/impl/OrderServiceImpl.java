@@ -6,7 +6,12 @@ import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.OrderDAO;
 import by.epamtc.protsko.rentcar.dao.TransactionDAO;
 import by.epamtc.protsko.rentcar.dao.exception.OrderDAOException;
+import by.epamtc.protsko.rentcar.dto.OrderDTO;
+import by.epamtc.protsko.rentcar.dto.OrderForShowDTO;
+import by.epamtc.protsko.rentcar.service.FinalRentActService;
 import by.epamtc.protsko.rentcar.service.OrderService;
+import by.epamtc.protsko.rentcar.service.ServiceFactory;
+import by.epamtc.protsko.rentcar.service.exception.FinalRentActServiceException;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
 import by.epamtc.protsko.rentcar.service.util.OrderUtil;
 
@@ -19,10 +24,14 @@ import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
     private final DAOFactory factory = DAOFactory.getInstance();
+    private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final OrderDAO orderDAO = factory.getOrderDAO();
+    private final FinalRentActService finalRentActService = serviceFactory.getFinalRentActService();
     private final TransactionDAO transactionDAO = factory.getTransactionDAO();
 
     private static final String CAR_NOT_AVAILABLE_FOR_CREATE_ORDER_MESSAGE = "The car unavailable on specified dates.";
+    private static final String NO_ORDERS_IN_DB_MESSAGE = "No any orders in database";
+    private static final String NO_USER_ORDERS_MESSAGE = "User has no orders";
     private static final String ORDER_ALREADY_CANCELED_MESSAGE = "Order already canceled.";
     private static final String ORDER_ALREADY_ACCEPTED_MESSAGE = "Order already accepted";
     private static final String ORDER_ALREADY_CLOSED_MESSAGE = "Order already closed";
@@ -35,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
     private static final String ORDER_NOT_CANCELED_VALUE = "Actual";
 
     @Override
-    public boolean createOrder(OrderDTO order) throws OrderServiceException {
+    public boolean add(OrderDTO order) throws OrderServiceException {
         final int carId = Integer.parseInt(order.getCarId());
         final LocalDate startRent = order.getStartRent();
         final LocalDate endRent = order.getEndRent();
@@ -48,10 +57,15 @@ public class OrderServiceImpl implements OrderService {
                 throw new OrderServiceException(CAR_NOT_AVAILABLE_FOR_CREATE_ORDER_MESSAGE);
             }
             newOrder = buildOrderFromOrderDTO(order);
-            return orderDAO.createOrder(newOrder);
+            int newOrderId = orderDAO.add(newOrder);
+
+            finalRentActService.create(newOrderId);
         } catch (OrderDAOException e) {
             throw new OrderServiceException(e);
+        } catch (FinalRentActServiceException e) {
+            throw new OrderServiceException(e);
         }
+        return true;
     }
 
     @Override
@@ -83,14 +97,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean acceptOrder(int orderId) throws OrderServiceException {
+    public boolean accept(int orderId) throws OrderServiceException {
         boolean isOrderAccepted = false;
         int carId;
         LocalDate startRent;
         LocalDate endRent;
 
         try {
-            Order order = orderDAO.getOrderByOrderId(orderId);
+            Order order = orderDAO.findByOrderId(orderId);
             if (order == null) {
                 throw new OrderServiceException(ORDER_NOT_FOUND_MESSAGE);
             }
@@ -113,7 +127,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             if (!selectedCar.isAvailableToRent()) {
-                isOrderAccepted = orderDAO.acceptOrder(orderId);
+                isOrderAccepted = orderDAO.accept(orderId);
             } else {
                 isOrderAccepted = transactionDAO.acceptOrderTransaction(orderId, carId);
             }
@@ -124,11 +138,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean closeOrder(int orderId) throws OrderServiceException {
+    public boolean close(int orderId) throws OrderServiceException {
         int carId;
 
         try {
-            Order order = orderDAO.getOrderByOrderId(orderId);
+            Order order = orderDAO.findByOrderId(orderId);
             if (order == null) {
                 throw new OrderServiceException(ORDER_NOT_FOUND_MESSAGE);
             }
@@ -140,7 +154,7 @@ public class OrderServiceImpl implements OrderService {
             int carOrdersCount = OrderUtil.getCarOrdersCount(carId);
 
             if (carOrdersCount > 1) {
-                return orderDAO.closeOrder(orderId);
+                return orderDAO.close(orderId);
             }
             return transactionDAO.closeOrderTransaction(orderId, carId);
         } catch (OrderDAOException e) {
@@ -149,11 +163,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean cancelOrder(int orderId) throws OrderServiceException {
+    public boolean cancel(int orderId) throws OrderServiceException {
         int carId;
 
         try {
-            Order order = orderDAO.getOrderByOrderId(orderId);
+            Order order = orderDAO.findByOrderId(orderId);
             if (order == null) {
                 throw new OrderServiceException(ORDER_NOT_FOUND_MESSAGE);
             }
@@ -161,14 +175,14 @@ public class OrderServiceImpl implements OrderService {
                 throw new OrderServiceException(ORDER_ALREADY_CANCELED_MESSAGE);
             }
             if (!order.isOrderAccepted()) {
-                return orderDAO.cancelOrder(orderId);
+                return orderDAO.cancel(orderId);
             }
 
             carId = order.getCarId();
             int carOrdersCount = OrderUtil.getCarOrdersCount(carId);
 
             if (carOrdersCount > 1) {
-                return orderDAO.cancelOrder(orderId);
+                return orderDAO.cancel(orderId);
             }
             return transactionDAO.cancelOrderTransaction(orderId, carId);
         } catch (OrderDAOException e) {
@@ -177,14 +191,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderForShowDTO> getAllOrders() throws OrderServiceException {
-        final String NO_ORDERS_IN_DB_MESSAGE = "No any orders in database";
+    public List<OrderForShowDTO> findAll() throws OrderServiceException {
         List<OrderForShowDTO> allOrderList = new ArrayList<>();
         List<OrderForShow> allOrders;
         OrderForShowDTO order;
 
         try {
-            allOrders = orderDAO.getAllOrders();
+            allOrders = orderDAO.findAll();
 
             for (OrderForShow orderTmp : allOrders) {
                 order = buildOrderForShowDTO(orderTmp);
@@ -201,14 +214,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderForShowDTO> getUserOrders(int userId) throws OrderServiceException {
-        final String NO_USER_ORDERS_MESSAGE = "User has no orders";
+    public List<OrderForShowDTO> findByUserId(int userId) throws OrderServiceException {
         List<OrderForShowDTO> userOrderList = new ArrayList<>();
         List<OrderForShow> allUserOrders;
         OrderForShowDTO order;
 
         try {
-            allUserOrders = orderDAO.getUserOrders(userId);
+            allUserOrders = orderDAO.findByUserId(userId);
 
             for (OrderForShow orderTmp : allUserOrders) {
                 order = buildOrderForShowDTO(orderTmp);
@@ -222,30 +234,6 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderServiceException(e);
         }
         return userOrderList;
-    }
-
-    @Override
-    public FinalRentActDTO getFinalRentAct(int orderId) throws OrderServiceException {
-        FinalRentActDTO finalRentAct;
-
-        try {
-            final FinalRentAct act = orderDAO.getFinalRentAct(orderId);
-            finalRentAct = buildFinalRentActDTO(act);
-        } catch (OrderDAOException e) {
-            throw new OrderServiceException(e);
-        }
-        return finalRentAct;
-    }
-
-    @Override
-    public boolean updateFinalRentAct(FinalRentActDTO rentAct) throws OrderServiceException {
-        FinalRentAct finalRentAct = buildFinalRentAct(rentAct);
-
-        try {
-            return orderDAO.updateFinalRentAct(finalRentAct);
-        } catch (OrderDAOException e) {
-            throw new OrderServiceException(e);
-        }
     }
 
     private OrderForShowDTO buildOrderForShowDTO(OrderForShow orderForShow) {
@@ -312,39 +300,6 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderCanceled(true);
         }
         return order;
-    }
-
-    private FinalRentAct buildFinalRentAct(FinalRentActDTO finalRentActDTO) {
-
-        FinalRentAct finalRentAct = new FinalRentAct();
-
-        finalRentAct.setId(finalRentActDTO.getId());
-        finalRentAct.setCostOverduePeriod(finalRentActDTO.getCostOverduePeriod());
-        finalRentAct.setCostByFuel(finalRentActDTO.getCostByFuel());
-        finalRentAct.setCostByMileage(finalRentActDTO.getCostByMileage());
-        finalRentAct.setCostByParkingPenalty(finalRentActDTO.getCostByParkingPenalty());
-        finalRentAct.setCostByPolicePenalty(finalRentActDTO.getCostByPolicePenalty());
-        finalRentAct.setCostByDamagePenalty(finalRentActDTO.getCostByDamagePenalty());
-        finalRentAct.setCostByOtherPenalty(finalRentActDTO.getCostByOtherPenalty());
-        finalRentAct.setOrderId(finalRentActDTO.getOrderId());
-
-        return finalRentAct;
-    }
-
-    private FinalRentActDTO buildFinalRentActDTO(FinalRentAct finalRentAct) {
-        FinalRentActDTO finalAct = new FinalRentActDTO();
-
-        finalAct.setId(finalRentAct.getId());
-        finalAct.setCostOverduePeriod(finalRentAct.getCostOverduePeriod());
-        finalAct.setCostByFuel(finalRentAct.getCostByFuel());
-        finalAct.setCostByMileage(finalRentAct.getCostByMileage());
-        finalAct.setCostByParkingPenalty(finalRentAct.getCostByParkingPenalty());
-        finalAct.setCostByPolicePenalty(finalRentAct.getCostByPolicePenalty());
-        finalAct.setCostByDamagePenalty(finalRentAct.getCostByDamagePenalty());
-        finalAct.setCostByOtherPenalty(finalRentAct.getCostByOtherPenalty());
-        finalAct.setOrderId(finalRentAct.getOrderId());
-
-        return finalAct;
     }
 
     private Date convertLocalDateToDate(LocalDate localDate) {

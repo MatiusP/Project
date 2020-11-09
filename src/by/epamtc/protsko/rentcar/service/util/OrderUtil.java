@@ -13,10 +13,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class OrderUtil {
+    private static final DAOFactory factory = DAOFactory.getInstance();
+    private static final CarDAO carDAO = factory.getCarDAO();
+    private static final OrderDAO orderDAO = factory.getOrderDAO();
+
     private static final String INCORRECT_RENT_PERIOD_MESSAGE = "Start rent date can't be after end rent date";
     private static final String INCORRECT_PERIOD_LENGTH_MESSAGE = "Sorry, but the rental period cannot exceed 30 days.";
     private static final String PERIOD_LENGTH_REGEX = "^[P][0-9]{1,2}[D]$";
-    private static final DAOFactory factory = DAOFactory.getInstance();
+    private static final String CAR_ID_CRITERIA_NAME = "car_id=";
+    private static final String CAR_NOT_FOUND_ERROR_MESSAGE = "Car not found. Please, select another car";
 
     private OrderUtil() {
     }
@@ -35,14 +40,11 @@ public class OrderUtil {
     }
 
     public static Car getSelectedCar(final int carId) throws OrderServiceException {
-        final CarDAO carDAO = factory.getCarDAO();
-        final String CAR_ID_CRITERIA_NAME = "car_id=";
-        final String CAR_NOT_FOUND_ERROR_MESSAGE = "Car not found. Please, select another car";
         Car car;
 
         try {
             String searchCriteria = CAR_ID_CRITERIA_NAME + carId;
-            List<Car> carList = carDAO.findCar(searchCriteria);
+            List<Car> carList = carDAO.findBySearchCriteria(searchCriteria);
 
             if (carList.isEmpty()) {
                 throw new OrderServiceException(CAR_NOT_FOUND_ERROR_MESSAGE);
@@ -57,12 +59,11 @@ public class OrderUtil {
 
     public static boolean isOrderAvailableForCreate(int carId, final LocalDate startRent, final LocalDate endRent)
             throws OrderServiceException {
-        final OrderDAO orderDAO = factory.getOrderDAO();
         List<Order> carOrders;
         boolean isOrderAvailableToCreate = true;
 
         try {
-            carOrders = orderDAO.getCarOrders(carId);
+            carOrders = orderDAO.findByCarId(carId);
 
             for (Order carOrder : carOrders) {
                 if (carOrder.isOrderAccepted() & !carOrder.isOrderClosed() & !carOrder.isOrderCanceled()) {
@@ -79,12 +80,11 @@ public class OrderUtil {
     }
 
     public static int getCarOrdersCount(int carId) throws OrderServiceException {
-        final OrderDAO orderDAO = factory.getOrderDAO();
         int carOrdersCount = 0;
         List<Order> carOrders;
 
         try {
-            carOrders = orderDAO.getCarOrders(carId);
+            carOrders = orderDAO.findByCarId(carId);
             for (Order order : carOrders) {
                 if (order.isOrderAccepted() & !order.isOrderClosed() & !order.isOrderCanceled())
                     carOrdersCount++;

@@ -31,7 +31,7 @@ public class CancelOrderCommand implements Command {
         String canceledError;
 
         try {
-            isOrderCanceled = orderService.cancelOrder(orderId);
+            isOrderCanceled = orderService.cancel(orderId);
         } catch (OrderServiceException e) {
             canceledError = e.getMessage();
             request.setAttribute(CANCEL_ERROR_ATTRIBUTE_NAME, canceledError);

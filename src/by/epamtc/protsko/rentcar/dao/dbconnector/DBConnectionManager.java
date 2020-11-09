@@ -4,7 +4,7 @@ import java.util.ResourceBundle;
 
 public class DBConnectionManager {
     private static final DBConnectionManager instance = new DBConnectionManager();
-    private ResourceBundle bundle = ResourceBundle.getBundle("property/dbConnectionParameter");
+    private static ResourceBundle bundle = ResourceBundle.getBundle("property/dbConnectionParameter");
 
     private DBConnectionManager() {
     }

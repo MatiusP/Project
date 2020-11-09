@@ -13,9 +13,4 @@ public class PhoneValidatorUserCommand implements UserCommandValidator {
 
         return pattern.matcher(userPhone).matches();
     }
-
-    @Override
-    public String getDataEntryRules() {
-        return "";
-    }
 }

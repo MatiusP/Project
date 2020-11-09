@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.carlayer;
 
-import by.epamtc.protsko.rentcar.bean.car.CarDTO;
+import by.epamtc.protsko.rentcar.dto.CarDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.CarService;
@@ -64,7 +64,7 @@ public class AddCarCommand implements Command {
 //            }
 
 
-            isAddedCarSuccessfully = carService.addCar(newCar);
+            isAddedCarSuccessfully = carService.add(newCar);
         } catch (CarServiceException e) {
             addedError = e.getMessage();
             request.setAttribute(ADDED_ERROR_ATTRIBUTE_NAME, addedError);

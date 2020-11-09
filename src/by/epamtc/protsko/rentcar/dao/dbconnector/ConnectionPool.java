@@ -12,6 +12,7 @@ import java.util.concurrent.Executor;
 
 public final class ConnectionPool {
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
+    private static final ConnectionPool instance = new ConnectionPool();
     private BlockingQueue<Connection> connectionQueue;
     private BlockingQueue<Connection> givenAwayConnectionQueue;
 
@@ -21,7 +22,7 @@ public final class ConnectionPool {
     private String connectionPassword;
     private int poolSize;
 
-    public ConnectionPool() {
+    private ConnectionPool() {
         DBConnectionManager dbConnectionManager = DBConnectionManager.getInstance();
 
         driverName = dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_DRIVER);
@@ -52,6 +53,10 @@ public final class ConnectionPool {
         } catch (SQLException e) {
             throw new ConnectionPoolException("SQL exception in database pool", e);
         }
+    }
+
+    public static ConnectionPool getInstance() {
+        return instance;
     }
 
     public Connection takeConnection() {

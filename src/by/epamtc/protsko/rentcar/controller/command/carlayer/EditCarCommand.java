@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.carlayer;
 
-import by.epamtc.protsko.rentcar.bean.car.CarDTO;
+import by.epamtc.protsko.rentcar.dto.CarDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.CarService;
@@ -57,7 +57,7 @@ public class EditCarCommand implements Command {
             carForEdit.setIsAvailableToRent(request.getParameter(PARAMETER_IS_AVAILABLE));
             carForEdit.setIsDeleted(request.getParameter(PARAMETER_IS_DELETED));
 
-            isEditCarDataSuccessfully = carService.editCarData(carForEdit);
+            isEditCarDataSuccessfully = carService.edit(carForEdit);
         } catch (CarServiceException e) {
             editCarDataError = e.getMessage();
             request.setAttribute(EDITING_CAR_DATA_ERROR, editCarDataError);

@@ -26,7 +26,7 @@ public class DeleteUserCommand implements Command {
 
         try {
             int userId = Integer.parseInt(request.getParameter(DELETE_USER_ID_PARAMETER_NAME));
-            isDeleteSuccessfully = userService.deleteUser(userId);
+            isDeleteSuccessfully = userService.delete(userId);
 
             if (isDeleteSuccessfully) {
                 session.setAttribute(DELETE_USER_RESULT, DELETED_USER_SUCCESSFULLY);

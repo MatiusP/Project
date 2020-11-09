@@ -13,9 +13,4 @@ public class PassportIDValidatorUserCommand implements UserCommandValidator {
 
         return pattern.matcher(userPassportIDNumber).matches();
     }
-
-    @Override
-    public String getDataEntryRules() {
-        return "";
-    }
 }

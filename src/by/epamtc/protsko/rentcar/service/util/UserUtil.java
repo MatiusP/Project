@@ -1,7 +1,7 @@
 package by.epamtc.protsko.rentcar.service.util;
 
-import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
-import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
+import by.epamtc.protsko.rentcar.dto.EditUserDTO;
+import by.epamtc.protsko.rentcar.dto.FullUserDTO;
 import by.epamtc.protsko.rentcar.bean.user.Role;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 import by.epamtc.protsko.rentcar.service.validator.user.UserCommandProvider;

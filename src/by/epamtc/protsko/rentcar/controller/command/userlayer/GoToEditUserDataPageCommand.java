@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.userlayer;
 
-import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
+import by.epamtc.protsko.rentcar.dto.FullUserDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
@@ -27,7 +27,7 @@ public class GoToEditUserDataPageCommand implements Command {
         FullUserDTO user = null;
 
         try {
-            user = userService.getUserById(userId);
+            user = userService.findByUserId(userId);
 
         } catch (UserServiceException e) {
             //logger

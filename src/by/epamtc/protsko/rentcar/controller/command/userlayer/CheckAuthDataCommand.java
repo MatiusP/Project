@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.userlayer;
 
-import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
+import by.epamtc.protsko.rentcar.dto.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;

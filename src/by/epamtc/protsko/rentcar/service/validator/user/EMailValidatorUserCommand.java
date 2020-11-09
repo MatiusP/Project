@@ -13,9 +13,4 @@ public class EMailValidatorUserCommand implements UserCommandValidator {
 
         return pattern.matcher(userEMail).matches();
     }
-
-    @Override
-    public String getDataEntryRules() {
-        return "";
-    }
 }

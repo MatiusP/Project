@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
-import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
+import by.epamtc.protsko.rentcar.dto.FullUserDTO;
+import by.epamtc.protsko.rentcar.dto.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
@@ -64,7 +64,7 @@ public class SaveNewUserCommand implements Command {
                 fullUserDTO.seteMail(request.getParameter(PARAMETER_EMAIL));
                 fullUserDTO.setPhone(request.getParameter(PARAMETER_PHONE));
 
-                isRegistrationSuccessfully = userService.registration(fullUserDTO);
+                isRegistrationSuccessfully = userService.add(fullUserDTO);
             } else {
                 registrationError = PASSWORD_ERROR_MESSAGE;
                 request.setAttribute(PASSWORD_ERROR_ATTRIBUTE_NAME, registrationError);

@@ -17,7 +17,8 @@ import java.sql.Statement;
 import java.util.List;
 
 public class TransactionDAOImpl implements TransactionDAO {
-    private static ConnectionPool connectionPool = new ConnectionPool();
+    private static ConnectionPool connectionPool = ConnectionPool.getInstance();
+
     private static DAOFactory factory = DAOFactory.getInstance();
     private static CarDAO carDAO = factory.getCarDAO();
     private static OrderDAO orderDAO = factory.getOrderDAO();
@@ -27,7 +28,6 @@ public class TransactionDAOImpl implements TransactionDAO {
     private static final String CANCEL_ORDER_QUERY = "UPDATE orders SET is_order_canceled=1 WHERE id=";
     private static final String SET_CAR_AVAILABLE_QUERY = "UPDATE cars SET is_avaliable_to_rent=1 WHERE id=";
     private static final String CAR_ID_CRITERIA_NAME = "car_id=";
-
 
     @Override
     public boolean acceptOrderTransaction(int orderId, int carId) {
@@ -39,7 +39,7 @@ public class TransactionDAOImpl implements TransactionDAO {
         Car car = null;
 
         try {
-            List<Car> carList = carDAO.findCar(CAR_ID_CRITERIA_NAME + carId);
+            List<Car> carList = carDAO.findBySearchCriteria(CAR_ID_CRITERIA_NAME + carId);
             car = carList.get(0);
 
             connection = connectionPool.takeConnection();
@@ -98,7 +98,7 @@ public class TransactionDAOImpl implements TransactionDAO {
             statement.executeUpdate(orderSQLQuery);
             statement.executeUpdate(carSQLQuery);
 
-            List<Order> carOrders = orderDAO.getCarOrders(carId);
+            List<Order> carOrders = orderDAO.findByCarId(carId);
             for (Order order : carOrders) {
                 if (order.isOrderAccepted() & !order.isOrderClosed() & !order.isOrderCanceled())
                     carOrdersCount++;
@@ -151,7 +151,7 @@ public class TransactionDAOImpl implements TransactionDAO {
             statement.executeUpdate(orderSQLQuery);
             statement.executeUpdate(carSQLQuery);
 
-            List<Order> carOrders = orderDAO.getCarOrders(carId);
+            List<Order> carOrders = orderDAO.findByCarId(carId);
             for (Order order : carOrders) {
                 if (order.isOrderAccepted() & !order.isOrderClosed() & !order.isOrderCanceled())
                     carOrdersCount++;
@@ -189,14 +189,3 @@ public class TransactionDAOImpl implements TransactionDAO {
         return true;
     }
 }
-//
-//class Main {
-//
-//    public static void main(String[] args) throws TransactionException, SQLException {
-//        TransactionDAOImpl o = new TransactionDAOImpl();
-//        o.acceptOrderTransaction(1, 2);
-//        System.out.println();
-//    }
-//
-//
-//}

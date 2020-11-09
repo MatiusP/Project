@@ -1,11 +1,11 @@
 package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
-import by.epamtc.protsko.rentcar.bean.order.FinalRentActDTO;
+import by.epamtc.protsko.rentcar.dto.FinalRentActDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
-import by.epamtc.protsko.rentcar.service.OrderService;
+import by.epamtc.protsko.rentcar.service.FinalRentActService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
-import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
+import by.epamtc.protsko.rentcar.service.exception.FinalRentActServiceException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ import java.util.Enumeration;
 
 public class GetFinalRentActCommand implements Command {
     private final ServiceFactory factory = ServiceFactory.getInstance();
-    private final OrderService orderService = factory.getOrderService();
+    private final FinalRentActService finalRentActService = factory.getFinalRentActService();
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
     private static final String BACK_TO_ALL_ORDERS_PAGE_MAPPING = "mainController?command=get_all_orders";
     private static final String FINAL_RENT_ACT_PAGE_MAPPING = "WEB-INF/jsp/finalRentActPage.jsp";
@@ -32,8 +32,8 @@ public class GetFinalRentActCommand implements Command {
         FinalRentActDTO finalRentActDTO = null;
 
         try {
-            finalRentActDTO = orderService.getFinalRentAct(orderId);
-        } catch (OrderServiceException e) {
+            finalRentActDTO = finalRentActService.find(orderId);
+        } catch (FinalRentActServiceException e) {
             finalActError = e.getMessage();
             request.setAttribute(GET_FINAL_ACT_ERROR_ATTRIBUTE_NAME, finalActError);
             request.getRequestDispatcher(BACK_TO_ALL_ORDERS_PAGE_MAPPING).forward(request, response);

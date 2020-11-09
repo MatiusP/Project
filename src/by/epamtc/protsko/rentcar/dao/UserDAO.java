@@ -9,13 +9,13 @@ public interface UserDAO {
 
     User authentication(String login, String password) throws UserDAOException;
 
-    boolean registration(User user) throws UserDAOException;
+    boolean add(User user) throws UserDAOException;
 
-    boolean editUserData(User user) throws UserDAOException;
+    boolean edit(User user) throws UserDAOException;
 
-    boolean deleteUser(int userId) throws UserDAOException;
+    boolean delete(int userId) throws UserDAOException;
 
-    User getUserById(int userId) throws UserDAOException;
+    User findById(int userId) throws UserDAOException;
 
-    List<User> findUser(String searchCriteria) throws UserDAOException;
+    List<User> findBySearchCriteria(String searchCriteria) throws UserDAOException;
 }

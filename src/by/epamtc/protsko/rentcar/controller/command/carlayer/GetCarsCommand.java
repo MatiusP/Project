@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.carlayer;
 
-import by.epamtc.protsko.rentcar.bean.car.CarDTO;
+import by.epamtc.protsko.rentcar.dto.CarDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
 import by.epamtc.protsko.rentcar.service.CarService;
@@ -35,7 +35,7 @@ public class GetCarsCommand implements Command {
         List<CarDTO> cars = new ArrayList<>();
 
         try {
-            carsTmpList = carService.getAllCars();
+            carsTmpList = carService.findAll();
 
             if (request.getParameter(CAR_CLASS_PARAMETER).equalsIgnoreCase(ECONOMY_CLASS_NAME)) {
                 for (CarDTO car : carsTmpList) {

@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.carlayer;
 
-import by.epamtc.protsko.rentcar.bean.car.CarDTO;
+import by.epamtc.protsko.rentcar.dto.CarDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
@@ -35,7 +35,7 @@ public class GoToCarPageCommand implements Command {
         try {
             carDTO = new CarDTO();
             carDTO.setId(Integer.parseInt(request.getParameter(CAR_ID_PARAMETER_NAME)));
-            car = carService.findCar(carDTO);
+            car = carService.findByCriteria(carDTO);
 
             request.setAttribute(CAR_ATTRIBUTE_NAME, car);
         } catch (CarServiceException e) {

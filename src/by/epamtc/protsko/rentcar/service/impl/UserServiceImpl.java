@@ -7,6 +7,9 @@ import by.epamtc.protsko.rentcar.bean.user.*;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;
+import by.epamtc.protsko.rentcar.dto.EditUserDTO;
+import by.epamtc.protsko.rentcar.dto.FullUserDTO;
+import by.epamtc.protsko.rentcar.dto.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 import by.epamtc.protsko.rentcar.service.util.UserUtil;
@@ -20,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND_EXCEPTION = "User not found for the given id";
     private static final String USER_ACTIVE_STATUS = "ACTIVE";
     private static final String USER_DELETE_STATUS = "DELETED";
+    private static final String NEW_LOGIN_MARK = "#";
 
     @Override
     public RegistrationUserDTO authentication(String login, String password) throws UserServiceException {
@@ -42,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean registration(FullUserDTO userData) throws UserServiceException {
+    public boolean add(FullUserDTO userData) throws UserServiceException {
 
         try {
             if (!UserUtil.isRegistrationFormFilled(userData)) {
@@ -50,7 +54,7 @@ public class UserServiceImpl implements UserService {
             }
             if (UserUtil.isRegistrationDataValid(userData)) {
                 User user = buildUserFromRegistrationData(userData);
-                return userDAO.registration(user);
+                return userDAO.add(user);
             }
         } catch (UserDAOException e) {
             throw new UserServiceException(e.getMessage(), e);
@@ -59,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean editUserData(EditUserDTO userForEdit) throws UserServiceException {
+    public boolean edit(EditUserDTO userForEdit) throws UserServiceException {
         String currentLogin = userForEdit.getCurrentLogin();
         String currentPassword = userForEdit.getCurrentPassword();
         String newPassword = userForEdit.getNewPassword();
@@ -69,14 +73,14 @@ public class UserServiceImpl implements UserService {
             if (UserUtil.isEditUserDataValid(userForEdit)) {
                 if ((currentPassword.isEmpty()) && (newPassword.isEmpty())) {
                     user = buildUserFromEditData(userForEdit);
-                    return userDAO.editUserData(user);
+                    return userDAO.edit(user);
                 }
                 if (((!currentPassword.isEmpty()) && (authentication(currentLogin, currentPassword) == null))
                         || ((currentPassword.isEmpty() && !newPassword.isEmpty()))) {
                     throw new UserServiceException(PASSWORD_ERROR);
                 }
                 user = buildUserFromEditData(userForEdit);
-                return userDAO.editUserData(user);
+                return userDAO.edit(user);
             }
         } catch (UserDAOException e) {
             throw new UserServiceException(e);
@@ -85,21 +89,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(int userId) throws UserServiceException {
+    public boolean delete(int userId) throws UserServiceException {
         try {
 
-            return userDAO.deleteUser(userId);
+            return userDAO.delete(userId);
         } catch (UserDAOException e) {
             throw new UserServiceException(e);
         }
     }
 
     @Override
-    public FullUserDTO getUserById(int userId) throws UserServiceException {
+    public FullUserDTO findByUserId(int userId) throws UserServiceException {
         FullUserDTO user = new FullUserDTO();
 
         try {
-            final User userById = userDAO.getUserById(userId);
+            final User userById = userDAO.findById(userId);
             if (userById == null) {
                 throw new UserServiceException(USER_NOT_FOUND_EXCEPTION);
             }
@@ -112,13 +116,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<FullUserDTO> findUsers(FullUserDTO userSearchCriteria) throws UserServiceException {
+    public List<FullUserDTO> findByCriteria(FullUserDTO criteria) throws UserServiceException {
         List<FullUserDTO> usersFoundList = new ArrayList<>();
-        String searchCriteria = UserUtil.createSearchUserQuery(userSearchCriteria);
+        String searchCriteria = UserUtil.createSearchUserQuery(criteria);
         FullUserDTO foundUser;
 
         try {
-            final List<User> foundUsers = userDAO.findUser(searchCriteria);
+            final List<User> foundUsers = userDAO.findBySearchCriteria(searchCriteria);
 
             for (User user : foundUsers) {
                 foundUser = buildFullUserDTOFromUser(user);
@@ -187,7 +191,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private User buildUserFromEditData(EditUserDTO editUserData) {
-        final String NEW_LOGIN_MARK = "#";
         final String editUserStatus = editUserData.getStatus();
         String newUserLogin = editUserData.getNewLogin();
         User user = new User();

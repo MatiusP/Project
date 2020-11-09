@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface CarDAO {
 
-    boolean addCar(Car car) throws CarDAOException;
+    boolean add(Car car) throws CarDAOException;
 
-    boolean editCarData(Car car) throws CarDAOException;
+    boolean edit(Car car) throws CarDAOException;
 
-    boolean deleteCarFromDatabase(int carId) throws CarDAOException;
+    boolean delete(int carId) throws CarDAOException;
 
-    boolean deleteCarFromSystem(int carId) throws CarDAOException;
+    boolean isVinExists(String carVin) throws CarDAOException;
 
-    List<Car> findCar(String criteria) throws CarDAOException;
+    List<Car> findBySearchCriteria(String criteria) throws CarDAOException;
 
-    List<Car> getAllCars() throws CarDAOException;
+    List<Car> findAll() throws CarDAOException;
 }

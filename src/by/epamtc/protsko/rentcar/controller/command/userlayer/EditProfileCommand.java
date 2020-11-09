@@ -1,7 +1,7 @@
 package by.epamtc.protsko.rentcar.controller.command.userlayer;
 
-import by.epamtc.protsko.rentcar.bean.user.EditUserDTO;
-import by.epamtc.protsko.rentcar.bean.user.RegistrationUserDTO;
+import by.epamtc.protsko.rentcar.dto.EditUserDTO;
+import by.epamtc.protsko.rentcar.dto.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
@@ -75,7 +75,7 @@ public class EditProfileCommand implements Command {
             editUserData.setStatus(request.getParameter(PARAMETER_STATUS));
             editUserData.setRole(request.getParameter(PARAMETER_USER_ROLE));
 
-            isEditUserDataSuccessfully = userService.editUserData(editUserData);
+            isEditUserDataSuccessfully = userService.edit(editUserData);
         } catch (UserServiceException e) {
             editUserDataError = e.getMessage();
             request.setAttribute(VALIDATION_ERROR, editUserDataError);

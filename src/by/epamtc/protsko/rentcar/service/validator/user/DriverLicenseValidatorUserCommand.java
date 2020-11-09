@@ -13,9 +13,4 @@ public class DriverLicenseValidatorUserCommand implements UserCommandValidator {
 
         return pattern.matcher(userDriverLicense).matches();
     }
-
-    @Override
-    public String getDataEntryRules() {
-        return "";
-    }
 }

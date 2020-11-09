@@ -14,10 +14,13 @@ import by.epamtc.protsko.rentcar.bean.user.User;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
 import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SQLUserDAO implements UserDAO {
-    private static final ConnectionPool connectionPool = new ConnectionPool();
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static final Logger logger = LogManager.getLogger(SQLUserDAO.class.getSimpleName());
 
     private static final String AUTH_USER_MESSAGE = "Incorrect login or password";
     private static final String USER_EXISTS_MESSAGE = "Login exists";
@@ -27,6 +30,7 @@ public class SQLUserDAO implements UserDAO {
     private static final String FIND_USER_ERROR_MESSAGE = "Error while finding user";
     private static final String GET_USER_ERROR_MESSAGE = "Error while getting user by id";
     private static final String READ_RESULT_SET_ERROR_MESSAGE = "Error while reading result set";
+    private static final String NEW_LOGIN_MARK = "#";
 
     private static final String IS_USER_EXISTS_QUERY = "SELECT * FROM users WHERE login=?";
     private static final String INSERT_USER_TO_DATABASE_QUERY = "INSERT INTO users" +
@@ -46,13 +50,14 @@ public class SQLUserDAO implements UserDAO {
         User userData = getRegistrationUserData(login, password);
 
         if ((userData != null) && (userData.isDeleted())) {
+            logger.error(AUTH_USER_MESSAGE);
             throw new UserDAOException(AUTH_USER_MESSAGE);
         }
         return userData;
     }
 
     @Override
-    public boolean registration(User user) throws UserDAOException {
+    public boolean add(User user) throws UserDAOException {
 
         if (isLoginExist(user.getLogin())) {
             throw new UserDAOException(USER_EXISTS_MESSAGE);
@@ -89,8 +94,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean editUserData(User user) throws UserDAOException {
-        final String NEW_LOGIN_MARK = "#";
+    public boolean edit(User user) throws UserDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -138,7 +142,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean deleteUser(int userId) throws UserDAOException {
+    public boolean delete(int userId) throws UserDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -161,7 +165,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public User getUserById(int userId) throws UserDAOException {
+    public User findById(int userId) throws UserDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -188,7 +192,7 @@ public class SQLUserDAO implements UserDAO {
 
 
     @Override
-    public List<User> findUser(String searchCriteria) throws UserDAOException {
+    public List<User> findBySearchCriteria(String searchCriteria) throws UserDAOException {
         Connection connection = null;
         ResultSet resultSet = null;
         Statement statement = null;

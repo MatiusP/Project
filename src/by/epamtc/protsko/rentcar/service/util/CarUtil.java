@@ -1,11 +1,19 @@
 package by.epamtc.protsko.rentcar.service.util;
 
-import by.epamtc.protsko.rentcar.bean.car.CarDTO;
+import by.epamtc.protsko.rentcar.dto.CarDTO;
 import by.epamtc.protsko.rentcar.service.exception.CarServiceException;
 import by.epamtc.protsko.rentcar.service.validator.car.CarParameterType;
 import by.epamtc.protsko.rentcar.service.validator.car.CarValidatorFactory;
 
 public class CarUtil {
+    private static final String VIN_INVALID_MESSAGE = "VIN value invalid";
+    private static final String MANUFACTURE_DATE_INVALID_MESSAGE = "Manufacture date value invalid";
+    private static final String ENGINE_POWER_INVALID_MESSAGE = "Engine power value invalid";
+    private static final String FUEL_CONSUMPTION_INVALID_MESSAGE = "Fuel consumption value invalid";
+    private static final String TRANSMISSION_TYPE_INVALID_MESSAGE = "Transmission type invalid";
+    private static final String CAR_CLASS_TYPE_INVALID_MESSAGE = "Car class invalid";
+    private static final String CAR_BRAND_INVALID_MESSAGE = "Car brand value invalid";
+    private static final String PRICE_INVALID_MESSAGE = "Price per day value invalid";
 
     private CarUtil() {
     }
@@ -30,23 +38,23 @@ public class CarUtil {
         boolean isCarBrandValid = factory.getValidator(CarParameterType.CAR_BRAND).isValid(carBrand);
 
         if (!isVinValid) {
-            throw new CarServiceException("VIN value invalid");
+            throw new CarServiceException(VIN_INVALID_MESSAGE);
         } else if (!isManufDateValid) {
-            throw new CarServiceException("Manufacture date value invalid");
+            throw new CarServiceException(MANUFACTURE_DATE_INVALID_MESSAGE);
         } else if (!isEnginePowerValid) {
-            throw new CarServiceException("Engine power value invalid");
+            throw new CarServiceException(ENGINE_POWER_INVALID_MESSAGE);
         } else if (!isFuelConsValid) {
-            throw new CarServiceException("Fuel consumption value invalid");
+            throw new CarServiceException(FUEL_CONSUMPTION_INVALID_MESSAGE);
         } else if (!isTransmissionValid) {
-            throw new CarServiceException("Transmission type invalid");
+            throw new CarServiceException(TRANSMISSION_TYPE_INVALID_MESSAGE);
         } else if (!isCarClassValid) {
-            throw new CarServiceException("Car class invalid");
+            throw new CarServiceException(CAR_CLASS_TYPE_INVALID_MESSAGE);
         } else if (!isCarBrandValid) {
-            throw new CarServiceException("Car brand value invalid");
+            throw new CarServiceException(CAR_BRAND_INVALID_MESSAGE);
         } else try {
             Double.parseDouble(carPricePerDay);
         } catch (NumberFormatException e) {
-            throw new CarServiceException("Price per day value invalid");
+            throw new CarServiceException(PRICE_INVALID_MESSAGE);
         }
         return true;
     }

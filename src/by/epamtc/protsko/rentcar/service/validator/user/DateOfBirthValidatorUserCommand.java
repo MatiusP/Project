@@ -13,9 +13,4 @@ public class DateOfBirthValidatorUserCommand implements UserCommandValidator {
 
         return pattern.matcher(userDateOfBirth).matches();
     }
-
-    @Override
-    public String getDataEntryRules() {
-        return "Date input rules: yyyy-mm-dd";
-    }
 }

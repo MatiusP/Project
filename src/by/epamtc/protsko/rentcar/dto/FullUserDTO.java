@@ -1,12 +1,14 @@
-package by.epamtc.protsko.rentcar.bean.user;
+package by.epamtc.protsko.rentcar.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class RegistrationUserDTO implements Serializable {
-    private static final long serialVersionUID = -8685454795552992812L;
+public class FullUserDTO implements Serializable {
+    private static final long serialVersionUID = -730577270846599955L;
 
     private int id;
+    private String login;
+    private String password;
     private String surname;
     private String name;
     private String passportIdNumber;
@@ -14,9 +16,10 @@ public class RegistrationUserDTO implements Serializable {
     private LocalDate dateOfBirth;
     private String eMail;
     private String phone;
+    private String status;
     private String role;
 
-    public RegistrationUserDTO() {
+    public FullUserDTO() {
     }
 
     public int getId() {
@@ -25,6 +28,22 @@ public class RegistrationUserDTO implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getSurname() {
@@ -83,6 +102,14 @@ public class RegistrationUserDTO implements Serializable {
         this.phone = phone;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getRole() {
         return role;
     }
@@ -94,26 +121,31 @@ public class RegistrationUserDTO implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RegistrationUserDTO)) return false;
+        if (!(o instanceof FullUserDTO)) return false;
 
-        RegistrationUserDTO that = (RegistrationUserDTO) o;
+        FullUserDTO userDTO = (FullUserDTO) o;
 
-        if (id != that.id) return false;
-        if (surname != null ? !surname.equals(that.surname) : that.surname != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (passportIdNumber != null ? !passportIdNumber.equals(that.passportIdNumber) : that.passportIdNumber != null)
+        if (id != userDTO.id) return false;
+        if (login != null ? !login.equals(userDTO.login) : userDTO.login != null) return false;
+        if (password != null ? !password.equals(userDTO.password) : userDTO.password != null) return false;
+        if (surname != null ? !surname.equals(userDTO.surname) : userDTO.surname != null) return false;
+        if (name != null ? !name.equals(userDTO.name) : userDTO.name != null) return false;
+        if (passportIdNumber != null ? !passportIdNumber.equals(userDTO.passportIdNumber) : userDTO.passportIdNumber != null)
             return false;
-        if (driverLicense != null ? !driverLicense.equals(that.driverLicense) : that.driverLicense != null)
+        if (driverLicense != null ? !driverLicense.equals(userDTO.driverLicense) : userDTO.driverLicense != null)
             return false;
-        if (dateOfBirth != null ? !dateOfBirth.equals(that.dateOfBirth) : that.dateOfBirth != null) return false;
-        if (eMail != null ? !eMail.equals(that.eMail) : that.eMail != null) return false;
-        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
-        return role != null ? role.equals(that.role) : that.role == null;
+        if (dateOfBirth != null ? !dateOfBirth.equals(userDTO.dateOfBirth) : userDTO.dateOfBirth != null) return false;
+        if (eMail != null ? !eMail.equals(userDTO.eMail) : userDTO.eMail != null) return false;
+        if (phone != null ? !phone.equals(userDTO.phone) : userDTO.phone != null) return false;
+        if (status != null ? !status.equals(userDTO.status) : userDTO.status != null) return false;
+        return role != null ? role.equals(userDTO.role) : userDTO.role == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (passportIdNumber != null ? passportIdNumber.hashCode() : 0);
@@ -121,14 +153,17 @@ public class RegistrationUserDTO implements Serializable {
         result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
         result = 31 * result + (eMail != null ? eMail.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "RegistrationUserDTO{" +
+        return "FullUserDTO{" +
                 "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", surname='" + surname + '\'' +
                 ", name='" + name + '\'' +
                 ", passportIdNumber='" + passportIdNumber + '\'' +
@@ -136,6 +171,7 @@ public class RegistrationUserDTO implements Serializable {
                 ", dateOfBirth=" + dateOfBirth +
                 ", eMail='" + eMail + '\'' +
                 ", phone='" + phone + '\'' +
+                ", status='" + status + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }

@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.userlayer;
 
-import by.epamtc.protsko.rentcar.bean.user.FullUserDTO;
+import by.epamtc.protsko.rentcar.dto.FullUserDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
@@ -83,7 +83,7 @@ public class FindUserCommand implements Command {
             userSearchParameters.setRole(searchingRole);
         }
         try {
-            usersFoundList = userService.findUsers(userSearchParameters);
+            usersFoundList = userService.findByCriteria(userSearchParameters);
 
             if (usersFoundList.isEmpty()) {
                 request.setAttribute(NO_USERS_FOUND_ATTRIBUTE_NAME, NO_USERS_FOUND_MESSAGE);

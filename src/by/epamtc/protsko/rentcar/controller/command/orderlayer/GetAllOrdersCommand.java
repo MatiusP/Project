@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
-import by.epamtc.protsko.rentcar.bean.order.OrderForShowDTO;
+import by.epamtc.protsko.rentcar.dto.OrderForShowDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.OrderService;
@@ -31,7 +31,7 @@ public class GetAllOrdersCommand implements Command {
         List<OrderForShowDTO> orderList;
 
         try {
-            orderList = orderService.getAllOrders();
+            orderList = orderService.findAll();
             request.setAttribute(ORDER_LIST_ATTRIBUTE_NAME, orderList);
             request.getRequestDispatcher(SHOW_ALL_ORDERS_MAPPING).forward(request, response);
         } catch (OrderServiceException e) {

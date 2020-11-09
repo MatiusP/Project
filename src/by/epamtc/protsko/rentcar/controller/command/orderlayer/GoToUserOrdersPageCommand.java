@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
-import by.epamtc.protsko.rentcar.bean.order.OrderForShowDTO;
+import by.epamtc.protsko.rentcar.dto.OrderForShowDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.OrderService;
@@ -35,7 +35,7 @@ public class GoToUserOrdersPageCommand implements Command {
         List<OrderForShowDTO> userOrders;
 
         try {
-            userOrders = orderService.getUserOrders(userId);
+            userOrders = orderService.findByUserId(userId);
             if (userOrders.isEmpty()) {
                 request.setAttribute(NO_USER_ORDERS_ATTRIBUTE_NAME, NO_USER_ORDERS_ATTRIBUTE_MESSAGE);
                 request.getRequestDispatcher(USER_ORDERS_PAGE_MAPPING).forward(request, response);
