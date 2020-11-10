@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="warn">
-    <Properties>
-        <Property name="basePath">C:\\logs</Property>
-    </Properties>
-
+<Configuration status="INFO">
     <Appenders>
-        <RollingFile name="fileLogger" fileName="${basePath}/rentCar-application.log"
-                     filePattern="${basePath}/ %d{yyyy-MM-dd}.log">
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n%xwEx"/>
+            <!-- Крутое, но бесцветное логирование-->
+            <!--            <PatternLayout pattern="%highlight{%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36}.%M():%L - %msg%n}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}"/>-->
+        </Console>
+        <RollingFile name="File" fileName="C://logs/output.log" filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz" immediateFlush="true">
             <PatternLayout>
-                <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB" />
             </Policies>
         </RollingFile>
     </Appenders>
-
     <Loggers>
-        <Root level="ERROR">
-            <appender-ref ref="fileLogger"/>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+            <AppenderRef ref="ErrorFile" level="error"/>
+            <AppenderRef ref="WarnFile" level="warn"/>
         </Root>
     </Loggers>
 </Configuration>

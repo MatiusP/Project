@@ -20,7 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SQLUserDAO implements UserDAO {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private static final Logger logger = LogManager.getLogger(SQLUserDAO.class.getSimpleName());
+    private static final Logger logger = LogManager.getLogger();
+
 
     private static final String AUTH_USER_MESSAGE = "Incorrect login or password";
     private static final String USER_EXISTS_MESSAGE = "Login exists";

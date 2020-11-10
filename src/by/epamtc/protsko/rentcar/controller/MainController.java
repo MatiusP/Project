@@ -36,9 +36,10 @@ public class MainController extends HttpServlet {
             command.execute(request, response);
         } catch (ServletException e) {
             // TODO Auto-generated catch block
+
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         } catch (ControllerException e) {
             e.printStackTrace();

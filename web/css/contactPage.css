@@ -1,5 +1,5 @@
 .contactPage h2 {
-    margin-top: -430px;
+    margin-top: -300px;
     padding:5px 20px;
     color: #011b32;
     font-family: 'Roboto', sans-serif;
@@ -21,6 +21,7 @@
     padding-left:20px;
     color: #011b32;
     font-family: 'Roboto', sans-serif;
-    font-weight: 600;
+    font-weight: 400;
     font-size: 18px;
+    letter-spacing:1.2px;
 }
