@@ -1,9 +1,9 @@
-package by.epamtc.protsko.rentcar.bean.order;
+package by.epamtc.protsko.rentcar.dto;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class OrderForClientAccept implements Serializable {
+public class OrderForClientAcceptDTO implements Serializable {
     private static final long serialVersionUID = 3114691290598231632L;
 
     private String carBrand;
@@ -14,7 +14,7 @@ public class OrderForClientAccept implements Serializable {
     private int rentPeriodLength;
     private double totalPrice;
 
-    public OrderForClientAccept() {
+    public OrderForClientAcceptDTO() {
     }
 
     public String getCarBrand() {
@@ -76,9 +76,9 @@ public class OrderForClientAccept implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OrderForClientAccept)) return false;
+        if (!(o instanceof OrderForClientAcceptDTO)) return false;
 
-        OrderForClientAccept that = (OrderForClientAccept) o;
+        OrderForClientAcceptDTO that = (OrderForClientAcceptDTO) o;
 
         if (rentPeriodLength != that.rentPeriodLength) return false;
         if (Double.compare(that.totalPrice, totalPrice) != 0) return false;

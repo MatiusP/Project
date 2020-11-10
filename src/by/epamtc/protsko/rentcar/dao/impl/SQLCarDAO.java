@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.dao.impl;
 
-import by.epamtc.protsko.rentcar.bean.car.*;
+import by.epamtc.protsko.rentcar.entity.car.*;
 import by.epamtc.protsko.rentcar.dao.CarDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
 import by.epamtc.protsko.rentcar.dao.exception.CarDAOException;

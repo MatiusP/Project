@@ -3,7 +3,7 @@ package by.epamtc.protsko.rentcar.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.epamtc.protsko.rentcar.bean.user.*;
+import by.epamtc.protsko.rentcar.entity.user.*;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;

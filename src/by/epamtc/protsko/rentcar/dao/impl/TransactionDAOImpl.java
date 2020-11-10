@@ -1,7 +1,7 @@
 package by.epamtc.protsko.rentcar.dao.impl;
 
-import by.epamtc.protsko.rentcar.bean.car.Car;
-import by.epamtc.protsko.rentcar.bean.order.Order;
+import by.epamtc.protsko.rentcar.entity.car.Car;
+import by.epamtc.protsko.rentcar.entity.order.Order;
 import by.epamtc.protsko.rentcar.dao.CarDAO;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.OrderDAO;

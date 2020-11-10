@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.service.impl;
 
-import by.epamtc.protsko.rentcar.bean.order.FinalRentAct;
+import by.epamtc.protsko.rentcar.entity.order.FinalRentAct;
 import by.epamtc.protsko.rentcar.dto.FinalRentActDTO;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.FinalRentActDAO;

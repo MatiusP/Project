@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
-import by.epamtc.protsko.rentcar.bean.order.OrderForClientAccept;
+import by.epamtc.protsko.rentcar.dto.OrderForClientAcceptDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.OrderService;
@@ -47,7 +47,7 @@ public class CheckOrderDataCommand implements Command {
             response.sendRedirect(BACK_TO_CAR_PAGE_MAPPING + carId);
         } else {
             try {
-                OrderForClientAccept orderForAccept = orderService.createOrderForClientAccept(carId, startRent, endRent);
+                OrderForClientAcceptDTO orderForAccept = orderService.createOrderForClientAccept(carId, startRent, endRent);
                 request.setAttribute(ORDER_FOR_ACCEPT_ATTRIBUTE_NAME, orderForAccept);
                 request.setAttribute(CAR_ID_ATTRIBUTE_NAME, carId);
                 request.getRequestDispatcher(BACK_TO_CAR_PAGE_MAPPING + carId).forward(request, response);

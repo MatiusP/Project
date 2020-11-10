@@ -1,4 +1,4 @@
-package by.epamtc.protsko.rentcar.bean.car;
+package by.epamtc.protsko.rentcar.entity.car;
 
 public enum CarClass {
     ECONOMY,

@@ -1,9 +1,9 @@
 package by.epamtc.protsko.rentcar.service.impl;
 
-import by.epamtc.protsko.rentcar.bean.car.Car;
-import by.epamtc.protsko.rentcar.bean.car.CarClass;
+import by.epamtc.protsko.rentcar.entity.car.Car;
+import by.epamtc.protsko.rentcar.entity.car.CarClass;
 import by.epamtc.protsko.rentcar.dto.CarDTO;
-import by.epamtc.protsko.rentcar.bean.car.Transmission;
+import by.epamtc.protsko.rentcar.entity.car.Transmission;
 import by.epamtc.protsko.rentcar.dao.CarDAO;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.exception.CarDAOException;

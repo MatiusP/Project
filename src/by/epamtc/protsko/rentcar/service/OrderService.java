@@ -1,7 +1,7 @@
 package by.epamtc.protsko.rentcar.service;
 
 import by.epamtc.protsko.rentcar.dto.OrderDTO;
-import by.epamtc.protsko.rentcar.bean.order.OrderForClientAccept;
+import by.epamtc.protsko.rentcar.dto.OrderForClientAcceptDTO;
 import by.epamtc.protsko.rentcar.dto.OrderForShowDTO;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
 
@@ -12,7 +12,7 @@ public interface OrderService {
 
     boolean add(OrderDTO order) throws OrderServiceException;
 
-    OrderForClientAccept createOrderForClientAccept(int carId, LocalDate startRent, LocalDate endRent) throws OrderServiceException;
+    OrderForClientAcceptDTO createOrderForClientAccept(int carId, LocalDate startRent, LocalDate endRent) throws OrderServiceException;
 
     boolean accept(int orderId) throws OrderServiceException;
 

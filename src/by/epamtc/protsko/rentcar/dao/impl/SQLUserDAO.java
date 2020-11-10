@@ -9,8 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.epamtc.protsko.rentcar.bean.user.Role;
-import by.epamtc.protsko.rentcar.bean.user.User;
+import by.epamtc.protsko.rentcar.entity.user.Role;
+import by.epamtc.protsko.rentcar.entity.user.User;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
 import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;

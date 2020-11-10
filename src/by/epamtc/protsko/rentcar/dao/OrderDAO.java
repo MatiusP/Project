@@ -1,7 +1,7 @@
 package by.epamtc.protsko.rentcar.dao;
 
-import by.epamtc.protsko.rentcar.bean.order.Order;
-import by.epamtc.protsko.rentcar.bean.order.OrderForShow;
+import by.epamtc.protsko.rentcar.entity.order.Order;
+import by.epamtc.protsko.rentcar.entity.order.OrderForShow;
 import by.epamtc.protsko.rentcar.dao.exception.OrderDAOException;
 
 import java.util.List;

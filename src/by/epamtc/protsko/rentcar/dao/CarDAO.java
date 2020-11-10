@@ -1,6 +1,6 @@
 package by.epamtc.protsko.rentcar.dao;
 
-import by.epamtc.protsko.rentcar.bean.car.Car;
+import by.epamtc.protsko.rentcar.entity.car.Car;
 import by.epamtc.protsko.rentcar.dao.exception.CarDAOException;
 
 import java.util.List;

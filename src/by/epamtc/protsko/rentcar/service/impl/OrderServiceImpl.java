@@ -1,7 +1,8 @@
 package by.epamtc.protsko.rentcar.service.impl;
 
-import by.epamtc.protsko.rentcar.bean.car.Car;
-import by.epamtc.protsko.rentcar.bean.order.*;
+import by.epamtc.protsko.rentcar.dto.OrderForClientAcceptDTO;
+import by.epamtc.protsko.rentcar.entity.car.Car;
+import by.epamtc.protsko.rentcar.entity.order.*;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.OrderDAO;
 import by.epamtc.protsko.rentcar.dao.TransactionDAO;
@@ -69,10 +70,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderForClientAccept createOrderForClientAccept(int carId, final LocalDate startRent, final LocalDate endRent)
+    public OrderForClientAcceptDTO createOrderForClientAccept(int carId, final LocalDate startRent, final LocalDate endRent)
             throws OrderServiceException {
         final Period rentPeriod = startRent.until(endRent);
-        OrderForClientAccept orderForAccept;
+        OrderForClientAcceptDTO orderForAccept;
 
         OrderUtil.checkCorrectRentPeriod(startRent, endRent);
         int lengthRentPeriod = OrderUtil.getLengthRentPeriod(rentPeriod.toString()) + 1;
@@ -84,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
 
         double totalPrice = getTotalPrice(lengthRentPeriod, selectedCar.getPricePerDay());
 
-        orderForAccept = new OrderForClientAccept();
+        orderForAccept = new OrderForClientAcceptDTO();
         orderForAccept.setCarBrand(selectedCar.getBrand());
         orderForAccept.setCarModel(selectedCar.getModel());
         orderForAccept.setCarVin(selectedCar.getVin());

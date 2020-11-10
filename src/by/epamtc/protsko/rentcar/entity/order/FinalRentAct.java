@@ -1,4 +1,4 @@
-package by.epamtc.protsko.rentcar.bean.order;
+package by.epamtc.protsko.rentcar.entity.order;
 
 import java.io.Serializable;
 
