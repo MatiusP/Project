@@ -126,11 +126,10 @@
                         <div class="management_error_message">
                             <c:if test="${requestScope.closeOrderError != null}">
                                 <c:if test="${requestScope.id == order.orderId}">
-                                    <h3>Order id=${orderId}: ${closeOrderError}</h3>
+                                    <h3>Order id=${id}: ${closeOrderError}</h3>
                                 </c:if>
                             </c:if>
                         </div>
-
 
                         <tr>
                             <td>${order.orderId}</td>

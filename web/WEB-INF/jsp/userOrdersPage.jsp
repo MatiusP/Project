@@ -79,6 +79,7 @@
                         <fmt:formatDate pattern="dd.MM.yyyy HH:mm"
                                         value="${parsedDateTime}"
                                         var="formattedOrderDate"/>
+
                         <tr>
                             <td>${order.orderId}</td>
                             <td>${formattedOrderDate}</td>

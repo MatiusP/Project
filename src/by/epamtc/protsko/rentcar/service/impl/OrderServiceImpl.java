@@ -1,18 +1,15 @@
 package by.epamtc.protsko.rentcar.service.impl;
 
+import by.epamtc.protsko.rentcar.dao.*;
+import by.epamtc.protsko.rentcar.dao.exception.CarDAOException;
+import by.epamtc.protsko.rentcar.dao.exception.FinalActDAOException;
 import by.epamtc.protsko.rentcar.dto.OrderForClientAcceptDTO;
 import by.epamtc.protsko.rentcar.entity.car.Car;
 import by.epamtc.protsko.rentcar.entity.order.*;
-import by.epamtc.protsko.rentcar.dao.DAOFactory;
-import by.epamtc.protsko.rentcar.dao.OrderDAO;
-import by.epamtc.protsko.rentcar.dao.TransactionDAO;
 import by.epamtc.protsko.rentcar.dao.exception.OrderDAOException;
 import by.epamtc.protsko.rentcar.dto.OrderDTO;
 import by.epamtc.protsko.rentcar.dto.OrderForShowDTO;
-import by.epamtc.protsko.rentcar.service.FinalRentActService;
-import by.epamtc.protsko.rentcar.service.OrderService;
-import by.epamtc.protsko.rentcar.service.ServiceFactory;
-import by.epamtc.protsko.rentcar.service.exception.FinalRentActServiceException;
+import by.epamtc.protsko.rentcar.service.*;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
 import by.epamtc.protsko.rentcar.service.util.OrderUtil;
 
@@ -24,13 +21,12 @@ import java.util.Date;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
-    private final DAOFactory factory = DAOFactory.getInstance();
-    private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
-    private final OrderDAO orderDAO = factory.getOrderDAO();
-    private final FinalRentActService finalRentActService = serviceFactory.getFinalRentActService();
-    private final TransactionDAO transactionDAO = factory.getTransactionDAO();
-
+    private static final DAOFactory daoFactory = DAOFactory.getInstance();
+    private OrderDAO orderDAO = daoFactory.getOrderDAO();
+    private CarDAO carDAO = daoFactory.getCarDAO();
+    private FinalRentActDAO finalRentActDAO = daoFactory.getFinalRentActDAO();
     private static final String CAR_NOT_AVAILABLE_FOR_CREATE_ORDER_MESSAGE = "The car unavailable on specified dates.";
+    private static final String CAR_ID_CRITERIA_NAME = "car_id=";
     private static final String NO_ORDERS_IN_DB_MESSAGE = "No any orders in database";
     private static final String NO_USER_ORDERS_MESSAGE = "User has no orders";
     private static final String ORDER_ALREADY_CANCELED_MESSAGE = "Order already canceled.";
@@ -59,11 +55,11 @@ public class OrderServiceImpl implements OrderService {
             }
             newOrder = buildOrderFromOrderDTO(order);
             int newOrderId = orderDAO.add(newOrder);
+            finalRentActDAO.create(newOrderId);
 
-            finalRentActService.create(newOrderId);
         } catch (OrderDAOException e) {
             throw new OrderServiceException(e);
-        } catch (FinalRentActServiceException e) {
+        } catch (FinalActDAOException e) {
             throw new OrderServiceException(e);
         }
         return true;
@@ -126,11 +122,10 @@ public class OrderServiceImpl implements OrderService {
                     throw new OrderServiceException(CAR_NOT_AVAILABLE_FOR_CREATE_ORDER_MESSAGE);
                 }
             }
-
             if (!selectedCar.isAvailableToRent()) {
                 isOrderAccepted = orderDAO.accept(orderId);
             } else {
-                isOrderAccepted = transactionDAO.acceptOrderTransaction(orderId, carId);
+                isOrderAccepted = acceptOrderTransaction(orderId, carId);
             }
         } catch (OrderDAOException e) {
             throw new OrderServiceException(e);
@@ -157,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
             if (carOrdersCount > 1) {
                 return orderDAO.close(orderId);
             }
-            return transactionDAO.closeOrderTransaction(orderId, carId);
+            return closeOrderTransaction(orderId, carId);
         } catch (OrderDAOException e) {
             throw new OrderServiceException(e);
         }
@@ -185,7 +180,7 @@ public class OrderServiceImpl implements OrderService {
             if (carOrdersCount > 1) {
                 return orderDAO.cancel(orderId);
             }
-            return transactionDAO.cancelOrderTransaction(orderId, carId);
+            return cancelOrderTransaction(orderId, carId);
         } catch (OrderDAOException e) {
             throw new OrderServiceException(e);
         }
@@ -302,6 +297,76 @@ public class OrderServiceImpl implements OrderService {
         }
         return order;
     }
+
+    private boolean acceptOrderTransaction(int orderId, int carId) throws OrderServiceException {
+        Car car = null;
+        try {
+            List<Car> carList = daoFactory.getCarDAO().findBySearchCriteria(CAR_ID_CRITERIA_NAME + carId);
+            car = carList.get(0);
+
+            if (car.isAvailableToRent()) {
+                car.setAvailableToRent(false);
+                orderDAO.accept(orderId);
+                carDAO.edit(car);
+            }
+        } catch (OrderDAOException e) {
+            throw new OrderServiceException(e);
+        } catch (CarDAOException e) {
+            throw new OrderServiceException(e);
+        }
+        return true;
+    }
+
+    private boolean closeOrderTransaction(int orderId, int carId) throws OrderServiceException {
+        Car car = null;
+        int carOrdersCount = 0;
+
+        try {
+            List<Order> carOrders = orderDAO.findByCarId(carId);
+            for (Order order : carOrders) {
+                if (order.isOrderAccepted() & !order.isOrderClosed() & !order.isOrderCanceled())
+                    carOrdersCount++;
+            }
+            if (carOrdersCount < 2) {
+                orderDAO.close(orderId);
+                List<Car> carList = daoFactory.getCarDAO().findBySearchCriteria(CAR_ID_CRITERIA_NAME + carId);
+                car = carList.get(0);
+                car.setAvailableToRent(true);
+                carDAO.edit(car);
+            }
+        } catch (OrderDAOException e) {
+            throw new OrderServiceException(e);
+        } catch (CarDAOException e) {
+            throw new OrderServiceException(e);
+        }
+        return true;
+    }
+
+    private boolean cancelOrderTransaction(int orderId, int carId) throws OrderServiceException {
+        Car car = null;
+        int carOrdersCount = 0;
+
+        try {
+            List<Order> carOrders = orderDAO.findByCarId(carId);
+            for (Order order : carOrders) {
+                if (order.isOrderAccepted() & !order.isOrderClosed() & !order.isOrderCanceled())
+                    carOrdersCount++;
+            }
+            if (carOrdersCount < 2) {
+                orderDAO.cancel(orderId);
+                List<Car> carList = daoFactory.getCarDAO().findBySearchCriteria(CAR_ID_CRITERIA_NAME + carId);
+                car = carList.get(0);
+                car.setAvailableToRent(true);
+                carDAO.edit(car);
+            }
+        } catch (OrderDAOException e) {
+            throw new OrderServiceException(e);
+        } catch (CarDAOException e) {
+            throw new OrderServiceException(e);
+        }
+        return true;
+    }
+
 
     private Date convertLocalDateToDate(LocalDate localDate) {
         return Date.from(localDate.atStartOfDay()

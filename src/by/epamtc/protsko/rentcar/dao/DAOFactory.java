@@ -8,7 +8,6 @@ public class DAOFactory {
     private static CarDAO carDAO = new SQLCarDAO();
     private static OrderDAO orderDAO = new SQLOrderDAO();
     private static FinalRentActDAO finalRentActDAO = new SQLFinalRentActDAO();
-    private static TransactionDAO transactionDAO = new TransactionDAOImpl();
 
     private DAOFactory() {
     }
@@ -33,7 +32,4 @@ public class DAOFactory {
         return finalRentActDAO;
     }
 
-    public TransactionDAO getTransactionDAO() {
-        return transactionDAO;
-    }
 }

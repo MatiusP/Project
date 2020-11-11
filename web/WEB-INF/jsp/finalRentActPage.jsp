@@ -34,7 +34,7 @@
 
 <form action="mainController" method="post" class="final_act_form">
     <input type="hidden" name="command" value="close_order"/>
-    <input type="hidden" name="orderId" value="${finalRentAct.orderId}"/>
+    <input type="hidden" name="id" value="${finalRentAct.orderId}"/>
     <input type="hidden" name="finalActId" value="${finalRentAct.id}"/>
 
     <h3>${main_message}</h3>

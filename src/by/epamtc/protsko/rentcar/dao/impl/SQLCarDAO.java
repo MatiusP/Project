@@ -190,7 +190,7 @@ public class SQLCarDAO implements CarDAO {
             statement = connection.createStatement();
 
             if (!searchCriteria.isEmpty()) {
-                resultSet = statement.executeQuery(FIND_CAR_QUERY + "(" + searchCriteria + ")");
+                resultSet = statement.executeQuery(FIND_CAR_QUERY + " (" + searchCriteria + ")");
             } else {
                 resultSet = statement.executeQuery(GET_ALL_CARS_QUERY);
             }

@@ -38,7 +38,6 @@ public class GetAllOrdersCommand implements Command {
             request.getSession().setAttribute(NO_ORDERS_ATTRIBUTE_NAME, NO_ORDERS_ATTRIBUTE_VALUE);
             response.sendRedirect(SHOW_ALL_ORDERS_MAPPING);
         }
-
     }
 
     private String getCurrentRequestURL(HttpServletRequest request) {

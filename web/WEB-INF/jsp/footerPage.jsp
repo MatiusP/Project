@@ -7,11 +7,9 @@
 <body>
 
 <div id="footer">
-    <ul class="footer">
-        <li><h2>MotorRENT</h2></li>
-        <li><h3>Контакты</h3></li>
-        </ul>
-    <h4>copyright: Matsvey Protsko</h4>
+    <h2>MotorRENT</h2>
+
+<%--    <h4>copyright: Matsvey Protsko</h4>--%>
 </div>
 </body>
 </html>

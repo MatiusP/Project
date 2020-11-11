@@ -1,14 +1,14 @@
 package by.epamtc.protsko.rentcar.service.impl;
 
-import by.epamtc.protsko.rentcar.entity.order.FinalRentAct;
-import by.epamtc.protsko.rentcar.dto.FinalRentActDTO;
 import by.epamtc.protsko.rentcar.dao.DAOFactory;
 import by.epamtc.protsko.rentcar.dao.FinalRentActDAO;
 import by.epamtc.protsko.rentcar.dao.exception.FinalActDAOException;
-import by.epamtc.protsko.rentcar.service.FinalRentActService;
+import by.epamtc.protsko.rentcar.dto.FinalRentActDTO;
+import by.epamtc.protsko.rentcar.entity.order.FinalRentAct;
+import by.epamtc.protsko.rentcar.service.FinalActService;
 import by.epamtc.protsko.rentcar.service.exception.FinalRentActServiceException;
 
-public class FinalRentActServiceImpl implements FinalRentActService {
+public class FinalActServiceImpl implements FinalActService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
     private FinalRentActDAO finalRentActDAO = daoFactory.getFinalRentActDAO();
     private static final String CREATE_FINAL_ACT_ERROR_MESSAGE = "Error while creating final rent act";

@@ -1,9 +1,9 @@
 package by.epamtc.protsko.rentcar.dao.impl;
 
-import by.epamtc.protsko.rentcar.entity.order.FinalRentAct;
 import by.epamtc.protsko.rentcar.dao.FinalRentActDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
 import by.epamtc.protsko.rentcar.dao.exception.FinalActDAOException;
+import by.epamtc.protsko.rentcar.entity.order.FinalRentAct;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

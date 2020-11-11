@@ -3,7 +3,7 @@ package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 import by.epamtc.protsko.rentcar.dto.FinalRentActDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
-import by.epamtc.protsko.rentcar.service.FinalRentActService;
+import by.epamtc.protsko.rentcar.service.FinalActService;
 import by.epamtc.protsko.rentcar.service.OrderService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.exception.FinalRentActServiceException;
@@ -17,10 +17,10 @@ import java.io.IOException;
 public class CloseOrderCommand implements Command {
     private final ServiceFactory factory = ServiceFactory.getInstance();
     private final OrderService orderService = factory.getOrderService();
-    private final FinalRentActService finalRentActService = factory.getFinalRentActService();
+    private final FinalActService finalRentActService = factory.getFinalActService();
     private static final String BACK_TO_ALL_ORDERS_PAGE_MAPPING = "mainController?command=get_all_orders";
     private static final String FINAL_ACT_ID_PARAMETER_NAME = "finalActId";
-    private static final String ORDER_ID_PARAMETER_NAME = "orderId";
+    private static final String ORDER_ID_PARAMETER_NAME = "id";
     private static final String OVERDUE_PERIOD_PARAMETER_NAME = "overduePeriod";
     private static final String COST_BY_FUEL_PARAMETER_NAME = "fuelCost";
     private static final String COST_BY_MILEAGE_PARAMETER_NAME = "mileage";
@@ -62,10 +62,12 @@ public class CloseOrderCommand implements Command {
         } catch (OrderServiceException e) {
             closedError = e.getMessage();
             request.setAttribute(CLOSE_ORDER_ERROR_ATTRIBUTE_NAME, closedError);
+            request.setAttribute(ORDER_ID_PARAMETER_NAME, orderId);
             request.getRequestDispatcher(BACK_TO_ALL_ORDERS_PAGE_MAPPING).forward(request, response);
-        }catch (FinalRentActServiceException e) {
+        } catch (FinalRentActServiceException e) {
             closedError = e.getMessage();
             request.setAttribute(UPDATE_FINAL_ACT_ERROR_ATTRIBUTE_VALUE, closedError);
+            request.setAttribute(ORDER_ID_PARAMETER_NAME, orderId);
             request.getRequestDispatcher(BACK_TO_ALL_ORDERS_PAGE_MAPPING).forward(request, response);
         }
         if (isOrderClosed) {

@@ -1,7 +1,7 @@
 package by.epamtc.protsko.rentcar.dao;
 
-import by.epamtc.protsko.rentcar.entity.order.FinalRentAct;
 import by.epamtc.protsko.rentcar.dao.exception.FinalActDAOException;
+import by.epamtc.protsko.rentcar.entity.order.FinalRentAct;
 
 public interface FinalRentActDAO {
 

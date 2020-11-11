@@ -14,14 +14,10 @@ import by.epamtc.protsko.rentcar.entity.user.User;
 import by.epamtc.protsko.rentcar.dao.UserDAO;
 import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
 import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SQLUserDAO implements UserDAO {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private static final Logger logger = LogManager.getLogger();
-
 
     private static final String AUTH_USER_MESSAGE = "Incorrect login or password";
     private static final String USER_EXISTS_MESSAGE = "Login exists";
@@ -51,7 +47,6 @@ public class SQLUserDAO implements UserDAO {
         User userData = getRegistrationUserData(login, password);
 
         if ((userData != null) && (userData.isDeleted())) {
-            logger.error(AUTH_USER_MESSAGE);
             throw new UserDAOException(AUTH_USER_MESSAGE);
         }
         return userData;
