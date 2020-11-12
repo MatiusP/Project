@@ -20,10 +20,8 @@
     <%@include file="../../js/sortTable.js"%>
 </script>
 
-
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="property/localisation" var="loc"/>
-
 <fmt:message bundle="${loc}" key="local.AllOrdersPage.main.message" var="main_message"/>
 <fmt:message bundle="${loc}" key="local.AllOrdersPage.noOrders.message" var="no_orders_message"/>
 <fmt:message bundle="${loc}" key="local.AllOrdersPage.orderId.message" var="order_id_message"/>
@@ -52,7 +50,6 @@
 <fmt:message bundle="${loc}" key="local.AllOrdersPage.exit.button" var="exit_button"/>
 
 <body>
-
 
 <form id="get_orders" action="mainController" method="post">
     <input type="hidden" name="command" value="get_all_orders"/>

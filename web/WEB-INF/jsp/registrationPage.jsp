@@ -157,10 +157,6 @@
         </p>
         ${go_to_auth} <a href="mainController?command=authentication">${sign_in}</a>
     </div>
-
-
 </form>
-
 </body>
-
 </html>

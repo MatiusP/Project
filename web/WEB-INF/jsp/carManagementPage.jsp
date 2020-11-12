@@ -224,7 +224,6 @@
                         <option value="Premium">${premium_class_message}</option>
                     </select>
                 </td>
-
                 <td>
                     <select name="transmission">
                         <option selected value="" disabled>${select_message}</option>
@@ -232,7 +231,6 @@
                         <option value="Automatic">${automat_transm_message}</option>
                     </select>
                 </td>
-
                 <td><input type="number" name="price" placeholder="${carPrice_message}"/></td>
                 <td><input type="text" name="carVIN" placeholder="VIN"/></td>
                 <td><input type="number" name="manufactureDate" placeholder="${carManDate_message}"/></td>
@@ -393,18 +391,6 @@
             <button form="exit" class="bot5" type="submit">${back_button}</button>
         </form>
     </c:if>
-
-
-
-
-
-
-
-
-
-
-
 ${sessionScope.remove('command')}
-
 </body>
 </html>

@@ -7,7 +7,6 @@
     <title></title>
     <fmt:setLocale value="${sessionScope.local}"/>
     <fmt:setBundle basename="property/localisation" var="loc"/>
-
     <fmt:message bundle="${loc}" key="local.message.signIn" var="sign_in"/>
     <fmt:message bundle="${loc}" key="local.sloganText.message" var="slogan_text"/>
     <fmt:message bundle="${loc}" key="local.home.href" var="home_button"/>
@@ -140,6 +139,5 @@
         <a href="mainController?command=sign_out">${sign_out}</a>
     </div>
 </div>
-
 </body>
 </html>

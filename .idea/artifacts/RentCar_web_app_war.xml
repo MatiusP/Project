@@ -8,6 +8,8 @@
           <element id="file-copy" path="C:/000_Other/Java/Tomcat_9/lib/servlet-api.jar" />
           <element id="file-copy" path="C:/000_Other/Java/Tomcat_9/webapps/examples/WEB-INF/lib/taglibs-standard-impl-1.2.5.jar" />
           <element id="file-copy" path="C:/000_Other/Java/Tomcat_9/webapps/examples/WEB-INF/lib/taglibs-standard-spec-1.2.5.jar" />
+          <element id="library" level="project" name="mysql-connector-java-8.0.21" />
+          <element id="library" level="project" name="spring-security-crypto-3.1.2.release" />
         </element>
       </element>
       <element id="directory" name="src">

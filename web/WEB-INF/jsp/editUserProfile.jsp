@@ -52,7 +52,6 @@
     <input type="hidden" name="currentRole" value="${userRegData.role}">
     <input type="hidden" name="currentLogin" value="${currentUserLogin}">
 
-
     <h3>${page_message}</h3>
 
     <div class="form_field">
@@ -145,13 +144,11 @@
         <span class="form_error">${phone_valid_rules}</span>
     </div>
 
-
     <div class="edit_profile-message">
         <c:if test="${not empty requestScope.get('validationError')}">
             <c:out value="${validationError}"/><br/>
         </c:if>
     </div>
-
 
     <div>
         <input type="submit" value="${button}">

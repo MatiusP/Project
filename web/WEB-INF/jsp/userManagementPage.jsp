@@ -37,7 +37,6 @@
 <fmt:message bundle="${loc}" key="local.userManagement.edit.button" var="edit_button"/>
 <fmt:message bundle="${loc}" key="local.userManagement.delete.button" var="delete_button"/>
 
-
 <head>
     <title>User management</title>
 </head>

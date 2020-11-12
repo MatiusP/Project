@@ -92,7 +92,6 @@
             </select>
         </div>
 
-
         <div class="form_field">
             <label>${transm_message}</label>
             <select name="carTransmission" required>

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <html>
 <head>
     <title>MotorRENT</title>
@@ -32,7 +33,8 @@
         <span class="spacer"></span>
         <br/>
         ${phone} +375(44)511-76-44
-	</span>
+        <br/>
+    </span>
     </h2>
 </div>
 

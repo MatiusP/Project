@@ -81,7 +81,5 @@
         <a href="mainController?command=get_all_orders">${back_button}</a>
     </div>
 </form>
-
-
 </body>
 </html>

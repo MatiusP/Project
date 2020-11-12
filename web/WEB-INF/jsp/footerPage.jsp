@@ -7,9 +7,7 @@
 <body>
 
 <div id="footer">
-    <h2>MotorRENT</h2>
-
-<%--    <h4>copyright: Matsvey Protsko</h4>--%>
+    <h4>copyright: Matsvey Pratsko  +375(29)-750-54-82</h4>
 </div>
 </body>
 </html>

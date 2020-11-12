@@ -122,6 +122,5 @@
     <button form="exit" class="table_sort" type="submit">${back_button}</button>
 </form>
 
-
 </body>
 </html>

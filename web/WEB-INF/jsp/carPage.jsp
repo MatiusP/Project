@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="myCustomTag" uri="/WEB-INF/tld" %>
+
 <jsp:include page="headerPage.jsp"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/carPage.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/rent_car_style.css"/>
@@ -82,24 +84,11 @@
 
                 <c:choose>
                     <c:when test="${requestScope.orderForAccept != null}">
-                        <fmt:formatDate pattern="dd-MM-yyyy"
-                                        value="${orderForAccept.startRent}"
-                                        var="formattedStartRent"/>
-                        <fmt:formatDate pattern="dd-MM-yyyy"
-                                        value="${orderForAccept.endRent}"
-                                        var="formattedEndRent"/>
-
-                        <fmt:formatDate pattern="yyyy-MM-dd"
-                                        value="${orderForAccept.startRent}"
-                                        var="deformattedStartRent"/>
-                        <fmt:formatDate pattern="yyyy-MM-dd"
-                                        value="${orderForAccept.endRent}"
-                                        var="deformattedEndRent"/>
-
                         <div class="rent">
                             <h2>${accept_order_message}</h2>
                             <p>${car_model_message} <b>${orderForAccept.carBrand} ${orderForAccept.carModel}</b></p>
-                            <p>${rent_period_message} <b>${formattedStartRent} - ${formattedEndRent}</b></p>
+                            <p>${rent_period_message} <b><myCustomTag:dateFormatTag date="${orderForAccept.startRent}"/>
+                                - <myCustomTag:dateFormatTag date="${orderForAccept.endRent}"/></b></p>
                             <p>${rent_length_message} <b>${orderForAccept.rentPeriodLength}</b></p>
                             <p>${total_price_message} <b>${orderForAccept.totalPrice}</b></p>
                         </div>
@@ -107,8 +96,9 @@
                         </button>
 
                         <input form="createOrderForm" type="hidden" name="startRentByOrder"
-                               value="${deformattedStartRent}">
-                        <input form="createOrderForm" type="hidden" name="endRentByOrder" value="${deformattedEndRent}">
+                               value="<myCustomTag:dateFormatFromUITag date="${orderForAccept.startRent}"/>"/>
+                        <input form="createOrderForm" type="hidden" name="endRentByOrder"
+                               value="<myCustomTag:dateFormatFromUITag date="${orderForAccept.endRent}"/>"/>
                         <input form="createOrderForm" type="hidden" name="totalPrice"
                                value="${orderForAccept.totalPrice}">
                         <input form="createOrderForm" type="hidden" name="user_id" value="${userRegData.id}">

@@ -7,7 +7,6 @@
     <title>Error page</title>
 </head>
 
-
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="property/localisation" var="loc"/>
 <fmt:message bundle="${loc}" key="local.errorPage.main.message" var="message"/>
@@ -28,7 +27,5 @@
 </div>
 
 <body>
-
-
 </body>
 </html>
