@@ -2,12 +2,13 @@ package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
 import by.epamtc.protsko.rentcar.dto.FinalRentActDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.FinalActService;
 import by.epamtc.protsko.rentcar.service.OrderService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.exception.FinalRentActServiceException;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CloseOrderCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(CloseOrderCommand.class);
     private final ServiceFactory factory = ServiceFactory.getInstance();
     private final OrderService orderService = factory.getOrderService();
     private final FinalActService finalRentActService = factory.getFinalActService();
@@ -33,7 +35,7 @@ public class CloseOrderCommand implements Command {
     private static final String UPDATE_FINAL_ACT_ERROR_ATTRIBUTE_VALUE = "The final act is not updated";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final int orderId = Integer.parseInt(request.getParameter(ORDER_ID_PARAMETER_NAME));
         final double costOverduePeriod = Double.parseDouble(request.getParameter(OVERDUE_PERIOD_PARAMETER_NAME));
         final double costByFuel = Double.parseDouble(request.getParameter(COST_BY_FUEL_PARAMETER_NAME));
@@ -60,11 +62,13 @@ public class CloseOrderCommand implements Command {
 
             isOrderClosed = orderService.close(orderId);
         } catch (OrderServiceException e) {
+            logger.error("Error while closing order", e);
             closedError = e.getMessage();
             request.setAttribute(CLOSE_ORDER_ERROR_ATTRIBUTE_NAME, closedError);
             request.setAttribute(ORDER_ID_PARAMETER_NAME, orderId);
             request.getRequestDispatcher(BACK_TO_ALL_ORDERS_PAGE_MAPPING).forward(request, response);
         } catch (FinalRentActServiceException e) {
+            logger.error("Error while updating final rent act", e);
             closedError = e.getMessage();
             request.setAttribute(UPDATE_FINAL_ACT_ERROR_ATTRIBUTE_VALUE, closedError);
             request.setAttribute(ORDER_ID_PARAMETER_NAME, orderId);

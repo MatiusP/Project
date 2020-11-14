@@ -1,7 +1,5 @@
 package by.epamtc.protsko.rentcar.controller.command;
 
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,8 +10,8 @@ public class ChangeLocaleCommand implements Command {
     private static final String PREVIOUS_URL_MAPPING = "previousRequestURL";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
-        request.getSession(true).setAttribute(LOCAL_ATTRIBUTE_NAME, request.getParameter(LOCAL_ATTRIBUTE_NAME));
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().setAttribute(LOCAL_ATTRIBUTE_NAME, request.getParameter(LOCAL_ATTRIBUTE_NAME));
         response.sendRedirect((String) request.getSession().getAttribute(PREVIOUS_URL_MAPPING));
     }
 }

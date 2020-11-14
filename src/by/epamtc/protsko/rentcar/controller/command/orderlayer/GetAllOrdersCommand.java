@@ -2,10 +2,11 @@ package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
 import by.epamtc.protsko.rentcar.dto.OrderForShowDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.OrderService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class GetAllOrdersCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(GetAllOrdersCommand.class);
     private static final String SHOW_ALL_ORDERS_MAPPING = "WEB-INF/jsp/orderManagementPage.jsp";
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
     private static final String ORDER_LIST_ATTRIBUTE_NAME = "orderList";
@@ -22,7 +24,7 @@ public class GetAllOrdersCommand implements Command {
     private static final String NO_ORDERS_ATTRIBUTE_VALUE = "No any orders in database";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String currentRequestMapping = getCurrentRequestURL(request);
         request.getSession().setAttribute(PREV_REQ_URL_ATTRIBUTE_NAME, currentRequestMapping);
 
@@ -35,6 +37,7 @@ public class GetAllOrdersCommand implements Command {
             request.setAttribute(ORDER_LIST_ATTRIBUTE_NAME, orderList);
             request.getRequestDispatcher(SHOW_ALL_ORDERS_MAPPING).forward(request, response);
         } catch (OrderServiceException e) {
+            logger.error("Error while getting all orders", e);
             request.getSession().setAttribute(NO_ORDERS_ATTRIBUTE_NAME, NO_ORDERS_ATTRIBUTE_VALUE);
             response.sendRedirect(SHOW_ALL_ORDERS_MAPPING);
         }

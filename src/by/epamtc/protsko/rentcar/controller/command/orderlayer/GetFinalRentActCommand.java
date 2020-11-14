@@ -2,9 +2,10 @@ package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
 import by.epamtc.protsko.rentcar.dto.FinalRentActDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.*;
 import by.epamtc.protsko.rentcar.service.exception.FinalRentActServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 public class GetFinalRentActCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(GetFinalRentActCommand.class);
     private final ServiceFactory factory = ServiceFactory.getInstance();
     private final FinalActService finalRentActService = factory.getFinalActService();
 
@@ -24,7 +26,7 @@ public class GetFinalRentActCommand implements Command {
     private static final String FINAL_RENT_ACT_ATTRIBUTE_NAME = "finalRentAct";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String currentRequestMapping = getCurrentRequestURL(request);
         request.getSession().setAttribute(PREV_REQ_URL_ATTRIBUTE_NAME, currentRequestMapping);
         final int orderId = Integer.parseInt(request.getParameter(ORDER_ID_PARAMETER_NAME));
@@ -33,8 +35,8 @@ public class GetFinalRentActCommand implements Command {
 
         try {
             finalRentActDTO = finalRentActService.find(orderId);
-        }
-        catch (FinalRentActServiceException e) {
+        } catch (FinalRentActServiceException e) {
+            logger.error("Error while getting final rent act", e);
             finalActError = e.getMessage();
             request.setAttribute(GET_FINAL_ACT_ERROR_ATTRIBUTE_NAME, finalActError);
             request.getRequestDispatcher(BACK_TO_ALL_ORDERS_PAGE_MAPPING).forward(request, response);

@@ -2,10 +2,11 @@ package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
 import by.epamtc.protsko.rentcar.dto.OrderDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.OrderService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class CreateOrderCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(CreateOrderCommand.class);
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final OrderService orderService = serviceFactory.getOrderService();
     private static final String BACK_TO_CAR_PAGE_MAPPING = "mainController?command=go_to_car_page&carId=";
@@ -28,7 +30,7 @@ public class CreateOrderCommand implements Command {
     private static final String ADDED_RESULT_MESSAGE = "Create new order was successfully";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         boolean isAddedOrderSuccessfully = false;
         OrderDTO newOrder = null;
         String addedError;
@@ -45,7 +47,7 @@ public class CreateOrderCommand implements Command {
 
             isAddedOrderSuccessfully = orderService.add(newOrder);
         } catch (OrderServiceException e) {
-            //logger
+            logger.error("Error while creating new order", e);
             addedError = e.getMessage();
             request.setAttribute(ADDED_ERROR_ATTRIBUTE_NAME, addedError);
             request.getRequestDispatcher(BACK_TO_CAR_PAGE_MAPPING).forward(request, response);

@@ -1,5 +1,8 @@
 package by.epamtc.protsko.rentcar.dao.dbconnector;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
@@ -9,6 +12,7 @@ import java.util.concurrent.Executor;
 
 public final class ConnectionPool {
     private static final ConnectionPool instance = new ConnectionPool();
+    private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
     private BlockingQueue<Connection> connectionQueue;
     private BlockingQueue<Connection> givenAwayConnectionQueue;
 
@@ -28,6 +32,7 @@ public final class ConnectionPool {
         try {
             poolSize = Integer.parseInt(dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_POOL_SIZE));
         } catch (NumberFormatException e) {
+            logger.error("Incorrect connection pool size value in property file.");
             poolSize = 15;
         }
         initConnectionPool();
@@ -72,13 +77,13 @@ public final class ConnectionPool {
         try {
             statement.close();
         } catch (SQLException e) {
-//            logger.error("Statement closing error", e);
+            logger.error("Statement closing error", e);
 
         }
         try {
             connection.close();
         } catch (SQLException e) {
-//            logger.error("Connection closing error", e);
+            logger.error("Connection closing error", e);
         }
     }
 
@@ -86,19 +91,19 @@ public final class ConnectionPool {
         try {
             resultSet.close();
         } catch (SQLException e) {
-//            logger.error("ResultSet closing error", e);
+            logger.error("ResultSet closing error", e);
 
         }
         try {
             statement.close();
         } catch (SQLException e) {
-//            logger.error("Statement closing error", e);
+            logger.error("Statement closing error", e);
 
         }
         try {
             connection.close();
         } catch (SQLException e) {
-//            logger.error("Connection closing error", e);
+            logger.error("Connection closing error", e);
         }
     }
 

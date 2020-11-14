@@ -2,10 +2,11 @@ package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
 import by.epamtc.protsko.rentcar.dto.OrderForShowDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.OrderService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class GoToUserOrdersPageCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(GoToUserOrdersPageCommand.class);
     private static final String USER_ORDERS_PAGE_MAPPING = "WEB-INF/jsp/userOrdersPage.jsp";
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
     private static final String USER_ID_PARAMETER_NAME = "userId";
@@ -25,7 +27,7 @@ public class GoToUserOrdersPageCommand implements Command {
     private static final String GET_USER_ORDERS_ERROR_ATTRIBUTE_VALUE = "Ooops, something wrong";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String currentRequestMapping = getCurrentRequestURL(request);
         request.getSession().setAttribute(PREV_REQ_URL_ATTRIBUTE_NAME, currentRequestMapping);
 
@@ -44,6 +46,7 @@ public class GoToUserOrdersPageCommand implements Command {
             request.setAttribute(USER_ORDER_LIST_ATTRIBUTE_NAME, userOrders);
             request.getRequestDispatcher(USER_ORDERS_PAGE_MAPPING).forward(request, response);
         } catch (OrderServiceException e) {
+            logger.error("Error while getting user's orders", e);
             request.setAttribute(GET_USER_ORDERS_ERROR_ATTRIBUTE_NAME, GET_USER_ORDERS_ERROR_ATTRIBUTE_VALUE);
             request.getRequestDispatcher(USER_ORDERS_PAGE_MAPPING).forward(request, response);
         }

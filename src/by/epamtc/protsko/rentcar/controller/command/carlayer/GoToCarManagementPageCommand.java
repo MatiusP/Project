@@ -2,7 +2,6 @@ package by.epamtc.protsko.rentcar.controller.command.carlayer;
 
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,7 @@ public class GoToCarManagementPageCommand implements Command {
     private static final String ATTRIBUTE_NAME = "command";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         String currentRequestURL = RequestURL.getRequestURL(request);
         session.setAttribute(PREV_REQ_URL_ATTRIBUTE_NAME, currentRequestURL);

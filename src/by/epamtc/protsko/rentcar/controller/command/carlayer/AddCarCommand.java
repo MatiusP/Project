@@ -2,10 +2,11 @@ package by.epamtc.protsko.rentcar.controller.command.carlayer;
 
 import by.epamtc.protsko.rentcar.dto.CarDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.CarService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.exception.CarServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AddCarCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(AddCarCommand.class);
     private static final String ADD_CAR_PAGE_MAPPING = "mainController?command=go_to_add_car_page";
+    private static final String CAR_MANAGEMENT_PAGE_MAPPING = "mainController?command=go_to_car_management_page";
     private static final String CAR_VAN_PARAMETER_NAME = "carVIN";
     private static final String MANUFACTURE_DATE_PARAMETER_NAME = "manufactureDate";
     private static final String ENGINE_POWER_PARAMETER_NAME = "enginePower";
@@ -32,7 +35,7 @@ public class AddCarCommand implements Command {
     private final CarService carService = serviceFactory.getCarService();
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CarDTO newCar = null;
         boolean isAddedCarSuccessfully = false;
         String addedError;
@@ -66,6 +69,7 @@ public class AddCarCommand implements Command {
 
             isAddedCarSuccessfully = carService.add(newCar);
         } catch (CarServiceException e) {
+            logger.error("Error while adding a new car", e);
             addedError = e.getMessage();
             request.setAttribute(ADDED_ERROR_ATTRIBUTE_NAME, addedError);
             request.getRequestDispatcher(ADD_CAR_PAGE_MAPPING).forward(request, response);
@@ -73,7 +77,7 @@ public class AddCarCommand implements Command {
 
         if (isAddedCarSuccessfully) {
             request.getSession().setAttribute(ADDED_RESULT_ATTRIBUTE_NAME, ADDED_RESULT_MESSAGE);
-            response.sendRedirect("mainController?command=go_to_car_management_page");
+            response.sendRedirect(CAR_MANAGEMENT_PAGE_MAPPING);
         }
     }
 }

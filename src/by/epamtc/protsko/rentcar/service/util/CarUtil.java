@@ -79,31 +79,31 @@ public class CarUtil {
             searchCarCriteria.append("car_id=").append(carId).append(" ");
         }
         if (carVin != null) {
-            searchCarCriteria.append("car_VIN=").append("'").append(carVin).append("'").append(" ");
+            searchCarCriteria.append("car_VIN='").append(carVin).append("' ");
         }
         if (carManufactureDate != null) {
-            searchCarCriteria.append("car_manufacture_date=").append("'").append(carManufactureDate).append("'").append(" ");
+            searchCarCriteria.append("car_manufacture_date='").append(carManufactureDate).append("' ");
         }
         if (carEnginePower != null) {
-            searchCarCriteria.append("car_engine_power=").append("'").append(carEnginePower).append("'").append(" ");
+            searchCarCriteria.append("car_engine_power='").append(carEnginePower).append("' ");
         }
         if (carFuelConsumption != null) {
-            searchCarCriteria.append("car_fuel_consumption=").append("'").append(carFuelConsumption).append("'").append(" ");
+            searchCarCriteria.append("car_fuel_consumption='").append(carFuelConsumption).append("' ");
         }
         if (pricePerDay != null) {
-            searchCarCriteria.append("pricePerDay=").append("'").append(pricePerDay).append("'").append(" ");
+            searchCarCriteria.append("pricePerDay='").append(pricePerDay).append("' ");
         }
         if (carTransmission != null) {
-            searchCarCriteria.append("car_transmission=").append("'").append(carTransmission).append("'").append(" ");
+            searchCarCriteria.append("car_transmission='").append(carTransmission).append("' ");
         }
         if (carClass != null) {
-            searchCarCriteria.append("car_class=").append("'").append(carClass).append("'").append(" ");
+            searchCarCriteria.append("car_class='").append(carClass).append("' ");
         }
         if (carModel != null) {
-            searchCarCriteria.append("car_model=").append("'").append(carModel).append("'").append(" ");
+            searchCarCriteria.append("car_model='").append(carModel).append("' ");
         }
         if (carBrand != null) {
-            searchCarCriteria.append("car_brand=").append("'").append(carClass).append("'").append(" ");
+            searchCarCriteria.append("car_brand='").append(carClass).append("' ");
         }
 
         if (isAvailableToRent != null) {

@@ -60,16 +60,13 @@ public class SQLUserDAO implements UserDAO {
         }
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        BCryptPasswordEncoder bCryptPasswordEncoder;
 
         try {
             connection = connectionPool.takeConnection();
-            bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            String hashPassword = bCryptPasswordEncoder.encode(user.getPassword());
             preparedStatement = connection.prepareStatement(INSERT_USER_TO_DATABASE_QUERY);
 
             preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, hashPassword);
+            preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getSurname());
             preparedStatement.setString(4, user.getName());
             preparedStatement.setString(5, user.getPassportIdNumber());

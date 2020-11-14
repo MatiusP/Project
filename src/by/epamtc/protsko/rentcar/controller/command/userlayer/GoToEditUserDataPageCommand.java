@@ -6,6 +6,8 @@ import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToEditUserDataPageCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(GoToEditUserDataPageCommand.class);
     private static final String SHOW_USER_DATA_PAGE_MAPPING = "WEB-INF/jsp/editUserData.jsp";
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
     private static final String USER_ID_PARAMETER_NAME = "id";
@@ -28,9 +31,8 @@ public class GoToEditUserDataPageCommand implements Command {
 
         try {
             user = userService.findByUserId(userId);
-
         } catch (UserServiceException e) {
-            //logger
+            logger.info("Error while finding user by id", e);
         }
         request.setAttribute(USER_ATTRIBUTE_NAME, user);
         request.getSession(true).setAttribute(PREV_REQ_URL_ATTRIBUTE_NAME, currentRequestURL);

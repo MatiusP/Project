@@ -2,10 +2,11 @@ package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
 import by.epamtc.protsko.rentcar.dto.OrderForClientAcceptDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.OrderService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.exception.OrderServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class CheckOrderDataCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(CheckOrderDataCommand.class);
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final OrderService orderService = serviceFactory.getOrderService();
     private static final String BACK_TO_CAR_PAGE_MAPPING = "mainController?command=go_to_car_page&carId=";
@@ -32,7 +34,7 @@ public class CheckOrderDataCommand implements Command {
     private static final String CAR_ID_ATTRIBUTE_NAME = "currentCarId";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final int carId = Integer.parseInt(request.getParameter(CAR_ID_PARAMETER_NAME));
         final LocalDate orderDate = LocalDate.now();
         final LocalDate startRent = LocalDate.parse(request.getParameter(START_RENT_PARAMETER_NAME));
@@ -52,6 +54,7 @@ public class CheckOrderDataCommand implements Command {
                 request.setAttribute(CAR_ID_ATTRIBUTE_NAME, carId);
                 request.getRequestDispatcher(BACK_TO_CAR_PAGE_MAPPING + carId).forward(request, response);
             } catch (OrderServiceException e) {
+                logger.error("Error while checking order data", e);
                 session.setAttribute(CAR_NOT_AVAILABLE_ATTRIBUTE_NAME, CAR_NOT_AVAILABLE_ATTRIBUTE_MESSAGE);
                 response.sendRedirect(BACK_TO_CAR_PAGE_MAPPING + carId);
             }

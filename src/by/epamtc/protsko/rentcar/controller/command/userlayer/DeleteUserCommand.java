@@ -4,6 +4,8 @@ import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class DeleteUserCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(DeleteUserCommand.class);
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
     private static final String DELETE_USER_RESULT = "deleteUserResult";
@@ -36,8 +39,7 @@ public class DeleteUserCommand implements Command {
                 response.sendRedirect(SHOW_ALL_USERS_MAPPING);
             }
         } catch (UserServiceException e) {
-            //logger
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
     }
 }

@@ -5,6 +5,8 @@ import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class FindUserCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(FindUserCommand.class);
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
     private static final String USER_MANAGEMENT_PAGE_MAPPING = "mainController?command=go_to_user_management_page";
@@ -91,7 +94,7 @@ public class FindUserCommand implements Command {
                 request.setAttribute(USERS_LIST_ATTRIBUTE_NAME, usersFoundList);
             }
         } catch (UserServiceException e) {
-            //logger
+            logger.info("Error while finding user", e);
         }
         request.getRequestDispatcher(USER_MANAGEMENT_PAGE_MAPPING).forward(request, response);
     }

@@ -184,28 +184,28 @@ public class UserUtil {
             searchUserCriteria.append("id=").append(id).append(" ");
         }
         if (login != null) {
-            searchUserCriteria.append("login=" + "'").append(login).append("'").append(" ");
+            searchUserCriteria.append("login='").append(login).append("' ");
         }
         if (surname != null) {
-            searchUserCriteria.append("surname=" + "'").append(surname).append("'").append(" ");
+            searchUserCriteria.append("surname='").append(surname).append("' ");
         }
         if (name != null) {
-            searchUserCriteria.append("name=" + "'").append(name).append("'").append(" ");
+            searchUserCriteria.append("name='").append(name).append("' ");
         }
         if (passportIdNumber != null) {
-            searchUserCriteria.append("passport_id_number=" + "'").append(passportIdNumber).append("'").append(" ");
+            searchUserCriteria.append("passport_id_number='").append(passportIdNumber).append("' ");
         }
         if (driverLicense != null) {
-            searchUserCriteria.append("driver_license=" + "'").append(driverLicense).append("'").append(" ");
+            searchUserCriteria.append("driver_license='").append(driverLicense).append("' ");
         }
         if (dateOfBirth != null) {
-            searchUserCriteria.append("date_of_birth=" + "'").append(dateOfBirth).append("'").append(" ");
+            searchUserCriteria.append("date_of_birth='").append(dateOfBirth).append("' ");
         }
         if (eMail != null) {
-            searchUserCriteria.append("e_mail=" + "'").append(eMail).append("'").append(" ");
+            searchUserCriteria.append("e_mail='").append(eMail).append("' ");
         }
         if (phone != null) {
-            searchUserCriteria.append("phone=" + "'").append(phone).append("'").append(" ");
+            searchUserCriteria.append("phone='").append(phone).append("' ");
         }
         if (status.equals(USER_ACTIVE_STATUS)) {
             searchUserCriteria.append("is_deleted=").append(false).append(" ");

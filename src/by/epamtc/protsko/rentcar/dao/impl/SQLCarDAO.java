@@ -194,7 +194,6 @@ public class SQLCarDAO implements CarDAO {
             } else {
                 resultSet = statement.executeQuery(GET_ALL_CARS_QUERY);
             }
-
             foundCarsList = getCarsList(resultSet);
         } catch (SQLException e) {
             throw new CarDAOException(e);

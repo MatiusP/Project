@@ -1,8 +1,41 @@
 #footer {
     position: fixed;
-    left: 0; bottom: 0;
+    left: 0;
+    bottom: 0;
     padding: 0px 30px;
     background: #011b32;
     color: #fff;
     width: 100%;
+}
+
+.footer_logo {
+    font-size: 30px;
+    color: red;
+    font-family: "Algerian";
+    font-variant: small-caps;
+}
+
+
+.leftstr, .rightstr {
+    float: left;
+    width: 50%;
+}
+
+.rightstr {
+    padding:0px 645px;
+    width:100%;
+    margin:695px;
+    font-family: Helvetica;
+    position: fixed;
+    top: 20%;
+    color: white;
+    font-size: 20px;
+}
+
+p {
+    color:white;
+    float: left;
+    width:60%;
+    margin:5px;
+    font-size:14px;
 }

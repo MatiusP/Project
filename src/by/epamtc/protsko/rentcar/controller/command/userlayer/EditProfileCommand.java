@@ -6,6 +6,8 @@ import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +18,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 public class EditProfileCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(EditProfileCommand.class);
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
     private static final String EDIT_PROFILE_MAPPING = "mainController?command=go_to_edit_profile_page";
@@ -77,10 +80,12 @@ public class EditProfileCommand implements Command {
 
             isEditUserDataSuccessfully = userService.edit(editUserData);
         } catch (UserServiceException e) {
+            logger.info(e.getMessage());
             editUserDataError = e.getMessage();
             request.setAttribute(VALIDATION_ERROR, editUserDataError);
             request.getRequestDispatcher(EDIT_PROFILE_MAPPING).forward(request, response);
         } catch (DateTimeParseException e) {
+            logger.error("Invalid date value", e);
             request.setAttribute(VALIDATION_ERROR, DATE_VALIDATOR_ERROR_MESSAGE);
             request.getRequestDispatcher(EDIT_PROFILE_MAPPING).forward(request, response);
         }

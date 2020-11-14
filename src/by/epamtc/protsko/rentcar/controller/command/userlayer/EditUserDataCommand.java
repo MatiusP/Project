@@ -5,6 +5,8 @@ import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +15,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class EditUserDataCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(EditUserDataCommand.class);
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
-
     private static final String EDIT_USER_DATA_MAPPING = "mainController?command=go_to_edit_user_data_page";
     private static final String USER_MANAGEMENT_PAGE_MAPPING = "mainController?command=go_to_user_management_page";
     private static final String VALIDATION_ERROR = "validationError";
@@ -62,6 +64,7 @@ public class EditUserDataCommand implements Command {
 
             isEditUserDataSuccessfully = userService.edit(editUserData);
         } catch (UserServiceException e) {
+            logger.info("Error while editing user date", e);
             editUserDataError = e.getMessage();
             request.setAttribute(VALIDATION_ERROR, editUserDataError);
             request.getRequestDispatcher(EDIT_USER_DATA_MAPPING + userIdForErrorMapping).forward(request, response);

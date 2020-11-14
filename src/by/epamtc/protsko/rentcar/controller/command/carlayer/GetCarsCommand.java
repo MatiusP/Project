@@ -6,6 +6,8 @@ import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
 import by.epamtc.protsko.rentcar.service.CarService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.exception.CarServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetCarsCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(GetCarsCommand.class);
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final CarService carService = serviceFactory.getCarService();
     private static final String SHOW_ALL_CARS_PAGE = "WEB-INF/jsp/ourCarsPage.jsp";
@@ -60,6 +63,7 @@ public class GetCarsCommand implements Command {
             }
             request.setAttribute(CAR_LIST_ATTRIBUTE_NAME, cars);
         } catch (CarServiceException e) {
+            logger.error("Error while getting a car", e);
             request.setAttribute(NO_CARS_FOUND_MESSAGE, e);
         }
         request.getRequestDispatcher(SHOW_ALL_CARS_PAGE).forward(request, response);

@@ -2,7 +2,6 @@ package by.epamtc.protsko.rentcar.controller.command.orderlayer;
 
 import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.controller.command.util.RequestURL;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,7 @@ public class GoToOrderManagementPageCommand implements Command {
     private static final String PREV_REQ_URL_ATTRIBUTE_NAME = "previousRequestURL";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String currentRequestURL = RequestURL.getRequestURL(request);
         request.getSession().setAttribute(PREV_REQ_URL_ATTRIBUTE_NAME, currentRequestURL);
 

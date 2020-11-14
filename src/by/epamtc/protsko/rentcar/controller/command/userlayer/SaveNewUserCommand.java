@@ -15,8 +15,11 @@ import by.epamtc.protsko.rentcar.controller.command.Command;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SaveNewUserCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(SaveNewUserCommand.class);
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final UserService userService = serviceFactory.getUserService();
     private static final String REGISTRATION_MAPPING = "mainController?command=registration";
@@ -71,6 +74,7 @@ public class SaveNewUserCommand implements Command {
                 request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
             }
         } catch (UserServiceException e) {
+            logger.info("Error while saving new user", e);
             registrationError = e.getMessage();
             if (registrationError.contains(FILL_FORM_ERROR_TEXT)) {
                 request.setAttribute(FILL_FORM_ERROR_ATTRIBUTE_NAME, registrationError);
@@ -79,6 +83,7 @@ public class SaveNewUserCommand implements Command {
             }
             request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
         } catch (DateTimeParseException e) {
+            logger.error("Incorrect date value", e);
             request.setAttribute(VALIDATION_ERROR_ATTRIBUTE_NAME, DATE_VALIDATOR_ERROR_MESSAGE);
             request.getRequestDispatcher(REGISTRATION_MAPPING).forward(request, response);
         }
@@ -101,7 +106,7 @@ public class SaveNewUserCommand implements Command {
         try {
             user = userService.authentication(fullUserDTO.getLogin(), fullUserDTO.getPassword());
         } catch (UserServiceException e) {
-            //loger;
+            logger.error("Error while getting user registration data from DB", e);
         }
         return user;
     }

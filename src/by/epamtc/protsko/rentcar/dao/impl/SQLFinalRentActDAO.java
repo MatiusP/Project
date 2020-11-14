@@ -12,7 +12,6 @@ import java.sql.SQLException;
 
 public class SQLFinalRentActDAO implements FinalRentActDAO {
     private static ConnectionPool connectionPool = ConnectionPool.getInstance();
-
     private static final String CREATE_FINAL_ACT_ERROR_MESSAGE = "Error while creating final act";
     private static final String FIND_FINAL_ACT_ERROR_MESSAGE = "Final act does not found";
     private static final String FIND_FINAL_ACT_SQL_ERROR_MESSAGE = "Error while getting final act";

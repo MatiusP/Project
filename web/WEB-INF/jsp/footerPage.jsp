@@ -7,7 +7,11 @@
 <body>
 
 <div id="footer">
-    <h4>copyright: Matsvey Pratsko  +375(29)-750-54-82</h4>
+    <p class="footer_logo leftstr">MotorRENT</p>
+    <p class="footer_slogan rightstr">+375(29)750 54 82</p>
+    <br/>
+    <p>copyright: Matsvey Pratsko</p>
 </div>
+
 </body>
 </html>

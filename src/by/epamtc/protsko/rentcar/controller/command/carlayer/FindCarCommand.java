@@ -2,10 +2,11 @@ package by.epamtc.protsko.rentcar.controller.command.carlayer;
 
 import by.epamtc.protsko.rentcar.dto.CarDTO;
 import by.epamtc.protsko.rentcar.controller.command.Command;
-import by.epamtc.protsko.rentcar.controller.exception.ControllerException;
 import by.epamtc.protsko.rentcar.service.CarService;
 import by.epamtc.protsko.rentcar.service.ServiceFactory;
 import by.epamtc.protsko.rentcar.service.exception.CarServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,9 +15,9 @@ import java.io.IOException;
 import java.util.List;
 
 public class FindCarCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(FindCarCommand.class);
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final CarService carService = serviceFactory.getCarService();
-
     private static final String GET_FIND_RESULT_MAPPING = "mainController?command=go_to_car_management_page&param=findCar";
     private static final String GET_ALL_CARS_MAPPING = "mainController?command=go_to_car_management_page";
     private static final String ALL_CARS_ATTRIBUTE_NAME = "command";
@@ -38,7 +39,7 @@ public class FindCarCommand implements Command {
     private static final String FOUND_CAR_LIST_ATTRIBUTE_NAME = "cars";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ControllerException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final String carId = request.getParameter(ID_PARAMETER_NAME);
         final String carVIN = request.getParameter(VIN_PARAMETER_NAME);
         final String carManufactureDate = request.getParameter(MANUFACTURE_DATE_PARAMETER_NAME);
@@ -100,7 +101,7 @@ public class FindCarCommand implements Command {
                 request.setAttribute(FOUND_CAR_LIST_ATTRIBUTE_NAME, carFoundList);
             }
         } catch (CarServiceException e) {
-            //logger
+            logger.error("Error while finding car", e);
         }
         if (request.getSession().getAttribute(ALL_CARS_ATTRIBUTE_NAME) != null
                 && request.getSession().getAttribute(ALL_CARS_ATTRIBUTE_NAME).equals(ALL_CARS_ATTRIBUTE_VALUE)) {

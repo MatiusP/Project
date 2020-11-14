@@ -13,6 +13,7 @@ import by.epamtc.protsko.rentcar.dto.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 import by.epamtc.protsko.rentcar.service.util.UserUtil;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UserServiceImpl implements UserService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
@@ -91,7 +92,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean delete(int userId) throws UserServiceException {
         try {
-
             return userDAO.delete(userId);
         } catch (UserDAOException e) {
             throw new UserServiceException(e);
@@ -175,10 +175,13 @@ public class UserServiceImpl implements UserService {
     }
 
     private User buildUserFromRegistrationData(FullUserDTO fullUserDTO) {
+        final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        final String hashPassword = bCryptPasswordEncoder.encode(fullUserDTO.getPassword());
+
         User user = new User();
 
         user.setLogin(fullUserDTO.getLogin());
-        user.setPassword(fullUserDTO.getPassword());
+        user.setPassword(hashPassword);
         user.setSurname(fullUserDTO.getSurname());
         user.setName(fullUserDTO.getName());
         user.setPassportIdNumber(fullUserDTO.getPassportIdNumber());

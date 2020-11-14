@@ -3,11 +3,14 @@ package by.epamtc.protsko.rentcar.controller.command;
 import by.epamtc.protsko.rentcar.controller.command.carlayer.*;
 import by.epamtc.protsko.rentcar.controller.command.orderlayer.*;
 import by.epamtc.protsko.rentcar.controller.command.userlayer.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandProvider {
+    private static final Logger logger = LogManager.getLogger(CommandProvider.class);
     private Map<ParameterName, Command> commands = new HashMap<>();
 
     public CommandProvider() {
@@ -53,12 +56,10 @@ public class CommandProvider {
             if (!commandName.isEmpty() || commandName != null) {
                 commandName = commandName.toUpperCase();
                 ParameterName valueName = ParameterName.valueOf(commandName);
-
                 command = commands.get(valueName);
             }
         } catch (IllegalArgumentException e) {
-            // logger
-            System.out.println("Unknown command!"); ///////////////////// обработать
+            logger.error("Unknown command for Command provider", e);
         }
         return command;
     }
