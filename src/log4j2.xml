@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss} [%level] %logger{36} - %m%n"/>
+        </Console>
+
+        <RollingFile name="FileLogger"
+                     filePattern="C:\\rentCar_app_logs\rent_car_app-%d{yyyy-MM-dd}.log"
+                     ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%d [%p] %c{1} – %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLogger"/>
+        </Root>
+
+    </Loggers>
+</Configuration>

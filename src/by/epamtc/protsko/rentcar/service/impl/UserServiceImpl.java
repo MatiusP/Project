@@ -175,13 +175,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private User buildUserFromRegistrationData(FullUserDTO fullUserDTO) {
-        final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        final String hashPassword = bCryptPasswordEncoder.encode(fullUserDTO.getPassword());
-
         User user = new User();
 
         user.setLogin(fullUserDTO.getLogin());
-        user.setPassword(hashPassword);
+        user.setPassword(fullUserDTO.getPassword());
         user.setSurname(fullUserDTO.getSurname());
         user.setName(fullUserDTO.getName());
         user.setPassportIdNumber(fullUserDTO.getPassportIdNumber());

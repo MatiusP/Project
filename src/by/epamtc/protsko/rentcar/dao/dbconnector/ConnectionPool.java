@@ -10,10 +10,29 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
+/**
+ * The class {@code ConnectionPool} provides an implementation
+ * to manage access to the {@code Connection} objects
+ *
+ * @author Matvey Protsko
+ * @see DBConnectionManager
+ * @see DBConnectionParameter
+ */
+
 public final class ConnectionPool {
     private static final ConnectionPool instance = new ConnectionPool();
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
+
+    /**
+     * This queue stores {@code Connection} objects, which are available
+     * for using.
+     */
     private BlockingQueue<Connection> connectionQueue;
+
+    /**
+     * This queue stores {@code Connection} objects that are currently
+     * being used by the program.
+     */
     private BlockingQueue<Connection> givenAwayConnectionQueue;
 
     private String driverName;
@@ -22,6 +41,11 @@ public final class ConnectionPool {
     private String connectionPassword;
     private int poolSize;
 
+
+    /**
+     * {@code ConnectionPool} constructor, that initializes parameters
+     * for database connection
+     */
     private ConnectionPool() {
         DBConnectionManager dbConnectionManager = DBConnectionManager.getInstance();
 
@@ -38,6 +62,9 @@ public final class ConnectionPool {
         initConnectionPool();
     }
 
+    /**
+     * Initialization of the queues with {@code PooledConnection} objects
+     */
     private void initConnectionPool() {
         try {
             Class.forName(driverName);
@@ -56,6 +83,11 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * {@code ConnectionPool} instance access point
+     *
+     * @return instance of the {@code ConnectionPool} class
+     */
     public static ConnectionPool getInstance() {
         return instance;
     }
@@ -127,6 +159,11 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Wrapper {@code PooledConnection} class for {@code Connection}
+     * Changes default behavior for the close() method to removing and offering
+     * connection instances using queues
+     */
     private class PooledConnection implements Connection {
         private Connection connection;
 

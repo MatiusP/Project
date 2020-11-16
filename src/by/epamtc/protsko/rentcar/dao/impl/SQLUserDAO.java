@@ -16,7 +16,17 @@ import by.epamtc.protsko.rentcar.dao.dbconnector.ConnectionPool;
 import by.epamtc.protsko.rentcar.dao.exception.UserDAOException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+/**
+ * This class implementation of {@link UserDAO}. Methods use
+ * {@link ConnectionPool} to connect to database and work with users.
+ *
+ * @author Matvey Protsko
+ */
+
 public class SQLUserDAO implements UserDAO {
+    /**
+     * A single instance of the class {@code ConnectionPool} (pattern Singleton)
+     */
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     private static final String AUTH_USER_MESSAGE = "Incorrect login or password";
@@ -42,6 +52,16 @@ public class SQLUserDAO implements UserDAO {
     private static final String GET_ALL_USERS_QUERY = "SELECT * FROM users";
     private static final String FIND_USER_QUERY = "SELECT * FROM users WHERE ";
 
+    /**
+     * Method {@code authentication} checked entered user's login and password.
+     *
+     * @param login    - entered user's login.
+     * @param password - entered user's password.
+     * @return User object which matching the entered login and password. If entered user's
+     * login and (or) password does not exist in the database, or if user's parameter isDeleted
+     * equals false, this method throws UserDAOException.
+     * @throws UserDAOException when problems with database access occur.
+     */
     @Override
     public User authentication(String login, String password) throws UserDAOException {
         User userData = getRegistrationUserData(login, password);
@@ -52,6 +72,17 @@ public class SQLUserDAO implements UserDAO {
         return userData;
     }
 
+    /**
+     * Method {@code add} adds a new user to database.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * and add a new user to database.
+     *
+     * @param user contains entered user's data from service layer.
+     * @return true if the user was successfully added to database. If user has not been
+     * added to the database, this method throws UserDAOException.
+     * @throws UserDAOException when problems with database access occur.
+     */
     @Override
     public boolean add(User user) throws UserDAOException {
 
@@ -60,13 +91,16 @@ public class SQLUserDAO implements UserDAO {
         }
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        BCryptPasswordEncoder bCryptPasswordEncoder;
 
         try {
             connection = connectionPool.takeConnection();
+            bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            String hashPassword = bCryptPasswordEncoder.encode(user.getPassword());
             preparedStatement = connection.prepareStatement(INSERT_USER_TO_DATABASE_QUERY);
 
             preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(2, hashPassword);
             preparedStatement.setString(3, user.getSurname());
             preparedStatement.setString(4, user.getName());
             preparedStatement.setString(5, user.getPassportIdNumber());
@@ -86,6 +120,17 @@ public class SQLUserDAO implements UserDAO {
         return true;
     }
 
+    /**
+     * Method {@code edit} edit (update) user's data in database.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * and add a new user to database.
+     *
+     * @param user contains entered new user's data from service layer.
+     * @return true if the user was successfully edited in database. If user has not been
+     * edited in the database, this method throws UserDAOException.
+     * @throws UserDAOException when problems with database access occur.
+     */
     @Override
     public boolean edit(User user) throws UserDAOException {
         Connection connection = null;
@@ -134,6 +179,18 @@ public class SQLUserDAO implements UserDAO {
         return true;
     }
 
+    /**
+     * Method {@code delete} removes a user from the system.
+     * This method change user's parameter isDeleted from false to true.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * and remove a user from system.
+     *
+     * @param userId - id of the user we want to remove from the system.
+     * @return true if the user was successfully removed from system. If user has not been
+     * removed from the system, this method returns false.
+     * @throws UserDAOException when problems with database access occur.
+     */
     @Override
     public boolean delete(int userId) throws UserDAOException {
         Connection connection = null;
@@ -157,6 +214,16 @@ public class SQLUserDAO implements UserDAO {
         return false;
     }
 
+    /**
+     * Method {@code findById} finds a user by user id.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * find and return user's data from database.
+     *
+     * @param userId - id of the user we want to find in the system.
+     * @return User object which id matches userId parameter value.
+     * @throws UserDAOException when problems with database access occur.
+     */
     @Override
     public User findById(int userId) throws UserDAOException {
         Connection connection = null;
@@ -183,7 +250,16 @@ public class SQLUserDAO implements UserDAO {
         return user;
     }
 
-
+    /**
+     * Method {@code findBySearchCriteria} finds users by search criteria.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * find and return users list from database, whose data match the search criteria.
+     *
+     * @param searchCriteria - criteria that can contains one or more user's data parameters.
+     * @return List of users whose data match the search criteria.
+     * @throws UserDAOException when problems with database access occur.
+     */
     @Override
     public List<User> findBySearchCriteria(String searchCriteria) throws UserDAOException {
         Connection connection = null;
@@ -216,7 +292,21 @@ public class SQLUserDAO implements UserDAO {
         return users;
     }
 
-
+    /**
+     * Method {@code getRegistrationUserData} is additional method, which used
+     * authentication {@code authentication} method for creating User object from
+     * database.
+     * <p>
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}) and
+     * ResultSet object {@code ResultSet} and search user in database.
+     * If the user is found, this method create and return founded user like User object.
+     *
+     * @param login    - entered user's login.
+     * @param password - entered user's password.
+     * @return User object which contains user's data by entered login and password.
+     * @throws UserDAOException when problems with database access occur.
+     */
     private User getRegistrationUserData(String login, String password) throws UserDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -249,6 +339,20 @@ public class SQLUserDAO implements UserDAO {
         return user;
     }
 
+    /**
+     * Method {@code isLoginExist} is additional method, which used
+     * add {@code add} and edit {@code edit} methods to check the login
+     * for existence in the database.
+     * <p>
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}) and
+     * ResultSet object {@code ResultSet} and search entered login in database.
+     *
+     * @param login - entered user's login for check by existence in the database.
+     * @return false if entered login has not exists in database. If entered login exists
+     * in database, this method throws UserDAOException.
+     * @throws UserDAOException when problems with database access occur.
+     */
     private boolean isLoginExist(String login) throws UserDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -273,6 +377,14 @@ public class SQLUserDAO implements UserDAO {
         return false;
     }
 
+    /**
+     * Method {@code fillUserDataFromDB} which used for build user
+     * from database data like User object.
+     *
+     * @param resultSet - resultSet, that contains user's data from database.
+     * @return User object which contains user's data from database.
+     * @throws UserDAOException when problems with database access occur.
+     */
     private User fillUserDataFromDB(ResultSet resultSet) throws UserDAOException {
         User user = new User();
 
