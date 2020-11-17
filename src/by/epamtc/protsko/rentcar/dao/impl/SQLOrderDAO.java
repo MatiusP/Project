@@ -10,7 +10,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class implementation of {@link OrderDAO}. Methods use
+ * {@link ConnectionPool} to connect to database and work with order layer.
+ *
+ * @author Matvey Protsko
+ */
+
 public class SQLOrderDAO implements OrderDAO {
+    /**
+     * A single instance of the class {@code ConnectionPool} (pattern Singleton)
+     */
     private static ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     private static final String CREATE_ORDER_ERROR_MESSAGE = "Error while creating new order";
@@ -33,6 +43,17 @@ public class SQLOrderDAO implements OrderDAO {
     private static final String CLOSE_ORDER_QUERY = "UPDATE orders SET is_order_closed=1 WHERE id=?";
     private static final String CANCEL_ORDER_QUERY = "UPDATE orders SET is_order_canceled=1 WHERE id=?";
 
+    /**
+     * Method {@code add} adds a new order to database.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}),
+     * create ResultSet {@code ResultSet} and add a new order to database.
+     *
+     * @param order contains entered order's data from service layer.
+     * @return added order id if the new order was successfully added to database.
+     * If order has not been added to the database, this method throws OrderDAOException.
+     * @throws OrderDAOException when problems with database access occur.
+     */
     @Override
     public int add(Order order) throws OrderDAOException {
         Connection connection = null;
@@ -72,6 +93,18 @@ public class SQLOrderDAO implements OrderDAO {
         return newOrderId;
     }
 
+    /**
+     * Method {@code accept} used for confirming the user's order and
+     * change order's parameter isOrderAccepted from false to true.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool} and create PreparedStatement for connecting
+     * to database.
+     *
+     * @param orderId - id of the order which we want to accept.
+     * @return true if the order was successfully accepted. If order has not
+     * been accepted, this method throws OrderDAOException.
+     * @throws OrderDAOException when problems with database access occur.
+     */
     @Override
     public boolean accept(int orderId) throws OrderDAOException {
         Connection connection = null;
@@ -97,6 +130,18 @@ public class SQLOrderDAO implements OrderDAO {
         }
     }
 
+    /**
+     * Method {@code close} used for closing the user's order and
+     * change order's parameter isOrderClosed from false to true.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool} and create PreparedStatement for connecting
+     * to database.
+     *
+     * @param orderId - id of the order which we want to close.
+     * @return true if the order was successfully closed. If order has not
+     * been closed, this method throws OrderDAOException.
+     * @throws OrderDAOException when problems with database access occur.
+     */
     @Override
     public boolean close(int orderId) throws OrderDAOException {
         Connection connection = null;
@@ -121,6 +166,18 @@ public class SQLOrderDAO implements OrderDAO {
         }
     }
 
+    /**
+     * Method {@code cancel} used for canceling the user's order and
+     * change order's parameter isOrderCanceled from false to true.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool} and create PreparedStatement for connecting
+     * to database.
+     *
+     * @param orderId - id of the order which we want to cancel.
+     * @return true if the order was successfully canceled. If order has not
+     * been canceled, this method throws OrderDAOException.
+     * @throws OrderDAOException when problems with database access occur.
+     */
     @Override
     public boolean cancel(int orderId) throws OrderDAOException {
         Connection connection = null;
@@ -145,6 +202,16 @@ public class SQLOrderDAO implements OrderDAO {
         }
     }
 
+    /**
+     * Method {@code findByOrderId} finds an order by order id.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}),
+     * ResultSet {@code ResultSet}, find and return order's data from database.
+     *
+     * @param orderId - id of the order we want to find in the system.
+     * @return Order object which id matches orderId parameter value.
+     * @throws OrderDAOException when problems with database access occur.
+     */
     @Override
     public Order findByOrderId(int orderId) throws OrderDAOException {
         Connection connection = null;
@@ -171,6 +238,15 @@ public class SQLOrderDAO implements OrderDAO {
         return order;
     }
 
+    /**
+     * Method {@code findAll} finds all orders in database.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}),
+     * ResultSet {@code ResultSet}, find and return orders list from database.
+     *
+     * @return List of ordersForShow objects, whose contains all information about orders.
+     * @throws OrderDAOException when problems with database access occur.
+     */
     @Override
     public List<OrderForShow> findAll() throws OrderDAOException {
         Connection connection = null;
@@ -199,6 +275,16 @@ public class SQLOrderDAO implements OrderDAO {
         return orderList;
     }
 
+    /**
+     * Method {@code findByUserId} finds an order by user id.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}),
+     * ResultSet {@code ResultSet}, find and return user's orders from database.
+     *
+     * @param userId - id of the user whose orders we are looking.
+     * @return List of ordersForShow, whose contains all user orders.
+     * @throws OrderDAOException when problems with database access occur.
+     */
     @Override
     public List<OrderForShow> findByUserId(int userId) throws OrderDAOException {
         Connection connection = null;
@@ -227,6 +313,16 @@ public class SQLOrderDAO implements OrderDAO {
         return userOrders;
     }
 
+    /**
+     * Method {@code findByCarId} finds an order by car id.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}),
+     * ResultSet {@code ResultSet}, find and return car's orders from database.
+     *
+     * @param carId - id of the car whose orders we are looking.
+     * @return List of Order, whose contains all car's orders.
+     * @throws OrderDAOException when problems with database access occur.
+     */
     @Override
     public List<Order> findByCarId(int carId) throws OrderDAOException {
         Connection connection = null;
@@ -255,6 +351,14 @@ public class SQLOrderDAO implements OrderDAO {
         return carOrderList;
     }
 
+    /**
+     * Method {@code buildOrderFromDB} is additional method which used for build order
+     * from database data like Order object.
+     *
+     * @param resultSet - resultSet, that contains order's data from database.
+     * @return Order object which contains order's data from database.
+     * @throws SQLException when problems with database access occur.
+     */
     private Order buildOrderFromDB(ResultSet resultSet) throws SQLException {
         Order order = new Order();
 
@@ -272,6 +376,17 @@ public class SQLOrderDAO implements OrderDAO {
         return order;
     }
 
+    /**
+     * Method {@code buildOrderFromDatabase} is additional method which used
+     * for build order from database data like OrderForShow {@link OrderForShow}
+     * object.
+     * OrderForShow object used for show all needed information about order's
+     * data in web page.
+     *
+     * @param resultSet - resultSet, that contains order's data from database.
+     * @return OrderForShow object which contains order's data from database.
+     * @throws SQLException when problems with database access occur.
+     */
     private OrderForShow buildOrderFromDatabase(ResultSet resultSet) throws SQLException {
         OrderForShow order = new OrderForShow();
 

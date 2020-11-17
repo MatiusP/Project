@@ -378,8 +378,8 @@ public class SQLUserDAO implements UserDAO {
     }
 
     /**
-     * Method {@code fillUserDataFromDB} which used for build user
-     * from database data like User object.
+     * Method {@code fillUserDataFromDB} is additional method which used
+     * for build user from database data like User object.
      *
      * @param resultSet - resultSet, that contains user's data from database.
      * @return User object which contains user's data from database.

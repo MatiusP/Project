@@ -2,6 +2,12 @@ package by.epamtc.protsko.rentcar.service.validator.user;
 
 import java.util.regex.Pattern;
 
+/**
+ * The class {@code PassportIDValidatorUserCommand} validates
+ * user's passport id number.
+ *
+ * @author Matvey Protsko
+ */
 public class PassportIDValidatorUserCommand implements UserCommandValidator {
     private ValidatorManager validatorManager = ValidatorManager.getInstance();
     private Pattern pattern;

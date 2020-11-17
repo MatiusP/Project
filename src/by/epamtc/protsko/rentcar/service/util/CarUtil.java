@@ -5,6 +5,12 @@ import by.epamtc.protsko.rentcar.service.exception.CarServiceException;
 import by.epamtc.protsko.rentcar.service.validator.car.CarParameterType;
 import by.epamtc.protsko.rentcar.service.validator.car.CarValidatorFactory;
 
+/**
+ * The {@code CarUtil} class provides methods for checking the input
+ * car data
+ *
+ * @author Matvey Protsko
+ */
 public class CarUtil {
     private static final String VIN_INVALID_MESSAGE = "VIN value invalid";
     private static final String MANUFACTURE_DATE_INVALID_MESSAGE = "Manufacture date value invalid";
@@ -18,6 +24,15 @@ public class CarUtil {
     private CarUtil() {
     }
 
+    /**
+     * The method {@code isEnteredDataValid} validation the input
+     * user data
+     *
+     * @param car {@link CarDTO} object which contains entered car's data values.
+     * @return true if entered car's data values is valid. If entered car's data values
+     * is not valid, this method throws CarServiceException
+     * @throws CarServiceException if entered car's data values is not valid.
+     */
     public static boolean isEnteredDataValid(CarDTO car) throws CarServiceException {
         final CarValidatorFactory factory = new CarValidatorFactory();
         final String carVin = car.getVin();
@@ -59,6 +74,14 @@ public class CarUtil {
         return true;
     }
 
+    /**
+     * The method {@code createSearchCarQuery} build search criteria from
+     * user request.
+     *
+     * @param searchingCar {@link CarDTO} object which contains user request
+     *                     search parameters.
+     * @return search criteria String line.
+     */
     public static String createSearchCarQuery(CarDTO searchingCar) {
         final int carId = searchingCar.getId();
         final String carVin = searchingCar.getVin();

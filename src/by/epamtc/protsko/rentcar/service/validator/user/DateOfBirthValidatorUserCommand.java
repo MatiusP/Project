@@ -2,6 +2,12 @@ package by.epamtc.protsko.rentcar.service.validator.user;
 
 import java.util.regex.Pattern;
 
+/**
+ * The class {@code DateOfBirthValidatorUserCommand} validates
+ * user's date of birth.
+ *
+ * @author Matvey Protsko
+ */
 public class DateOfBirthValidatorUserCommand implements UserCommandValidator {
     private ValidatorManager validatorManager = ValidatorManager.getInstance();
     private Pattern pattern;

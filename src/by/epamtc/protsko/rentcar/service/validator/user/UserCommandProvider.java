@@ -3,6 +3,12 @@ package by.epamtc.protsko.rentcar.service.validator.user;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The class {@code UserCommandProvider} is a
+ * validator command provider.
+ *
+ * @author Matvey Protsko
+ */
 public class UserCommandProvider {
 	private static Map<UserCredentialType, UserCommandValidator> commands = new HashMap<>();
 

@@ -9,6 +9,11 @@ import by.epamtc.protsko.rentcar.service.validator.user.UserCredentialType;
 
 import java.time.LocalDate;
 
+/**
+ * {@code UserUtil} is a util class for {@code UserServiceImpl} class.
+ *
+ * @author Matvey Protsko
+ */
 public class UserUtil {
     private static final UserCommandProvider VALIDATOR_USER_COMMAND_PROVIDER = new UserCommandProvider();
     private static final String LOGIN_OR_PASSWORD_INVALID_MESSAGE = "Invalid login or password";
@@ -27,6 +32,16 @@ public class UserUtil {
     private UserUtil() {
     }
 
+    /**
+     * The method {@code isAuthenticationDataValid} validation the input
+     * login and password.
+     *
+     * @param login    contains information about entered user's login.
+     * @param password contains information about entered user's password.
+     * @return true if entered login and password are valid. Otherwise method
+     * throw UserServiceException.
+     * @throws UserServiceException if login or (and) password is invalid.
+     */
     public static boolean isAuthenticationDataValid(String login, String password) throws UserServiceException {
         boolean isLoginValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.LOGIN).execute(login);
         boolean isPassportValid = VALIDATOR_USER_COMMAND_PROVIDER.getValidator(UserCredentialType.PASSWORD)
@@ -39,6 +54,16 @@ public class UserUtil {
         }
     }
 
+    /**
+     * The method {@code isRegistrationDataValid} validation the input
+     * user's registration data.
+     *
+     * @param user {@link FullUserDTO} contains information about entered user's
+     *             registration data.
+     * @return true if entered registration data is valid. Otherwise method
+     * throw UserServiceException.
+     * @throws UserServiceException if entered registration data is invalid.
+     */
     public static boolean isRegistrationDataValid(FullUserDTO user) throws UserServiceException {
         String userLogin = user.getLogin();
         String userPassword = user.getPassword();
@@ -87,6 +112,16 @@ public class UserUtil {
         return true;
     }
 
+    /**
+     * The method {@code isAuthenticationDataValid} validation the input
+     * user's edit data.
+     *
+     * @param user {@link FullUserDTO} contains information about entered new
+     *             user's profile data.
+     * @return true if entered new profile data is valid. Otherwise method
+     * throw UserServiceException.
+     * @throws UserServiceException if entered new profile data is invalid.
+     */
     public static boolean isEditUserDataValid(EditUserDTO user) throws UserServiceException {
         String userLogin = user.getNewLogin();
         String newUserPassword = user.getNewPassword();
@@ -140,6 +175,16 @@ public class UserUtil {
         return true;
     }
 
+    /**
+     * The method {@code isRegistrationFormFilled} checks the complete
+     * completion of the registration form.
+     *
+     * @param userData {@link FullUserDTO} contains information about entered
+     *                 user's registration data.
+     * @return true if the registration form has been completed completely.
+     * Otherwise method throw UserServiceException.
+     * @throws UserServiceException if the registration form was not completed completely.
+     */
     public static boolean isRegistrationFormFilled(FullUserDTO userData) {
         String userLogin = userData.getLogin();
         String userPassword = userData.getPassword();
@@ -165,6 +210,14 @@ public class UserUtil {
                 && isDriverLicenseFilled && isDateOfBirthFilled && isEMailFilled && isPhoneFilled);
     }
 
+    /**
+     * The method {@code createSearchUserQuery} build search criteria from
+     * user request.
+     *
+     * @param userData {@link FullUserDTO} object which contains user request
+     *                     search parameters.
+     * @return search criteria String line.
+     */
     public static String createSearchUserQuery(FullUserDTO userData) {
         final int id = userData.getId();
         final String login = userData.getLogin();

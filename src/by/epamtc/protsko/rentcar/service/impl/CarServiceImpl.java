@@ -14,6 +14,13 @@ import by.epamtc.protsko.rentcar.service.util.CarUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class implementation of {@link CarService}. Methods execute business logic
+ * for working with car layer.
+ *
+ * @author Matvey Protsko
+ */
+
 public class CarServiceImpl implements CarService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
     private CarDAO carDAO = daoFactory.getCarDAO();
@@ -23,6 +30,16 @@ public class CarServiceImpl implements CarService {
     private static final String IS_CAR_DELETED = "DELETED";
     private static final String IS_CAR_NOT_DELETED = "ACTIVE";
 
+    /**
+     * Method {@code add} provides validation entered car's data from UI
+     * and adding new car to the system.
+     *
+     * @param newCar {@link CarDTO} contains entered car's data value.
+     * @return true if entered new car's data is valid and has been adding to the database.
+     * Otherwise method return false.
+     * @throws CarServiceException when problems in CarDAO {@code CarDAO} layer or if entered car's
+     *                             data invalid or if car's vin number already exists in system.
+     */
     @Override
     public boolean add(CarDTO newCar) throws CarServiceException {
         Car car;
@@ -42,6 +59,16 @@ public class CarServiceImpl implements CarService {
         return false;
     }
 
+    /**
+     * Method {@code edit} provides validation entered car's updating information
+     * and updating car's data.
+     *
+     * @param carForEdit {@link CarDTO} contains entered car's update data value.
+     * @return true if entered car's update data is valid and has been added to the database.
+     * Otherwise method return false.
+     * @throws CarServiceException when problems in CarDAO {@code CarDAO} layer or if entered
+     *                             car's update data invalid.
+     */
     @Override
     public boolean edit(CarDTO carForEdit) throws CarServiceException {
         Car car;
@@ -57,6 +84,15 @@ public class CarServiceImpl implements CarService {
         return false;
     }
 
+    /**
+     * Method {@code delete} for removing a car from the system.
+     *
+     * @param carId - id of the car we want to remove from the system.
+     * @return true if the car was successfully removed from system.
+     * Otherwise method return false.
+     * @throws CarServiceException when problems in CarDAO {@code CarDAO} layer or
+     *                             in business logic.
+     */
     @Override
     public boolean delete(int carId) throws CarServiceException {
         try {
@@ -66,6 +102,15 @@ public class CarServiceImpl implements CarService {
         }
     }
 
+    /**
+     * Method {@code findByCriteria} provides validation and business
+     * logic for finding cars by search criteria.
+     *
+     * @param criteria criteria that can contains one or more car's data parameters.
+     * @return List of {@link CarDTO} objects.
+     * @throws CarServiceException when problems in CarDAO {@code CarDAO} layer or
+     *                             in business logic.
+     */
     @Override
     public List<CarDTO> findByCriteria(CarDTO criteria) throws CarServiceException {
         List<CarDTO> foundCarList = new ArrayList<>();
@@ -85,6 +130,15 @@ public class CarServiceImpl implements CarService {
         return foundCarList;
     }
 
+    /**
+     * Method {@code findAll} provides business logic for finding
+     * all cars in system.
+     *
+     * @return List of {@link CarDTO} objects, whose contains
+     * all information about car.
+     * @throws CarServiceException when problems in CarDAO {@code CarDAO} layer or
+     *                             in business logic.
+     */
     @Override
     public List<CarDTO> findAll() throws CarServiceException {
         List<CarDTO> allCars = new ArrayList<>();

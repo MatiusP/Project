@@ -89,7 +89,7 @@ public interface OrderDAO {
      * Method {@code findByCarId} finds a order by car id.
      *
      * @param carId - id of the car whose orders we are looking.
-     * @return List of ordersForShow, whose contains all car orders.
+     * @return List of Order, whose contains all car's orders.
      * @throws OrderDAOException when problems with database access occur.
      */
     List<Order> findByCarId(int carId) throws OrderDAOException;

@@ -1,7 +1,11 @@
 package by.epamtc.protsko.rentcar.service.validator.user;
 
+/**
+ * The class {@code ValidatorParameter} contains constants with keys for regex values properties
+ *
+ * @author Matvey Protsko
+ */
 public class ValidatorParameter {
-
     public static final String LOGIN = "login.validator.regex";
     public static final String PASSWORD = "password.validator.regex";
     public static final String SURNAME = "surname.validator.regex";

@@ -9,9 +9,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQLCarDAO implements CarDAO {
-    private static ConnectionPool connectionPool = ConnectionPool.getInstance();
+/**
+ * This class implementation of {@link CarDAO}. Methods use
+ * {@link ConnectionPool} to connect to database and work with car layer.
+ *
+ * @author Matvey Protsko
+ */
 
+public class SQLCarDAO implements CarDAO {
+    /**
+     * A single instance of the class {@code ConnectionPool} (pattern Singleton)
+     */
+    private static ConnectionPool connectionPool = ConnectionPool.getInstance();
     private static final String GET_ALL_UN_DELETED_CARS_QUERY = "SELECT * FROM fullCarsData WHERE is_deleted=0";
     private static final String GET_ALL_CARS_QUERY = "SELECT * FROM fullCarsData";
     private static final String FIND_CAR_QUERY = "SELECT * FROM fullCarsData WHERE";
@@ -46,6 +55,17 @@ public class SQLCarDAO implements CarDAO {
     private static final String GET_CAR_MODEL_ERROR_MESSAGE = "Error while getting car model";
     private static final String GET_CAR_ID_ERROR_MESSAGE = "Error while getting car id";
 
+    /**
+     * Method {@code add} adds a new car to database.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}),
+     * and add a new car to database.
+     *
+     * @param car contains entered car's data value from service layer.
+     * @return true if the car was successfully added to database, false -
+     * if has not been added to the database.
+     * @throws CarDAOException when problems with database access occur.
+     */
     @Override
     public boolean add(Car car) throws CarDAOException {
         Connection connection = null;
@@ -88,6 +108,17 @@ public class SQLCarDAO implements CarDAO {
         return false;
     }
 
+    /**
+     * Method {@code edit} updates car's data in database.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * and try to update car's data in database.
+     *
+     * @param car contains entered new cars's data for updating.
+     * @return true if the car's data was successfully updated, false -
+     * if has not been updated.
+     * @throws CarDAOException when problems with database access occur.
+     */
     @Override
     public boolean edit(Car car) throws CarDAOException {
         Connection connection = null;
@@ -127,6 +158,18 @@ public class SQLCarDAO implements CarDAO {
         return false;
     }
 
+    /**
+     * Method {@code delete} removes a car from the system.
+     * This method change car's parameter isDeleted from false to true.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * and remove a car from system.
+     *
+     * @param carId - id of the car we want to remove from the system.
+     * @return true if the car was successfully removed, false -
+     * if has not been removed.
+     * @throws CarDAOException when problems with database access occur.
+     */
     @Override
     public boolean delete(int carId) throws CarDAOException {
         Connection connection = null;
@@ -152,6 +195,17 @@ public class SQLCarDAO implements CarDAO {
         return false;
     }
 
+    /**
+     * Method {@code isVinExists} checks the entered vin for existence.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}),
+     * ResultSet {@code ResultSet} and try to find entered carVin in database.
+     *
+     * @param carVIN - car's VIN number we want to check for existence.
+     * @return true if the carVin already exists in database, false -
+     * if carVin not exists in database.
+     * @throws CarDAOException when problems with database access occur.
+     */
     @Override
     public boolean isVinExists(String carVIN) throws CarDAOException {
         Connection connection = null;
@@ -178,6 +232,17 @@ public class SQLCarDAO implements CarDAO {
         return false;
     }
 
+    /**
+     * Method {@code findBySearchCriteria} finds cars by search criteria.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * ResultSet {@code ResultSet}, find and returns cars list from database,
+     * whose data match the search criteria.
+     *
+     * @param searchCriteria - criteria that can contains one or more car's data parameters.
+     * @return List of cars whose data match the search criteria.
+     * @throws CarDAOException when problems with database access occur.
+     */
     @Override
     public List<Car> findBySearchCriteria(String searchCriteria) throws CarDAOException {
         Connection connection = null;
@@ -205,6 +270,15 @@ public class SQLCarDAO implements CarDAO {
         return foundCarsList;
     }
 
+    /**
+     * Method {@code findAll} find all cars.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * ResultSet {@code ResultSet}, find and returns all cars list from database.
+     *
+     * @return List of cars from database.
+     * @throws CarDAOException when problems with database access occur.
+     */
     @Override
     public List<Car> findAll() throws CarDAOException {
         Connection connection = null;
@@ -228,6 +302,14 @@ public class SQLCarDAO implements CarDAO {
         return carsList;
     }
 
+    /**
+     * Method {@code getCarsList} is additional method which used for build
+     * cars list from database data.
+     *
+     * @param resultSet - resultSet, that contains cars's data from database.
+     * @return Car {@link Car} object list.
+     * @throws CarDAOException when problems with database access occur.
+     */
     private List<Car> getCarsList(ResultSet resultSet) throws CarDAOException {
         List<Car> cars = new ArrayList<>();
         Car car;
@@ -258,6 +340,14 @@ public class SQLCarDAO implements CarDAO {
         return cars;
     }
 
+    /**
+     * Method {@code getCarPhotos} is additional method which used for build
+     * car's photos list from database.
+     *
+     * @param carId - id of the car, photos of which we want to find.
+     * @return List of links to car photos.
+     * @throws CarDAOException when problems with database access occur.
+     */
     private List<String> getCarPhotos(int carId) throws CarDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -285,6 +375,16 @@ public class SQLCarDAO implements CarDAO {
         return carPhotos;
     }
 
+    /**
+     * Method {@code addCarPhotos} is additional method which adds new car's photos.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}),
+     * and add a new car's photos to database.
+     *
+     * @param photoList list of links to car's photos.
+     * @param carId     id of the car, photos of which we want to add.
+     * @throws CarDAOException when problems with database access occur.
+     */
     private void addCarPhotos(List<String> photoList, int carId) throws CarDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -310,6 +410,17 @@ public class SQLCarDAO implements CarDAO {
         }
     }
 
+    /**
+     * Method {@code getCarBrandId} is additional method which find and return
+     * car brand id as a number by car brand.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * ResultSet {@code ResultSet}, find and returns car's brand id as a number.
+     *
+     * @param carBrand car brand as string.
+     * @return car brand id as a number which matches the string brand value.
+     * @throws CarDAOException when problems with database access occur.
+     */
     private int getCarBrandId(String carBrand) throws CarDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -345,6 +456,18 @@ public class SQLCarDAO implements CarDAO {
         }
     }
 
+    /**
+     * Method {@code getCarBrandId} is additional method which find and return
+     * car model id as a number by car model.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * ResultSet {@code ResultSet}, find and returns car's model id as a number.
+     *
+     * @param carModel   car model as string.
+     * @param carBrandId car brand id.
+     * @return car model id as a number which matches the string model value.
+     * @throws CarDAOException when problems with database access occur.
+     */
     private int getCarModelId(String carModel, int carBrandId) throws CarDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -383,6 +506,17 @@ public class SQLCarDAO implements CarDAO {
         }
     }
 
+    /**
+     * Method {@code getCarId} is additional method which find and return
+     * car id by entered carVin.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * ResultSet {@code ResultSet}, try to find and returns car's id.
+     *
+     * @param carVIN id of the car, vin of which we want to find.
+     * @return car's id which matches the vin value.
+     * @throws CarDAOException when problems with database access occur.
+     */
     private int getCarId(String carVIN) throws CarDAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;

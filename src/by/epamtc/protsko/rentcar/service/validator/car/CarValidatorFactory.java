@@ -1,5 +1,11 @@
 package by.epamtc.protsko.rentcar.service.validator.car;
 
+/**
+ * The class {@code CarValidatorFactory} is a factory
+ * for validation car's data.
+ *
+ * @author Matvey Protsko
+ */
 public class CarValidatorFactory {
 
     public CarParameterValidator getValidator(CarParameterType carParameter) {

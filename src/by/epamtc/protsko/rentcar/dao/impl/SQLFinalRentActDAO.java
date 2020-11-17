@@ -10,7 +10,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class implementation of {@link FinalRentActDAO}. Methods use
+ * {@link ConnectionPool} to connect to database and work with final rent act layer.
+ *
+ * @author Matvey Protsko
+ */
+
 public class SQLFinalRentActDAO implements FinalRentActDAO {
+    /**
+     * A single instance of the class {@code ConnectionPool} (pattern Singleton)
+     */
     private static ConnectionPool connectionPool = ConnectionPool.getInstance();
     private static final String CREATE_FINAL_ACT_ERROR_MESSAGE = "Error while creating final act";
     private static final String FIND_FINAL_ACT_ERROR_MESSAGE = "Final act does not found";
@@ -24,6 +34,19 @@ public class SQLFinalRentActDAO implements FinalRentActDAO {
                     " cost_by_police_penalty=?, cost_by_damage=?, cost_by_other_penalty=?" +
                     " WHERE id=?";
 
+    /**
+     * Method {@code create} create a new final rent act.
+     * All orders in the system have their own final rent acts.
+     * <p>
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}),
+     * and create a new final rent act in database.
+     *
+     * @param orderId id of the order we want to create final rent act.
+     * @return true if the final rent act was successfully created, false -
+     * if final rent act has not been created.
+     * @throws FinalActDAOException when problems with database access occur.
+     */
     @Override
     public boolean create(int orderId) throws FinalActDAOException {
         Connection connection = null;
@@ -48,6 +71,17 @@ public class SQLFinalRentActDAO implements FinalRentActDAO {
         return false;
     }
 
+    /**
+     * Method {@code find} finds a final rent act by order id.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement}),
+     * ResultSet {@code ResultSet}, find and return final rent act data from database.
+     *
+     * @param orderId - id of the order, final rent act of which we want to find.
+     * @return FinalRentAct object which id matches orderId parameter value. If
+     * final rent act has not been founded, this method throws FinalActDAOException.
+     * @throws FinalActDAOException when problems with database access occur.
+     */
     @Override
     public FinalRentAct find(int orderId) throws FinalActDAOException {
         Connection connection = null;
@@ -85,6 +119,17 @@ public class SQLFinalRentActDAO implements FinalRentActDAO {
         return rentAct;
     }
 
+    /**
+     * Method {@code update} updates final rent act data in database.
+     * This method take a Connection {@code Connection} from ConnectionPool
+     * {@link ConnectionPool}, create PreparedStatement object ({@code PreparedStatement})
+     * and try to update final rent act's data from database.
+     *
+     * @param rentAct contains entered new final rent act's data.
+     * @return true if the final rent act data was successfully updated. If
+     * final rent act has not been updated, this method throws FinalActDAOException.
+     * @throws FinalActDAOException when problems with database access occur.
+     */
     @Override
     public boolean update(FinalRentAct rentAct) throws FinalActDAOException {
         Connection connection = null;

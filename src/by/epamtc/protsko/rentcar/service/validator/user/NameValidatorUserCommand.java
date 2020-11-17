@@ -2,6 +2,12 @@ package by.epamtc.protsko.rentcar.service.validator.user;
 
 import java.util.regex.Pattern;
 
+/**
+ * The class {@code NameValidatorUserCommand} validates
+ * user's name.
+ *
+ * @author Matvey Protsko
+ */
 public class NameValidatorUserCommand implements UserCommandValidator {
     private ValidatorManager validatorManager = ValidatorManager.getInstance();
     private Pattern pattern;

@@ -13,7 +13,13 @@ import by.epamtc.protsko.rentcar.dto.RegistrationUserDTO;
 import by.epamtc.protsko.rentcar.service.UserService;
 import by.epamtc.protsko.rentcar.service.exception.UserServiceException;
 import by.epamtc.protsko.rentcar.service.util.UserUtil;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+/**
+ * This class implementation of {@link UserService}. Methods execute business logic
+ * for working with user layer.
+ *
+ * @author Matvey Protsko
+ */
 
 public class UserServiceImpl implements UserService {
     private DAOFactory daoFactory = DAOFactory.getInstance();
@@ -26,6 +32,17 @@ public class UserServiceImpl implements UserService {
     private static final String USER_DELETE_STATUS = "DELETED";
     private static final String NEW_LOGIN_MARK = "#";
 
+    /**
+     * Method {@code authentication} provides validation entered login and password
+     * and access to user's registration information.
+     *
+     * @param login    contains information about entered user's login.
+     * @param password contains information about entered user's password.
+     * @return RegistrationUserDTO {@link RegistrationUserDTO} object which contains
+     * the user's registration data according to the entered login and password.
+     * @throws UserServiceException when problems in UserDAO {@code UserDAO} layer or
+     *                              in business logic.
+     */
     @Override
     public RegistrationUserDTO authentication(String login, String password) throws UserServiceException {
         RegistrationUserDTO regUserData = null;
@@ -46,6 +63,16 @@ public class UserServiceImpl implements UserService {
         return regUserData;
     }
 
+    /**
+     * Method {@code add} provides validation entered user's data from
+     * registration form and adding a new user.
+     *
+     * @param userData contains all entered user's registration information.
+     * @return true if entered user's data is valid and has been adding to the database.
+     * Otherwise method return false.
+     * @throws UserServiceException when problems in UserDAO {@code UserDAO} layer or
+     *                              in business logic.
+     */
     @Override
     public boolean add(FullUserDTO userData) throws UserServiceException {
 
@@ -63,6 +90,16 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    /**
+     * Method {@code edit} provides validation entered new user's profile data from
+     * edit user data form and updating user's data.
+     *
+     * @param userForEdit {@link EditUserDTO} object, which contains new user's profile information.
+     * @return true if entered new user's data is valid and has been adding to the database.
+     * Otherwise method return false.
+     * @throws UserServiceException when problems in UserDAO {@code UserDAO} layer or
+     *                              in business logic.
+     */
     @Override
     public boolean edit(EditUserDTO userForEdit) throws UserServiceException {
         String currentLogin = userForEdit.getCurrentLogin();
@@ -89,6 +126,14 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    /**
+     * Method {@code delete} provides business logic for removes a user from the system.
+     *
+     * @param userId - id of the user we want to remove from the system.
+     * @return true if the user was successfully removed from system.
+     * @throws UserServiceException when problems in UserDAO {@code UserDAO} layer or
+     *                              in business logic.
+     */
     @Override
     public boolean delete(int userId) throws UserServiceException {
         try {
@@ -98,6 +143,15 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Method {@code findByUserId} provides business logic for
+     * finding a user by user id.
+     *
+     * @param userId - id of the user we want to find in the system.
+     * @return {@link FullUserDTO} object which id matches userId parameter value.
+     * @throws UserServiceException when problems in UserDAO {@code UserDAO} layer or
+     *                              in business logic.
+     */
     @Override
     public FullUserDTO findByUserId(int userId) throws UserServiceException {
         FullUserDTO user = new FullUserDTO();
@@ -115,6 +169,15 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    /**
+     * Method {@code findByCriteria} provides validation and business
+     * logic for finding users by search criteria.
+     *
+     * @param criteria - criteria that can contains one or more user's data parameters.
+     * @return List of {@link FullUserDTO} objects.
+     * @throws UserServiceException when problems in UserDAO {@code UserDAO} layer or
+     *                              in business logic.
+     */
     @Override
     public List<FullUserDTO> findByCriteria(FullUserDTO criteria) throws UserServiceException {
         List<FullUserDTO> usersFoundList = new ArrayList<>();

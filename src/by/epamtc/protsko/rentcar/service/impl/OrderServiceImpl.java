@@ -20,6 +20,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This class implementation of {@link OrderService}. Methods execute business logic
+ * for working with order layer.
+ *
+ * @author Matvey Protsko
+ */
+
 public class OrderServiceImpl implements OrderService {
     private static final DAOFactory daoFactory = DAOFactory.getInstance();
     private OrderDAO orderDAO = daoFactory.getOrderDAO();
@@ -40,6 +47,15 @@ public class OrderServiceImpl implements OrderService {
     private static final String ORDER_CANCELED_VALUE = "Canceled";
     private static final String ORDER_NOT_CANCELED_VALUE = "Actual";
 
+    /**
+     * Method {@code add} provides validation entered order's data from UI
+     * and adding a new order.
+     *
+     * @param order {@link OrderDTO} contains entered user's order data value.
+     * @return true if entered order's data is valid and has been adding to the database.
+     * Otherwise method throw OrderServiceException.
+     * @throws OrderServiceException when problems in OrderDAO {@code OrderDAO} layer.
+     */
     @Override
     public boolean add(OrderDTO order) throws OrderServiceException {
         final int carId = Integer.parseInt(order.getCarId());
@@ -65,6 +81,18 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
+    /**
+     * Method {@code createOrderForClientAccept} provides validation entered order's data from UI
+     * and build {@link OrderForClientAcceptDTO} object for user checking and accept.
+     *
+     * @param carId     - id of the car which was selected by the user for rent.
+     * @param startRent - start of rental period.
+     * @param endRent   - end of rental period.
+     * @return {@link OrderForClientAcceptDTO} object which contains user's entered rental information
+     * for checking and accept.
+     * @throws OrderServiceException when problems in OrderDAO {@code OrderDAO} layer or if selected
+     *                               car is not available for rent for the selected period.
+     */
     @Override
     public OrderForClientAcceptDTO createOrderForClientAccept(int carId, final LocalDate startRent, final LocalDate endRent)
             throws OrderServiceException {
@@ -93,6 +121,15 @@ public class OrderServiceImpl implements OrderService {
         return orderForAccept;
     }
 
+    /**
+     * Method {@code accept} is for accept user's rental order.
+     *
+     * @param orderId - id of the order we want to accept.
+     * @return true if the order was successfully accepted, false -
+     * if order has not been accepted.
+     * @throws OrderServiceException when problems in OrderDAO {@code OrderDAO} layer or
+     *                               in business logic.
+     */
     @Override
     public boolean accept(int orderId) throws OrderServiceException {
         boolean isOrderAccepted = false;
@@ -133,6 +170,15 @@ public class OrderServiceImpl implements OrderService {
         return isOrderAccepted;
     }
 
+    /**
+     * Method {@code close} is for close user's rental order.
+     *
+     * @param orderId - id of the order we want to close.
+     * @return true if the order was successfully closed, false -
+     * if order has not been closed.
+     * @throws OrderServiceException when problems in OrderDAO {@code OrderDAO} layer or
+     *                               in business logic.
+     */
     @Override
     public boolean close(int orderId) throws OrderServiceException {
         int carId;
@@ -158,6 +204,15 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    /**
+     * Method {@code cancel} is for cancel user's rental order.
+     *
+     * @param orderId - id of the order we want to cancel.
+     * @return true if the order was successfully canceled, false -
+     * if order has not been canceled.
+     * @throws OrderServiceException when problems in OrderDAO {@code OrderDAO} layer or
+     *                               in business logic.
+     */
     @Override
     public boolean cancel(int orderId) throws OrderServiceException {
         int carId;
@@ -186,6 +241,15 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    /**
+     * Method {@code findAll} provides business logic for finding
+     * all orders in system.
+     *
+     * @return List of {@link OrderForShowDTO} objects, whose contains
+     * all information about order.
+     * @throws OrderServiceException when problems in OrderDAO {@code OrderDAO} layer or
+     *                               in business logic.
+     */
     @Override
     public List<OrderForShowDTO> findAll() throws OrderServiceException {
         List<OrderForShowDTO> allOrderList = new ArrayList<>();
@@ -209,6 +273,15 @@ public class OrderServiceImpl implements OrderService {
         return allOrderList;
     }
 
+    /**
+     * Method {@code findByUserId} provides business logic for finding
+     * an user's orders.
+     *
+     * @param userId - id of the user whose orders we are looking.
+     * @return List of {@link OrderForShowDTO}, whose contains all user orders.
+     * @throws OrderServiceException when problems in OrderDAO {@code OrderDAO}
+     *                               layer or in business logic.
+     */
     @Override
     public List<OrderForShowDTO> findByUserId(int userId) throws OrderServiceException {
         List<OrderForShowDTO> userOrderList = new ArrayList<>();

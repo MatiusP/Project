@@ -17,7 +17,8 @@ public interface CarDAO {
      * Method {@code add} adds a new car to database.
      *
      * @param car contains entered car's data value from service layer.
-     * @return true if the new car was successfully added to database.
+     * @return true if the car was successfully added to database, false -
+     * if has not been added to the database.
      * @throws CarDAOException when problems with database access occur.
      */
     boolean add(Car car) throws CarDAOException;
@@ -37,7 +38,7 @@ public interface CarDAO {
      * This method change cars's parameter isDeleted from false to true.
      *
      * @param carId - id of the car we want to remove from the system.
-     * @return true if the carId was successfully removed from system.
+     * @return true if the car was successfully removed from system.
      * @throws CarDAOException when problems with database access occur.
      */
     boolean delete(int carId) throws CarDAOException;
