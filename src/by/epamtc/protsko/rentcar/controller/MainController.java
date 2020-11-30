@@ -1,7 +1,7 @@
 package by.epamtc.protsko.rentcar.controller;
 
 import java.io.IOException;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
