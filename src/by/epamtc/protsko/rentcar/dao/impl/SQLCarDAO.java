@@ -20,7 +20,7 @@ public class SQLCarDAO implements CarDAO {
     /**
      * A single instance of the class {@code ConnectionPool} (pattern Singleton)
      */
-    private static ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static ConnectionPool connectionPool = ConnectionPool.getInstance(true);
     private static final String GET_ALL_UN_DELETED_CARS_QUERY = "SELECT * FROM fullCarsData WHERE is_deleted=0";
     private static final String GET_ALL_CARS_QUERY = "SELECT * FROM fullCarsData";
     private static final String FIND_CAR_QUERY = "SELECT * FROM fullCarsData WHERE";

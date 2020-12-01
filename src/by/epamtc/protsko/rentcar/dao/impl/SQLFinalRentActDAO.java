@@ -21,7 +21,7 @@ public class SQLFinalRentActDAO implements FinalRentActDAO {
     /**
      * A single instance of the class {@code ConnectionPool} (pattern Singleton)
      */
-    private static ConnectionPool connectionPool = ConnectionPool.getInstance();
+    private static ConnectionPool connectionPool = ConnectionPool.getInstance(true);
     private static final String CREATE_FINAL_ACT_ERROR_MESSAGE = "Error while creating final act";
     private static final String FIND_FINAL_ACT_ERROR_MESSAGE = "Final act does not found";
     private static final String FIND_FINAL_ACT_SQL_ERROR_MESSAGE = "Error while getting final act";

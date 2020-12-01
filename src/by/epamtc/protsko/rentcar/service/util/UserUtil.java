@@ -183,7 +183,6 @@ public class UserUtil {
      *                 user's registration data.
      * @return true if the registration form has been completed completely.
      * Otherwise method throw UserServiceException.
-     * @throws UserServiceException if the registration form was not completed completely.
      */
     public static boolean isRegistrationFormFilled(FullUserDTO userData) {
         String userLogin = userData.getLogin();
@@ -215,7 +214,7 @@ public class UserUtil {
      * user request.
      *
      * @param userData {@link FullUserDTO} object which contains user request
-     *                     search parameters.
+     *                 search parameters.
      * @return search criteria String line.
      */
     public static String createSearchUserQuery(FullUserDTO userData) {
