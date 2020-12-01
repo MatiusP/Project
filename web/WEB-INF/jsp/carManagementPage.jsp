@@ -177,11 +177,6 @@
             </select>
         </div>
 
-        <div class="form_field">
-            <label>${photos_message}</label>
-            <input type="file" name="photo" multiple accept="image/jpeg,image/png"/>
-        </div>
-
         <div>
             <input type="submit" value="ADD">
         </div>
@@ -329,68 +324,68 @@
     </form>
 </c:if>
 
-    <c:if test="${sessionScope.command eq 'getAllCars'}">
+<c:if test="${sessionScope.command eq 'getAllCars'}">
 
-        <div class="h3">
-            <h3>${allCars_main_message}</h3>
-        </div>
+    <div class="h3">
+        <h3>${allCars_main_message}</h3>
+    </div>
 
-        <form action="mainController" method="post">
-            <input type="hidden" name="command" value="">
+    <form action="mainController" method="post">
+        <input type="hidden" name="command" value="">
 
-            <c:choose>
-                <c:when test="${not empty requestScope.carNotFound}">
-                    <div class="info-message">
-                        <h3><c:out value="${no_cars_message}"/></h3>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <c:if test="${not empty cars}">
-                        <table class="table_dark table_sort">
-                            <thead>
+        <c:choose>
+            <c:when test="${not empty requestScope.carNotFound}">
+                <div class="info-message">
+                    <h3><c:out value="${no_cars_message}"/></h3>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <c:if test="${not empty cars}">
+                    <table class="table_dark table_sort">
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>${carBrand_message}</th>
+                            <th>${carModel_message}</th>
+                            <th>${carClass_message}</th>
+                            <th>${carTransm_message}</th>
+                            <th>${carPrice_message}</th>
+                            <th>${vin_message}</th>
+                            <th>${carManDate_message}</th>
+                            <th>${carEngPow_message}</th>
+                            <th>${carFuCons_message}</th>
+                            <th>${carAvailable_message}</th>
+                            <th>${carStatus_message}</th>
+                        </tr>
+                        </thead>
+                        <c:forEach items="${cars}" var="car">
                             <tr>
-                                <th>id</th>
-                                <th>${carBrand_message}</th>
-                                <th>${carModel_message}</th>
-                                <th>${carClass_message}</th>
-                                <th>${carTransm_message}</th>
-                                <th>${carPrice_message}</th>
-                                <th>${vin_message}</th>
-                                <th>${carManDate_message}</th>
-                                <th>${carEngPow_message}</th>
-                                <th>${carFuCons_message}</th>
-                                <th>${carAvailable_message}</th>
-                                <th>${carStatus_message}</th>
+                                <td>${car.id}</td>
+                                <td>${car.brand}</td>
+                                <td>${car.model}</td>
+                                <td>${car.classType}</td>
+                                <td>${car.transmissionType}</td>
+                                <td>${car.pricePerDay}</td>
+                                <td>${car.vin}</td>
+                                <td>${car.manufactureDate}</td>
+                                <td>${car.enginePower}</td>
+                                <td>${car.fuelConsumption}</td>
+                                <td>${car.isAvailableToRent}</td>
+                                <td>${car.isDeleted}</td>
+                                <td>
+                                    <a href="mainController?command=go_to_edit_car_page&id=${car.id}"/>${edit_button}
+                                </td>
                             </tr>
-                            </thead>
-                            <c:forEach items="${cars}" var="car">
-                                <tr>
-                                    <td>${car.id}</td>
-                                    <td>${car.brand}</td>
-                                    <td>${car.model}</td>
-                                    <td>${car.classType}</td>
-                                    <td>${car.transmissionType}</td>
-                                    <td>${car.pricePerDay}</td>
-                                    <td>${car.vin}</td>
-                                    <td>${car.manufactureDate}</td>
-                                    <td>${car.enginePower}</td>
-                                    <td>${car.fuelConsumption}</td>
-                                    <td>${car.isAvailableToRent}</td>
-                                    <td>${car.isDeleted}</td>
-                                    <td>
-                                        <a href="mainController?command=go_to_edit_car_page&id=${car.id}"/>${edit_button}
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
-                    </c:if>
-                </c:otherwise>
-            </c:choose>
-        </form>
-        <form id="exit" action="mainController?command=go_to_car_management_page" method="post">
-            <button form="exit" class="bot5" type="submit">${back_button}</button>
-        </form>
-    </c:if>
+                        </c:forEach>
+                    </table>
+                </c:if>
+            </c:otherwise>
+        </c:choose>
+    </form>
+    <form id="exit" action="mainController?command=go_to_car_management_page" method="post">
+        <button form="exit" class="bot5" type="submit">${back_button}</button>
+    </form>
+</c:if>
 ${sessionScope.remove('command')}
 </body>
 </html>

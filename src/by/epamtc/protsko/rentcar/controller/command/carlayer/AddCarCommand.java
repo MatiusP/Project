@@ -54,19 +54,6 @@ public class AddCarCommand implements Command {
             newCar.setBrand(request.getParameter(BRAND_PARAMETER_NAME));
             newCar.setPricePerDay(request.getParameter(PRICE_PARAMETER_NAME));
 
-//            List<String> photos;              //TODO реализовать
-//
-//            for (Part part : request.getParts()) {
-//                String fileName = URLDecoder.decode(part.getSubmittedFileName(), "UTF-8");
-//                String path = request.getSession().getServletContext().getInitParameter("uploadFilesPath");
-//                File file = new File(path + File.separator + fileName);
-//                file.getParentFile().mkdirs();
-//                InputStream inputStream = part.getInputStream();
-//                java.nio.file.Files.copy(inputStream, file.toPath());
-//                inputStream.close();
-//            }
-
-
             isAddedCarSuccessfully = carService.add(newCar);
         } catch (CarServiceException e) {
             logger.error("Error while adding a new car", e);
