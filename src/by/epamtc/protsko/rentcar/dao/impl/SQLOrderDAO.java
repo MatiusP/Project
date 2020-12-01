@@ -21,7 +21,7 @@ public class SQLOrderDAO implements OrderDAO {
     /**
      * A single instance of the class {@code ConnectionPool} (pattern Singleton)
      */
-    private static ConnectionPool connectionPool = ConnectionPool.getInstance(true);
+    private static ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     private static final String CREATE_ORDER_ERROR_MESSAGE = "Error while creating new order";
     private static final String ACCEPT_ORDER_ERROR_MESSAGE = "Error while accepting order";

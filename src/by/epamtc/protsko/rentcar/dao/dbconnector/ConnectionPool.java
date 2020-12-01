@@ -27,30 +27,45 @@ public final class ConnectionPool {
      * This queue stores {@code Connection} objects, which are available
      * for using.
      */
-    private static BlockingQueue<Connection> connectionQueue;
+    private BlockingQueue<Connection> connectionQueue;
 
     /**
      * This queue stores {@code Connection} objects that are currently
      * being used by the program.
      */
-    private static BlockingQueue<Connection> givenAwayConnectionQueue;
+    private BlockingQueue<Connection> givenAwayConnectionQueue;
 
-    private static String driverName;
-    private static String connectionLogin;
-    private static String connectionPassword;
-    private static int poolSize;
+    private String driverName;
+    private String jdbcUrl;
+    private String connectionLogin;
+    private String connectionPassword;
+    private int poolSize;
 
 
     /**
-     * {@code ConnectionPool} constructor
+     * {@code ConnectionPool} constructor, that initializes parameters
+     * for database connection
      */
     private ConnectionPool() {
+        DBConnectionManager dbConnectionManager = DBConnectionManager.getInstance();
+
+        driverName = dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_DRIVER);
+        jdbcUrl = dbConnectionManager.getPropertyValue(DBConnectionParameter.JDBC_URL);
+        connectionLogin = dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_CONNECTION_LOGIN);
+        connectionPassword = dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_CONNECTION_PASSWORD);
+        try {
+            poolSize = Integer.parseInt(dbConnectionManager.getPropertyValue(DBConnectionParameter.DB_POOL_SIZE));
+        } catch (NumberFormatException e) {
+            logger.error("Incorrect connection pool size value in property file.");
+            poolSize = 15;
+        }
+        initConnectionPool();
     }
 
     /**
      * Initialization of the queues with {@code PooledConnection} objects
      */
-    private static void initConnectionPool(String jdbcUrl) {
+    private void initConnectionPool() {
         try {
             Class.forName(driverName);
             connectionQueue = new ArrayBlockingQueue<>(poolSize);
@@ -69,34 +84,11 @@ public final class ConnectionPool {
     }
 
     /**
-     * {@code ConnectionPool} initializes parameters for database connection and
-     * get instance access point
+     * {@code ConnectionPool} instance access point
      *
-     * @param isDBForApplication if {@code isDBForApplication} true, the method provides
-     *                           a connection to the application database, else - method
-     *                           provides a connection to the database for testing.
      * @return instance of the {@code ConnectionPool} class
      */
-    public static ConnectionPool getInstance(boolean isDBForApplication) {
-        String jdbcURL = null;
-        DBConnectionManager dbConnectionManager = DBConnectionManager.getInstance();
-        driverName = dbConnectionManager.getApplicationPropertyValue(DBConnectionParameter.DB_DRIVER);
-        connectionLogin = dbConnectionManager.getApplicationPropertyValue(DBConnectionParameter.DB_CONNECTION_LOGIN);
-        connectionPassword = dbConnectionManager.getApplicationPropertyValue(DBConnectionParameter.DB_CONNECTION_PASSWORD);
-
-        if (isDBForApplication) {
-            jdbcURL = dbConnectionManager.getApplicationPropertyValue(DBConnectionParameter.JDBC_URL);
-        } else {
-            jdbcURL = dbConnectionManager.getTestPropertyValue(DBConnectionParameter.JDBC_URL);
-        }
-
-        try {
-            poolSize = Integer.parseInt(dbConnectionManager.getApplicationPropertyValue(DBConnectionParameter.DB_POOL_SIZE));
-        } catch (NumberFormatException e) {
-            logger.error("Incorrect connection pool size value in property file.");
-            poolSize = 15;
-        }
-        initConnectionPool(jdbcURL);
+    public static ConnectionPool getInstance() {
         return instance;
     }
 
@@ -172,7 +164,7 @@ public final class ConnectionPool {
      * Changes default behavior for the close() method to removing and offering
      * connection instances using queues
      */
-    private static class PooledConnection implements Connection {
+    private class PooledConnection implements Connection {
         private Connection connection;
 
         public PooledConnection(Connection connection) throws SQLException {

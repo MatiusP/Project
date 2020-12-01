@@ -27,7 +27,7 @@ public class SQLUserDAO implements UserDAO {
     /**
      * A single instance of the class {@code ConnectionPool} (pattern Singleton)
      */
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance(true);
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     private static final String AUTH_USER_MESSAGE = "Incorrect login or password";
     private static final String USER_EXISTS_MESSAGE = "Login exists";

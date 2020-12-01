@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLUserDAOTest {
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance(false);
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
     private static SQLUserDAO userDAO = new SQLUserDAO();
     private static final String CREATE_TEST_RENT_CAR_DB_SCRIPT = "D://createTest_rentCar_DB-practic.sql";
 
