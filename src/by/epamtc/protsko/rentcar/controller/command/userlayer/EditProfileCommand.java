@@ -44,6 +44,12 @@ public class EditProfileCommand implements Command {
     private static final String CURRENT_USER_LOGIN_ATTRIBUTE = "currentUserLogin";
     private static final String PASSWORD_ERROR_MESSAGE = "New passwords do not match!";
     private static final String PASSWORD_ERROR_ATTRIBUTE_NAME = "passwordsError";
+    private static final String LOGIN_ERROR_ATTRIBUTE_NAME = "loginExists";
+    private static final String LOGIN_EXISTS_MESSAGE_PARAMETER = "Login exists";
+    private static final String LOGIN_EXISTS_MESSAGE_VALUE = "Sorry, but the login is already exists";
+    private static final String CURRENT_PASSWORD_ERROR_ATTRIBUTE_NAME = "currentPasswordError";
+    private static final String CURRENT_PASSWORD_ERROR_MESSAGE = "Current password incorrect";
+    private static final String CURRENT_PASSWORD_ERROR_VALUE = "Current password incorrect";
     private static final String SUCCESSFUL_EDIT_DATA_ATTRIBUTE_NAME = "edit_data_successfully";
 
     @Override
@@ -54,8 +60,7 @@ public class EditProfileCommand implements Command {
         String editUserDataError;
 
         try {
-            if ((!request.getParameter(PARAMETER_NEW_PASSWORD).isEmpty())
-                    | !request.getParameter(PARAMETER_NEW_PASSWORD).equals(request.getParameter(PARAMETER_REPEAT_NEW_PASSWORD))) {
+            if (!request.getParameter(PARAMETER_NEW_PASSWORD).equals(request.getParameter(PARAMETER_REPEAT_NEW_PASSWORD))) {
                 editUserDataError = PASSWORD_ERROR_MESSAGE;
                 request.setAttribute(PASSWORD_ERROR_ATTRIBUTE_NAME, editUserDataError);
                 request.getRequestDispatcher(EDIT_PROFILE_MAPPING).forward(request, response);
@@ -82,7 +87,14 @@ public class EditProfileCommand implements Command {
         } catch (UserServiceException e) {
             logger.info(e.getMessage());
             editUserDataError = e.getMessage();
-            request.setAttribute(VALIDATION_ERROR, editUserDataError);
+            if (editUserDataError.contains(LOGIN_EXISTS_MESSAGE_PARAMETER)) {
+                editUserDataError = LOGIN_EXISTS_MESSAGE_VALUE;
+                request.setAttribute(LOGIN_ERROR_ATTRIBUTE_NAME, editUserDataError);
+            }
+            if (editUserDataError.contains(CURRENT_PASSWORD_ERROR_MESSAGE)) {
+                editUserDataError = CURRENT_PASSWORD_ERROR_VALUE;
+                request.setAttribute(CURRENT_PASSWORD_ERROR_ATTRIBUTE_NAME, editUserDataError);
+            }
             request.getRequestDispatcher(EDIT_PROFILE_MAPPING).forward(request, response);
         } catch (DateTimeParseException e) {
             logger.error("Invalid date value", e);

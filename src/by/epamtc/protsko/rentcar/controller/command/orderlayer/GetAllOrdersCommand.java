@@ -36,10 +36,12 @@ public class GetAllOrdersCommand implements Command {
             orderList = orderService.findAll();
             request.setAttribute(ORDER_LIST_ATTRIBUTE_NAME, orderList);
             request.getRequestDispatcher(SHOW_ALL_ORDERS_MAPPING).forward(request, response);
+            return;
         } catch (OrderServiceException e) {
             logger.error("Error while getting all orders", e);
             request.getSession().setAttribute(NO_ORDERS_ATTRIBUTE_NAME, NO_ORDERS_ATTRIBUTE_VALUE);
-            response.sendRedirect(SHOW_ALL_ORDERS_MAPPING);
+            request.getRequestDispatcher(SHOW_ALL_ORDERS_MAPPING).forward(request, response);
+//            response.sendRedirect(SHOW_ALL_ORDERS_MAPPING);
         }
     }
 

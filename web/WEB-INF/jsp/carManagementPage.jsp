@@ -77,6 +77,8 @@
 <fmt:message bundle="${loc}" key="local.addCarPage.manDateValidRules.message" var="man_date_rules"/>
 <fmt:message bundle="${loc}" key="local.addCarPage.engPowValidRules.message" var="eng_pow_rules"/>
 <fmt:message bundle="${loc}" key="local.addCarPage.fuelConsValidRules.message" var="fu_cons_rules"/>
+<fmt:message bundle="${loc}" key="local.addCarPage.addedSuccessfully.message" var="add_carr_message"/>
+
 
 <body>
 
@@ -88,7 +90,7 @@
 
 <div class="add_car_form-message">
     <c:if test="${not empty sessionScope.added_result}">
-        <c:out value="${added_result}"/><br/>
+        <c:out value="${add_carr_message}"/><br/>
         ${sessionScope.remove('added_result')}
     </c:if>
 </div>

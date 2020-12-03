@@ -41,6 +41,7 @@
 <fmt:message bundle="${loc}" key="local.carPage.endRent.selectCar.back.button" var="back_button"/>
 <fmt:message bundle="${loc}" key="local.carPage.endRent.carNotAvailable.message" var="car_not_avail_message"/>
 <fmt:message bundle="${loc}" key="local.carPage.endRent.createOrder.create.message" var="create_order_message"/>
+<fmt:message bundle="${loc}" key="local.carPage.lengthPeriod.message" var="incor_period_length_message"/>
 
 <c:forEach items="${car}" var="current_car">
     <div class="inst">
@@ -132,6 +133,13 @@
                                 <c:if test="${sessionScope.carNotAvailable != null}">
                                     <h3>${car_not_avail_message}</h3>
                                     ${sessionScope.remove('carNotAvailable')}
+                                </c:if>
+                            </div>
+
+                            <div class="rent_error_message">
+                                <c:if test="${sessionScope.rentPeriodNotAvailable != null}">
+                                    <h3>${incor_period_length_message}</h3>
+                                    ${sessionScope.remove('rentPeriodNotAvailable')}
                                 </c:if>
                             </div>
 

@@ -30,6 +30,9 @@ public class CheckOrderDataCommand implements Command {
     private static final String INVALID_PERIOD_ATTRIBUTE_VALUE = "Invalid period. Check your entered data";
     private static final String CAR_NOT_AVAILABLE_ATTRIBUTE_NAME = "carNotAvailable";
     private static final String CAR_NOT_AVAILABLE_ATTRIBUTE_MESSAGE = "Car not available for this dates";
+    private static final String RENT_PERIOD_NOT_AVAILABLE_MESSAGE = "rental period cannot exceed";
+    private static final String RENT_PERIOD_NOT_AVAILABLE_ATTRIBUTE_NAME = "rentPeriodNotAvailable";
+    private static final String RENT_PERIOD_AVAILABLE_ATTRIBUTE_MESSAGE = "Rental period not available";
     private static final String ORDER_FOR_ACCEPT_ATTRIBUTE_NAME = "orderForAccept";
     private static final String CAR_ID_ATTRIBUTE_NAME = "currentCarId";
 
@@ -55,7 +58,11 @@ public class CheckOrderDataCommand implements Command {
                 request.getRequestDispatcher(BACK_TO_CAR_PAGE_MAPPING + carId).forward(request, response);
             } catch (OrderServiceException e) {
                 logger.error("Error while checking order data", e);
-                session.setAttribute(CAR_NOT_AVAILABLE_ATTRIBUTE_NAME, CAR_NOT_AVAILABLE_ATTRIBUTE_MESSAGE);
+                if (e.getMessage().contains(RENT_PERIOD_NOT_AVAILABLE_MESSAGE)) {
+                    session.setAttribute(RENT_PERIOD_NOT_AVAILABLE_ATTRIBUTE_NAME, RENT_PERIOD_AVAILABLE_ATTRIBUTE_MESSAGE);
+                } else {
+                    session.setAttribute(CAR_NOT_AVAILABLE_ATTRIBUTE_NAME, CAR_NOT_AVAILABLE_ATTRIBUTE_MESSAGE);
+                }
                 response.sendRedirect(BACK_TO_CAR_PAGE_MAPPING + carId);
             }
         }

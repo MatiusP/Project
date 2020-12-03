@@ -35,6 +35,8 @@
 <fmt:message bundle="${loc}" key="local.regPage.dateBirthValidRules.message" var="dateBirth_valid_rules"/>
 <fmt:message bundle="${loc}" key="local.regPage.emailValidRules.message" var="email_valid_rules"/>
 <fmt:message bundle="${loc}" key="local.regPage.phoneValidRules.message" var="phone_valid_rules"/>
+<fmt:message bundle="${loc}" key="local.editUser.loginExists.message" var="login_exists_message"/>
+<fmt:message bundle="${loc}" key="local.editUser.currentPassIncorrect.message" var="pass_incorrect_message"/>
 
 <jsp:include page="headerPage.jsp"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/editProfileForm.css"/>
@@ -149,6 +151,18 @@
             <c:out value="${validationError}"/><br/>
         </c:if>
     </div>
+
+    <c:if test="${not empty requestScope.get('loginExists')}">
+        <div class="edit_profile-pas-message">
+            <c:out value="${login_exists_message}"/>
+        </div>
+    </c:if>
+
+    <c:if test="${not empty requestScope.get('currentPasswordError')}">
+        <div class="edit_profile-pas-message">
+            <c:out value="${pass_incorrect_message}"/>
+        </div>
+    </c:if>
 
     <div>
         <input type="submit" value="${button}">

@@ -65,7 +65,8 @@
     <c:choose>
         <c:when test="${sessionScope.noAnyOrders != null}">
             <div class="info-message">
-                <h3><c:out value="${noAnyOrders}"/></h3>
+                <h3><c:out value="${no_orders_message}"/></h3>
+                ${sessionScope.remove('noAnyOrders')}
             </div>
         </c:when>
         <c:otherwise>
@@ -180,9 +181,11 @@
                                 </button>
                             </td>
                             <td>
-                                <button class="order_manager">
-                                    <a href="mainController?command=get_final_rent_act&id=${order.orderId}"/>${close_button}
-                                </button>
+                                <c:if test="${order.isOrderAccepted eq 'Accepted'}">
+                                    <button class="order_manager">
+                                        <a href="mainController?command=get_final_rent_act&id=${order.orderId}"/>${close_button}
+                                    </button>
+                                </c:if>
                             </td>
                         </tr>
                     </c:forEach>

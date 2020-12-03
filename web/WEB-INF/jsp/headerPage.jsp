@@ -44,9 +44,9 @@
     <div class="header_item header_button">
         <a href="mainController?command=go_to_our_cars_page">${our_cars_button}</a>
     </div>
-    <div class="header_item header_button">
-        <a href="rentalConditionsPage">${our_conditions_button}</a>
-    </div>
+<%--    <div class="header_item header_button">--%>
+<%--        <a href="rentalConditionsPage">${our_conditions_button}</a>--%>
+<%--    </div>--%>
     <div class="header_item header_button">
         <a href="mainController?command=go_to_contact_page">${our_contacts_button}</a>
     </div>
@@ -98,6 +98,9 @@
                                         </li>
                                         <li>
                                             <a href="mainController?command=go_to_edit_profile_page">${edit_user_button}</a>
+                                        </li>
+                                        <li>
+                                            <a href="mainController?command=go_to_user_orders_page&userId=${userRegData.id}">${user_orders_button}</a>
                                         </li>
                                     </ul>
                                 </c:if>
