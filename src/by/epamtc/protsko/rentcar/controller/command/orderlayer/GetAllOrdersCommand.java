@@ -41,7 +41,6 @@ public class GetAllOrdersCommand implements Command {
             logger.error("Error while getting all orders", e);
             request.getSession().setAttribute(NO_ORDERS_ATTRIBUTE_NAME, NO_ORDERS_ATTRIBUTE_VALUE);
             request.getRequestDispatcher(SHOW_ALL_ORDERS_MAPPING).forward(request, response);
-//            response.sendRedirect(SHOW_ALL_ORDERS_MAPPING);
         }
     }
 
